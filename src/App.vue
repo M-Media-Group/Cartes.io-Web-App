@@ -1,6 +1,7 @@
 <template>
   <!-- <img alt="Vue logo" src="./assets/logo.png" />
   <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
+  <img src="./marker.svg" />
   <a-scene
     vr-mode-ui="enabled: false"
     arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
@@ -102,9 +103,9 @@ const computedMarkerCategories = computed(() => {
   const allCategories = markers.value.map((marker) => marker.category);
   const uniqueCategories = [...new Set(allCategories)];
   const categories = uniqueCategories.map((category) => {
-    // If the icon does not start with http, it's a relative path - so append the base url
-    if (!category.icon.startsWith("http")) {
-      category.icon = "https://cartes.io" + category.icon;
+    // If the icon does not start with https, it's a relative path - so append the base url
+    if (!category.icon.startsWith("https")) {
+      category.icon = "/marker.svg";
     }
     return category;
   });
