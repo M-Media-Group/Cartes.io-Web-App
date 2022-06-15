@@ -27,8 +27,7 @@
       "@types"
     ],
     "types": [
-      "vite/client",
-      "@types/jest"
+      "vite/client"
     ],
   },
   "include": [
