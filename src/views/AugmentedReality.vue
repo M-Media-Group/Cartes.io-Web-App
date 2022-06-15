@@ -1,107 +1,153 @@
 <template>
   <!-- <img alt="Vue logo" src="./assets/logo.png" />
   <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
-  <a-scene
-    vr-mode-ui="enabled: false"
-    arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
-    loading-screen="dotsColor: blue; backgroundColor: black"
-  >
+  <a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
+    loading-screen="dotsColor: blue; backgroundColor: black">
     <a-assets>
-      <img
-        v-for="category in computedMarkerCategories"
-        :key="'cat-' + category.id"
-        :id="'cat-' + category.id"
-        :src="category.icon"
-        crossorigin="anonymous"
-      />
+      <img v-for="category in computedMarkerCategories" :key="'cat-' + category.id" :id="'cat-' + category.id"
+        :src="category.icon" crossorigin="anonymous" />
     </a-assets>
-    <template v-for="marker in markers" ref="markerRefs" :key="marker.id">
-      <a-text
-        :value="marker.category.name"
-        look-at="#camera1"
-        scale="70 70 70"
-        position="0 50 0"
+    <template v-for="marker in props.markers" :key="marker.id">
+      <a-text ref="markerRefs" :value="marker.category.name" look-at="#camera1" :scale="scale" position="0 50 0"
         :gps-projected-entity-place="
           'latitude: ' +
           marker.location.coordinates[0] +
           '; longitude: ' +
           marker.location.coordinates[1]
-        "
-      >
+        ">
       </a-text>
-      <a-image
-        look-at="#camera1"
-        :title="marker.category.name"
-        :src="'#cat-' + marker.category.id"
-        scale="70 70 70"
+      <a-text marker-distance look-at="#camera1" :scale="scale" position="0 40 0" :gps-projected-entity-place="
+        'latitude: ' +
+        marker.location.coordinates[0] +
+        '; longitude: ' +
+        marker.location.coordinates[1]
+      ">
+      </a-text>
+      <a-image look-at="#camera1" :title="marker.category.name" :src="'#cat-' + marker.category.id" :scale="scale"
         :gps-projected-entity-place="
           'latitude: ' +
           marker.location.coordinates[0] +
           '; longitude: ' +
           marker.location.coordinates[1]
-        "
-      ></a-image>
+        "></a-image>
     </template>
 
-    <a-camera
-      id="camera1"
-      look-controls-enabled="false"
-      arjs-look-controls="smoothingFactor: 0.1"
-      gps-projected-camera="gpsMinDistance: 5"
-      rotation-reader
-    >
+    <a-camera id="camera1" look-controls-enabled="false" arjs-look-controls="smoothingFactor: 0.1"
+      gps-projected-camera="gpsMinDistance: 5" rotation-reader>
     </a-camera>
   </a-scene>
 </template>
+<script lang="ts">
+// @ts-ignore
+AFRAME.registerComponent("marker-distance", {
+  tick: function () {
+    this.markerDistance()
+  },
+  markerDistance: function (event: any) {
+    var marker1Pos, marker2Pos
+
+    console.log("event", event, this.el.object3D)
+
+    const marker1 = document.querySelector("#camera1")
+    if (!marker1) {
+      return
+    }
+    // @ts-ignore
+    marker1Pos = new THREE.Vector3();
+    // @ts-ignore
+    marker1.object3D.getWorldPosition(marker1Pos);
+
+    const marker2 = this.el
+    // @ts-ignore
+    marker2Pos = new THREE.Vector3();
+    marker2.object3D.getWorldPosition(marker2Pos);
+
+    //distance
+    this.d = Math.round(marker1Pos.distanceTo(marker2Pos));
+    this.el.setAttribute("value", this.d + "m");
+  }
+});
+</script>
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import { ref, nextTick, watch, computed } from "vue";
+import { ref, nextTick, watch, computed, PropType } from "vue";
 // import HelloWorld from "./components/HelloWorld.vue";
 import { Marker } from "@/types/marker";
 
-const markerRefs = ref([]);
+const props = defineProps({
+  markers: {
+    type: Array as PropType<Marker[]>,
+    required: true,
+  }
+})
 
-const markers = ref([] as Marker[]);
+const scale = "50 50 50";
 
-// Get the map ID from the url ?mapId parameter
-const mapId = new URLSearchParams(window.location.search).get("mapId");
+const markerRefs = ref<HTMLElement[] | null[]>([]);
 
-// Fetch the markers from the api https://cartes.io/api/maps/3bdc0bdc-8a77-40e3-8c34-c70466443980/markers
-fetch("https://cartes.io/api/maps/" + mapId + "/markers")
-  .then((response) => response.json())
-  .then((data) => {
-    markers.value = data;
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
-const markerWatcher = watch(
+const observer = new MutationObserver(function (event) {
+  console.log('callback that runs when observer is triggered', event);
+});
+
+watch(
   markerRefs,
   (newValue) => {
     console.log("newValue", newValue);
     // On nextTick, in each a-text, update the value
-    nextTick(() => {
-      const texts = document.querySelectorAll("[gps-entity-place]");
-      texts.forEach((text) => {
-        // Get the distance attribute
-        console.log(text);
+    const placeEntities = document.querySelectorAll("[gps-projected-entity-place]")
 
-        const distance = text.getAttribute("distanceMsg");
-        if (distance) {
-          text.setAttribute(
-            "value",
-            text.getAttribute("value") + " " + distance
-          );
-        }
-      });
+    placeEntities.forEach((markerRef) => {
+      if (!markerRef) {
+        return;
+      }
+      console.log("markerRef", markerRef);
+      observer.observe(markerRef, { subtree: true, childList: true });
     });
-  },
-  { deep: true }
+    // nextTick(() => {
+    //   const texts = document.querySelectorAll("[gps-projected-entity-place]");
+    //   const camera = document.querySelector('[gps-projected-camera]');
+
+    //   // Sleep 3 seconds
+    //   setTimeout(() => {
+    //     // Update the value of each a-text
+
+    //     texts.forEach((text) => {
+    //       console.log('NewValText', text);
+    //       const distance = text.getAttribute("distancemsg");
+    //       if (!camera || !distance) {
+    //         return;
+    //       }
+    //       text.addEventListener('markerFound', () => {
+    //         let cameraPosition = camera.object3D.position;
+    //         let markerPosition = text.object3D.position;
+    //         let distance = cameraPosition.distanceTo(markerPosition)
+
+    //         const check = setInterval(() => {
+    //           cameraPosition = camera.object3D.position;
+    //           markerPosition = text.object3D.position;
+    //           distance = cameraPosition.distanceTo(markerPosition)
+
+    //           // do what you want with the distance:
+    //           console.log(distance);
+    //         }, 100);
+    //       });
+    //       if (distance) {
+    //         text.setAttribute(
+    //           "value",
+    //           text.getAttribute("value") + " " + distance
+    //         );
+    //       }
+    //     });
+    //   });
+    // },
+    // );
+  }
+  , { deep: true }
 );
 
 const computedMarkerCategories = computed(() => {
-  const allCategories = markers.value.map((marker) => marker.category);
+  const allCategories = props.markers.map((marker) => marker.category);
   const uniqueCategories = [...new Set(allCategories)];
   const categories = uniqueCategories.map((category) => {
     // If the icon does not start with https, it's a relative path - so append the base url
@@ -113,6 +159,7 @@ const computedMarkerCategories = computed(() => {
   // return the unique categories
   return categories;
 });
+
 </script>
 
 <style>
@@ -124,11 +171,13 @@ const computedMarkerCategories = computed(() => {
   color: #2c3e50;
   margin-top: 60px;
 }
+
 a-scene {
   /* aspect ratio */
   width: 100%;
   aspect-ratio: 0.8;
 }
+
 /* Hide videos with display=none */
 [display="none"] {
   display: none;
