@@ -57,61 +57,22 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { ref, nextTick, watch, computed } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+// import HelloWorld from "./components/HelloWorld.vue";
+import { Marker } from "./types/marker";
 
 const markerRefs = ref([]);
 
-const markers = ref([
-  {
-    id: 2694,
-    location: {
-      type: "Point",
-      coordinates: [43.695382432334, 7.3027592897415],
-    },
-    category_id: 491,
-    created_at: "2022-06-14T07:21:06+02:00",
-    updated_at: "2022-06-14T07:21:06+02:00",
-    description: "",
-    expires_at: null,
-    is_spam: false,
-    link: null,
-    category: {
-      id: 491,
-      name: "Outdoor gym",
-      slug: "outdoor-gym",
-      icon: "/images/marker-01.svg",
-    },
-  },
-  {
-    id: 2695,
-    location: {
-      type: "Point",
-      coordinates: [43.697995458261, 7.3079681396484],
-    },
-    category_id: 488,
-    created_at: "2022-06-14T07:23:00+02:00",
-    updated_at: "2022-06-14T07:23:00+02:00",
-    description: "",
-    expires_at: null,
-    is_spam: false,
-    link: null,
-    category: {
-      id: 488,
-      name: "Port",
-      slug: "port",
-      icon: "/images/marker-01.svg",
-    },
-  },
-]);
+const markers = ref([] as Marker[]);
 
-const mapId = "3bdc0bdc-8a77-40e3-8c34-c70466443980";
+// Get the map ID from the url ?mapId parameter
+const mapId = new URLSearchParams(window.location.search).get("mapId");
 
 // Fetch the markers from the api https://cartes.io/api/maps/3bdc0bdc-8a77-40e3-8c34-c70466443980/markers
-// fetch("https://cartes.io/api/maps/" + mapId + "/markers")
-//   .then((response) => response.json())
-//   .then((data) => {
-//     markers.value = data;
-//   });
+fetch("https://cartes.io/api/maps/" + mapId + "/markers")
+  .then((response) => response.json())
+  .then((data) => {
+    markers.value = data;
+  });
 
 const markerWatcher = watch(
   markerRefs,
@@ -143,7 +104,7 @@ const computedMarkerCategories = computed(() => {
   const categories = uniqueCategories.map((category) => {
     // If the icon does not start with http, it's a relative path - so append the base url
     if (!category.icon.startsWith("http")) {
-      category.icon = "https://cartes.io/" + category.icon;
+      category.icon = "https://cartes.io" + category.icon;
     }
     return category;
   });
@@ -151,6 +112,7 @@ const computedMarkerCategories = computed(() => {
   return categories;
 });
 </script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
