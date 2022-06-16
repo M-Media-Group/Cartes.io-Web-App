@@ -2,7 +2,7 @@
   <div v-if="supportsAR">
     <!-- <img alt="Vue logo" src="./assets/logo.png" />
   <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
-    <div class="close" @click="close()">Open map</div>
+    <button class="close" @click="close()">Open map</button>
     <a-scene vr-mode-ui="enabled: false"
       arjs="trackingMethod: best; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; videoTexture: true; debugUIEnabled: false;"
       loading-screen="dotsColor: blue; backgroundColor: black">
@@ -11,9 +11,8 @@
           :src="category.icon" crossorigin="anonymous" />
       </a-assets>
       <template v-for="marker in props.markers" :key="marker.id">
-        <a-entity ref="markerRefs" look-at="#camera1" :scale="scale"
-          :position="'0 ' + (altitude + (!!marker.elevation ? marker.elevation : 0)) + ' 0'"
-          :gps-projected-entity-place="
+        <a-entity ref="markerRefs" look-at="#camera1" :scale="scale" :data-marker-elevation="marker.elevation"
+          :position="'0 0 0'" :gps-projected-entity-place="
             'latitude: ' +
             marker.location.coordinates[0] +
             '; longitude: ' +
@@ -42,6 +41,7 @@
   </div>
   <div v-else>
     <p>Your browser/device does not support Augmented Reality.</p>
+    <button class="close" @click="close()">Open map instead</button>
   </div>
 </template>
 <script setup lang="ts">
@@ -76,19 +76,23 @@ const supportsAR =
 
 const scale = "40 40 40";
 
-const altitude = ref(-1);
 const distanceToGround = ref(0);
 
-// Get the users altitude from the device GPS
-navigator.geolocation.getCurrentPosition((position) => {
-  altitude.value = (position.coords.altitude ?? 1) * -1;
-});
-
-
 // Listen for GeolocationCoordinates.altitude changes
-// navigator.geolocation.watchPosition((position) => {
-//   altitude.value = Math.round(position.coords.altitude ?? 0) * -1;
-// });
+navigator.geolocation.watchPosition((position) => {
+  const newValue = Math.round(position.coords.altitude ?? 0);
+
+  distanceToGround.value = newValue;
+
+  markerRefs.value.forEach((markerRef) => {
+    if (markerRef) {
+      const altitudeToSet = (parseInt(markerRef.getAttribute("data-marker-elevation") ?? "0")) + (newValue * -1);
+
+      // @ts-ignore we ignore the error because we know that the element is a AFRAME element
+      markerRef.object3D.position.y = altitudeToSet;
+    }
+  });
+});
 
 
 const markerRefs = ref<HTMLElement[] | null[]>([]);
