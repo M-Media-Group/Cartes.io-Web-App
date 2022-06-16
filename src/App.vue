@@ -1,5 +1,5 @@
 <template>
-  <AugmentedReality :markers="markers" />
+  <AugmentedReality :markers="markers" @close="redirectToCartes()" />
 </template>
 
 <script setup lang="ts">
@@ -22,4 +22,7 @@ fetch("https://cartes.io/api/maps/" + mapId + "/markers")
     console.error("Error:", error);
   });
 
+const redirectToCartes = () => {
+  window.location.href = "https://cartes.io/maps/" + mapId;;
+}
 </script>

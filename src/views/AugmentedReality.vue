@@ -1,31 +1,29 @@
 <template>
-  <!-- <img alt="Vue logo" src="./assets/logo.png" />
+  <div v-if="supportsAR">
+    <!-- <img alt="Vue logo" src="./assets/logo.png" />
   <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
-  <a-scene vr-mode-ui="enabled: false"
-    arjs="trackingMethod: best; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; videoTexture: true; debugUIEnabled: false;"
-    loading-screen="dotsColor: blue; backgroundColor: black">
-    <a-assets>
-      <img v-for="category in computedMarkerCategories" :key="'cat-' + category.id" :id="'cat-' + category.id"
-        :src="category.icon" crossorigin="anonymous" />
-    </a-assets>
-    <template v-for="marker in props.markers" :key="marker.id">
-      <a-text ref="markerRefs" :value="marker.category.name" look-at="#camera1" :scale="scale" position="0 50 0"
-        :gps-projected-entity-place="
-          'latitude: ' +
-          marker.location.coordinates[0] +
-          '; longitude: ' +
-          marker.location.coordinates[1]
-        ">
-      </a-text>
-      <a-text v-if="props.showDistance" marker-distance look-at="#camera1" :scale="scale" position="0 40 0"
-        :gps-projected-entity-place="
-          'latitude: ' +
-          marker.location.coordinates[0] +
-          '; longitude: ' +
-          marker.location.coordinates[1]
-        ">
-      </a-text>
-      <!-- <a-entity position="0 1.6 -1" htmlembed :gps-projected-entity-place="
+    <div class="close" @click="close()">Open map</div>
+    <a-scene vr-mode-ui="enabled: false"
+      arjs="trackingMethod: best; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; videoTexture: true; debugUIEnabled: false;"
+      loading-screen="dotsColor: blue; backgroundColor: black">
+      <a-assets>
+        <img v-for="category in computedMarkerCategories" :key="'cat-' + category.id" :id="'cat-' + category.id"
+          :src="category.icon" crossorigin="anonymous" />
+      </a-assets>
+      <template v-for="marker in props.markers" :key="marker.id">
+        <a-entity ref="markerRefs" look-at="#camera1" :scale="scale"
+          :position="'0 ' + (altitude + (!!marker.elevation ? marker.elevation : 0)) + ' 0'"
+          :gps-projected-entity-place="
+            'latitude: ' +
+            marker.location.coordinates[0] +
+            '; longitude: ' +
+            marker.location.coordinates[1]
+          ">
+          <a-text :value="marker.category.name" :position="'0 0.7 0'">
+          </a-text>
+          <a-text v-if="props.showDistance" marker-distance :position="'0 -0.7 0'">
+          </a-text>
+          <!-- <a-entity position="0 1.6 -1" htmlembed :gps-projected-entity-place="
         'latitude: ' +
         marker.location.coordinates[0] +
         '; longitude: ' +
@@ -33,19 +31,18 @@
       ">
         <p>My HTML</p>
       </a-entity> -->
-      <a-image look-at="#camera1" :title="marker.category.name" :src="'#cat-' + marker.category.id" :scale="scale"
-        :gps-projected-entity-place="
-          'latitude: ' +
-          marker.location.coordinates[0] +
-          '; longitude: ' +
-          marker.location.coordinates[1]
-        "></a-image>
-    </template>
+          <a-image :title="marker.category.name" :src="'#cat-' + marker.category.id"></a-image>
+        </a-entity>
+      </template>
 
-    <a-camera id="camera1" look-controls-enabled="false" arjs-look-controls="smoothingFactor: 0.1"
-      gps-projected-camera="gpsMinDistance: 2" rotation-reader>
-    </a-camera>
-  </a-scene>
+      <a-camera id="camera1" look-controls-enabled="false" arjs-look-controls="smoothingFactor: 0.1"
+        gps-projected-camera="gpsMinDistance: 2" rotation-reader>
+      </a-camera>
+    </a-scene>
+  </div>
+  <div v-else>
+    <p>Your browser/device does not support Augmented Reality.</p>
+  </div>
 </template>
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
@@ -65,7 +62,34 @@ const props = defineProps({
   }
 })
 
-const scale = "50 50 50";
+const emit = defineEmits(['close'])
+
+// Determine if the device supports AR (has camera and GPS)
+const supportsAR =
+  navigator.geolocation &&
+  "geolocation" in navigator &&
+  navigator.mediaDevices &&
+  "mediaDevices" in navigator &&
+  // Check if the device has accelerometer and gyroscope
+  window.DeviceOrientationEvent &&
+  "DeviceOrientationEvent" in window
+
+const scale = "40 40 40";
+
+const altitude = ref(-1);
+const distanceToGround = ref(0);
+
+// Get the users altitude from the device GPS
+navigator.geolocation.getCurrentPosition((position) => {
+  altitude.value = (position.coords.altitude ?? 1) * -1;
+});
+
+
+// Listen for GeolocationCoordinates.altitude changes
+// navigator.geolocation.watchPosition((position) => {
+//   altitude.value = Math.round(position.coords.altitude ?? 0) * -1;
+// });
+
 
 const markerRefs = ref<HTMLElement[] | null[]>([]);
 
@@ -110,66 +134,6 @@ if (props.showDistance) {
   });
 }
 
-const observer = new MutationObserver(function (event) {
-  console.log('callback that runs when observer is triggered', event);
-});
-
-watch(
-  markerRefs,
-  (newValue) => {
-    console.log("newValue", newValue);
-    // On nextTick, in each a-text, update the value
-    const placeEntities = document.querySelectorAll("[gps-projected-entity-place]")
-
-    placeEntities.forEach((markerRef) => {
-      if (!markerRef) {
-        return;
-      }
-      console.log("markerRef", markerRef);
-      observer.observe(markerRef, { subtree: true, childList: true });
-    });
-    // nextTick(() => {
-    //   const texts = document.querySelectorAll("[gps-projected-entity-place]");
-    //   const camera = document.querySelector('[gps-projected-camera]');
-
-    //   // Sleep 3 seconds
-    //   setTimeout(() => {
-    //     // Update the value of each a-text
-
-    //     texts.forEach((text) => {
-    //       console.log('NewValText', text);
-    //       const distance = text.getAttribute("distancemsg");
-    //       if (!camera || !distance) {
-    //         return;
-    //       }
-    //       text.addEventListener('markerFound', () => {
-    //         let cameraPosition = camera.object3D.position;
-    //         let markerPosition = text.object3D.position;
-    //         let distance = cameraPosition.distanceTo(markerPosition)
-
-    //         const check = setInterval(() => {
-    //           cameraPosition = camera.object3D.position;
-    //           markerPosition = text.object3D.position;
-    //           distance = cameraPosition.distanceTo(markerPosition)
-
-    //           // do what you want with the distance:
-    //           console.log(distance);
-    //         }, 100);
-    //       });
-    //       if (distance) {
-    //         text.setAttribute(
-    //           "value",
-    //           text.getAttribute("value") + " " + distance
-    //         );
-    //       }
-    //     });
-    //   });
-    // },
-    // );
-  }
-  , { deep: true }
-);
-
 const computedMarkerCategories = computed(() => {
   const allCategories = props.markers.map((marker) => marker.category);
   const uniqueCategories = [...new Set(allCategories)];
@@ -183,6 +147,11 @@ const computedMarkerCategories = computed(() => {
   // return the unique categories
   return categories;
 });
+
+const close = () => {
+  // Emit a close event
+  emit("close");
+}
 
 </script>
 
@@ -205,5 +174,15 @@ a-scene {
 /* Hide videos with display=none */
 [display="none"] {
   display: none;
+}
+
+.close {
+  position: fixed;
+  right: 16px;
+  top: 16px;
+  z-index: 1;
+  background-color: white;
+  padding: 8px;
+  border-radius: 8px;
 }
 </style>

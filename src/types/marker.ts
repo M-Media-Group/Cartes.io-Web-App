@@ -9,7 +9,8 @@ export interface Marker {
     description: string;
     expires_at: null;
     is_spam: boolean;
-    link: null;
+    link: string | null;
+    elevation: number | null;
     category: Category;
 }
 
