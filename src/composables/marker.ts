@@ -2,11 +2,11 @@ import { Marker, MarkerForm } from "@/types/marker";
 import { computed } from "@vue/reactivity";
 import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
 
+const markers = ref<Marker[]>([]);
+
 export function useMarker() {
 
     const minCategoryNameLength = 3;
-
-    const markers = ref<Marker[]>([]);
 
     const emit = getCurrentInstance()?.emit as any;
 
@@ -20,6 +20,14 @@ export function useMarker() {
         description: "",
         link: "",
     });
+
+    const addMarkerToMarkerArray = (marker: Marker) => {
+        markers.value.push(marker);
+    }
+
+    const removeMarkerFromMarkerArray = (marker: Marker) => {
+        markers.value = markers.value.filter((m) => m.id !== marker.id);
+    }
 
     const hasErrors = computed(() => {
         return Object.values(formErrors).some((error) => error !== "");
@@ -122,6 +130,7 @@ export function useMarker() {
                     if (data.category.icon && !data.category.icon.startsWith("https")) {
                         data.category.icon = "/marker.svg";
                     }
+                    addMarkerToMarkerArray(data);
                     localStorage["post_" + data.id] = data.token;
                     emit("addedMarker", data);
                 }
@@ -155,6 +164,7 @@ export function useMarker() {
             })
                 .then((response) => {
                     if (response.ok) {
+                        removeMarkerFromMarkerArray(marker);
                         localStorage.removeItem("post_" + marker.id);
                         emit('deletedMarker', marker);
                     }

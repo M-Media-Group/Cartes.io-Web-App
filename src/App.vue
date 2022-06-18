@@ -4,16 +4,12 @@
     <AugmentedReality :mapId="mapId"
       :markers="markers"
       @close="toggleMapVisibility()"
-      v-if="!showMap"
-      @addedMarker="addMarkerToMarkerArray($event)"
-      @deletedMarker="removeMarkerFromMarkerArray($event)" />
+      v-if="!showMap" />
     <NewMapComponent v-if="showMap"
       :mapId="mapId"
       :show-ar="true"
       :markers="markers"
       style="height: 70vh"
-      @addedMarker="addMarkerToMarkerArray($event)"
-      @deletedMarker="removeMarkerFromMarkerArray($event)"
       @showAr="toggleMapVisibility()">
     </NewMapComponent>
   </template>
@@ -26,7 +22,6 @@
 import { onMounted, ref } from "vue";
 import AugmentedReality from "./views/AugmentedReality.vue";
 import NewMapComponent from "@/components/NewMapComponent.vue"
-import { Marker } from "@/types/marker";
 import { useMarker } from "./composables/marker";
 
 const { markers, getAllMarkersForMap } = useMarker();
@@ -43,14 +38,6 @@ onMounted(() => {
     getAllMarkersForMap(mapId);
   }
 });
-
-const addMarkerToMarkerArray = (marker: Marker) => {
-  markers.value.push(marker);
-}
-
-const removeMarkerFromMarkerArray = (marker: Marker) => {
-  markers.value = markers.value.filter((m) => m.id !== marker.id);
-}
 
 const toggleMapVisibility = () => {
   showMap.value = !showMap.value;
