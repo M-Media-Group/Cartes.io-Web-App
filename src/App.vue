@@ -1,28 +1,44 @@
 <template>
-  <AugmentedReality :markers="markers" @close="redirectToCartes()" />
+  <h1>Cartes.io</h1>
+  <AugmentedReality :mapId="mapId" :markers="markers" @close="showMap = true" v-if="!showMap"
+    @addedMarker="addMarkerToMarkerArray($event)" @deletedMarker="removeMarkerFromMarkerArray($event)" />
+  <NewMapComponent v-if="showMap && mapId" :mapId="mapId" :show-ar="true" :markers="markers" style="height: 50vh"
+    @addedMarker="addMarkerToMarkerArray($event)" @deletedMarker="removeMarkerFromMarkerArray($event)"
+    @showAr="showMap = !showMap">
+  </NewMapComponent>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import AugmentedReality from "./views/AugmentedReality.vue";
+import NewMapComponent from "@/components/NewMapComponent.vue"
 import { Marker } from "@/types/marker";
+import { useMarker } from "./composables/marker";
 
-const markers = ref([] as Marker[]);
+const { markers, getAllMarkersForMap } = useMarker();
+
+const searchParams = new URLSearchParams(window.location.search);
 
 // Get the map ID from the url ?mapId parameter
-const mapId = new URLSearchParams(window.location.search).get("mapId");
+const mapId = searchParams.get("mapId");
 
-// Fetch the markers from the api https://cartes.io/api/maps/3bdc0bdc-8a77-40e3-8c34-c70466443980/markers
-fetch("https://cartes.io/api/maps/" + mapId + "/markers")
-  .then((response) => response.json())
-  .then((data) => {
-    markers.value = data;
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
+const showMap = ref(searchParams.get("showAr") ?? false);
+
+onMounted(() => {
+  if (mapId) {
+    getAllMarkersForMap(mapId);
+  }
+});
 
 const redirectToCartes = () => {
   window.location.href = "https://cartes.io/maps/" + mapId;;
+}
+
+const addMarkerToMarkerArray = (marker: Marker) => {
+  markers.value.push(marker);
+}
+
+const removeMarkerFromMarkerArray = (marker: Marker) => {
+  markers.value = markers.value.filter((m) => m.id !== marker.id);
 }
 </script>

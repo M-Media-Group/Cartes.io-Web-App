@@ -1,0 +1,210 @@
+<template>
+  <form method="POST" action="/markers" @submit.prevent="addMarker(mapId, submitData)" :disabled="!canSubmit">
+
+    <slot name="form-top"></slot>
+
+    <div class="form-errors" v-if="hasErrors">
+      <ul>
+        <template v-for="error in formErrors">
+          <li v-if="error !== ''">{{ error }}</li>
+        </template>
+      </ul>
+    </div>
+    <!-- <Multiselect v-model="submitData.category_name" valueProp="name" label="name" :searchable="true"
+      :options="categories">
+    </Multiselect> -->
+
+    <slot name="form">
+      <label class="my-1 mr-2">Marker label:</label>
+      <Multiselect v-model="submitData.category_name" valueProp="name" ref="multiselect" label="name"
+        placeholder="Start typing..." tag-placeholder="Add this as new label" :options="categories"
+        :resolve-on-load="false" :searchable="true" :allow-empty="false" :create-option="true" :on-create="addTag"
+        :show-labels="false" class="your_custom_class" :loading="isLoading" :internal-search="false"
+        :clear-on-select="false" :options-limit="300" :min-chars="minCategoryNameLength" :max-height="600"
+        :show-no-results="false" :preserve-search="true" @search-change="getCategories($event)" required>
+        <!-- <template slot="limit">Keep typing to refine your search</template>
+      <template slot="noOptions">Search for or add a new label</template>
+      <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name }}</strong></template>
+      <template slot="option" slot-scope="props"><img v-if="props.option.icon" class="rounded img-thumbnail mr-1"
+          height="25" width="25" :src="props.option.icon" alt="" style="position: initial" />{{ props.option.name }}
+      </template> -->
+      </Multiselect>
+
+      <div class="form-group mt-1">
+        <textarea class="form-control mt-1" id="description" rows="2" name="description"
+          v-model="submitData.description" placeholder="Description (optional)"></textarea>
+        <input v-if="showLinkInput === 'required' || showLinkInput === 'optional'" class="form-control mt-1" type="url"
+          pattern="https://.*" :placeholder="
+            'Link using https://' +
+            (showLinkInput === 'optional' ? ' (optional)' : '')
+          " :required="showLinkInput === 'required'" v-model="submitData.link" />
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-sm my-1" :disabled="!canSubmit">
+        Add {{ submitData.category_name ?? "marker" }}
+      </button>
+    </slot>
+  </form>
+</template>
+<script setup lang="ts">
+import "leaflet/dist/leaflet.css";
+import { computed, onMounted, PropType, reactive, ref, watch } from "vue";
+import Multiselect from '@vueform/multiselect'
+import { MarkerForm } from "@/types/marker";
+import { Category } from "@/types/category";
+import { useMarker } from "@/composables/marker";
+
+const props = defineProps({
+  showLinkInput: {
+    type: String as PropType<"required" | "optional" | "disabled" | null>,
+    default: "optional",
+  },
+  mapId: {
+    type: String as PropType<string | number>,
+    required: true,
+  },
+  markerLat: {
+    type: Number as PropType<number | string>,
+    default: "",
+    required: false,
+  },
+  markerLng: {
+    type: Number as PropType<number | string>,
+    default: "",
+    required: false,
+  },
+})
+
+const { addMarker, isLoading, formErrors, hasErrors } = useMarker();
+
+const categories = ref<Category[]>([]);
+
+const minCategoryNameLength = 3;
+
+const multiselect = ref<HTMLInputElement | null>(null);
+
+const submitData = reactive<MarkerForm>({
+  lat: "",
+  lng: "",
+  category_name: "",
+  description: "",
+  link: "",
+});
+
+const canSubmit = computed(() => {
+  return !isLoading.value &&
+    submitData?.category_name?.length >= minCategoryNameLength &&
+    submitData.lat !== "" &&
+    submitData.lng !== "" &&
+    (props.showLinkInput === 'optional' || props.showLinkInput === 'disabled' || submitData.link)
+});
+
+watch(submitData, (newValue, oldValue) => {
+
+  // Clear all the formErrors
+  Object.keys(formErrors).forEach((key) => {
+    formErrors[key] = "";
+  });
+
+  // Actually cant do below with current setup - see https://stackoverflow.com/a/68463834/7410951
+  // // For each newValue key, check if it is different from oldValue key and if it is, clear the error
+  // Object.keys(newValue).forEach(key => {
+  //   console.log(key, newValue[key], oldValue[key], formErrors[key], newValue, oldValue);
+  //   if (newValue[key] !== oldValue[key]) {
+  //     // If the key exists in the formErrors object, clear it
+  //     formErrors[key] = "";
+  //   }
+  // });
+}
+);
+
+watch(
+  () => props.markerLat,
+  (newValue) => {
+    submitData.lat = newValue.toString();
+    formErrors.lat = "";
+  },
+  { immediate: true }
+);
+
+watch(
+  () => props.markerLng,
+  (newValue) => {
+    submitData.lng = newValue.toString();
+    formErrors.lng = "";
+  },
+  { immediate: true }
+);
+
+const getCategories = async (query = null as string | null) => {
+  isLoading.value = true;
+  let url = "https://cartes.io/api/categories"
+  if (query && query.length >= minCategoryNameLength) {
+    url += "?query=" + query;
+  }
+  const response = await fetch(url);
+  const data = await response.json() as Category[];
+  categories.value.splice(0, categories.value.length);
+  data.forEach((category) => {
+    categories.value.push({
+      id: category.id,
+      name: category.name,
+      icon: category.icon,
+      slug: category.slug,
+    });
+  });
+  isLoading.value = false;
+}
+
+onMounted(() => {
+  // Get an initial list of categories
+  getCategories();
+});
+
+const addTag = async (newTag: { name: string; }) => {
+  const tag = {
+    id: -1,
+    name: newTag.name,
+    icon: "/images/marker-01.svg",
+    slug: newTag.name.toLowerCase().replace(/\s+/g, "-"),
+  };
+  categories.value.push(tag);
+  // this.fullCategory = tag;
+  submitData.category_name = tag.name;
+  //this.addMarker()
+
+  return newTag
+}
+
+const focusMultiselect = () => {
+  if (multiselect.value) {
+    multiselect.value.focus();
+  }
+}
+
+defineExpose({
+  focusMultiselect,
+});
+
+</script>
+<style src="@vueform/multiselect/themes/default.css">
+</style>
+<style>
+form {
+  display: grid;
+  gap: 1rem;
+}
+
+input,
+textarea,
+form>button {
+  /* Reset the inputs */
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 16px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  border-radius: 8px;
+  min-width: 200px;
+}
+</style>

@@ -5,7 +5,7 @@
     <button class="close" @click="close()">Open map</button>
     <a-scene vr-mode-ui="enabled: false"
       arjs="trackingMethod: best; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; videoTexture: true; debugUIEnabled: false;"
-      loading-screen="dotsColor: blue; backgroundColor: black">
+      loading-screen="dotsColor: blue; backgroundColor: black" @click="showAddForm = false">
       <a-assets>
         <img v-for="category in computedMarkerCategories" :key="'cat-' + category.id" :id="'cat-' + category.id"
           :src="category.icon" crossorigin="anonymous" />
@@ -38,18 +38,23 @@
         gps-projected-camera="gpsMinDistance: 2" rotation-reader>
       </a-camera>
     </a-scene>
+    <AddMarkerForm @click="showAddForm = true" :class="{ 'partiallyHidden': !showAddForm }" class="addMarkerForm"
+      ref="addMarkerForm" :mapId="mapId" :markers="markers" :markerLat="userPosition.lat" :markerLng="userPosition.lng"
+      @addedMarker="handleNewMarkerEvent($event)" />
   </div>
   <div v-else>
     <p>Your browser/device does not support Augmented Reality.</p>
-    <button class="close" @click="close()">Open map instead</button>
+    <button @click="close()">Open map instead</button>
   </div>
 </template>
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { ref, nextTick, watch, computed, PropType } from "vue";
+import AddMarkerForm from "@/components/AddMarkerForm.vue";
 // import HelloWorld from "./components/HelloWorld.vue";
 import { Marker } from "@/types/marker";
+import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
 
 const props = defineProps({
   markers: {
@@ -59,10 +64,16 @@ const props = defineProps({
   showDistance: {
     type: Boolean,
     default: true,
-  }
+  },
+  mapId: {
+    type: String as PropType<string | number>,
+    required: true,
+  },
 })
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'addedMarker'])
+
+const showAddForm = ref(false)
 
 // Determine if the device supports AR (has camera and GPS)
 const supportsAR =
@@ -78,11 +89,23 @@ const scale = "40 40 40";
 
 const distanceToGround = ref(0);
 
+const { userPosition, setUrlPositionParameters } = useUrlPositionParameters();
+
 // Listen for GeolocationCoordinates.altitude changes
 navigator.geolocation.watchPosition((position) => {
   const newValue = Math.round(position.coords.altitude ?? 0);
 
   distanceToGround.value = newValue;
+
+  userPosition.value = {
+    lat: position.coords.latitude,
+    lng: position.coords.longitude,
+  };
+
+  setUrlPositionParameters(
+    position.coords.latitude,
+    position.coords.longitude,
+  );
 
   markerRefs.value.forEach((markerRef) => {
     if (markerRef) {
@@ -97,7 +120,11 @@ navigator.geolocation.watchPosition((position) => {
 
 const markerRefs = ref<HTMLElement[] | null[]>([]);
 
-if (props.showDistance) {
+const registerMarkerDistanceComponent = () => {
+  //@ts-ignore
+  if (AFRAME.components["marker-distance"]) {
+    return;
+  }
   // @ts-ignore
   AFRAME.registerComponent("marker-distance", {
     init: function () {
@@ -138,6 +165,10 @@ if (props.showDistance) {
   });
 }
 
+if (props.showDistance) {
+  registerMarkerDistanceComponent()
+}
+
 const computedMarkerCategories = computed(() => {
   const allCategories = props.markers.map((marker) => marker.category);
   const uniqueCategories = [...new Set(allCategories)];
@@ -156,6 +187,11 @@ const close = () => {
   // Emit a close event
   emit("close");
 }
+
+const handleNewMarkerEvent = (event: Marker) => {
+  showAddForm.value = false;
+  emit('addedMarker', event);
+};
 
 </script>
 
@@ -188,5 +224,20 @@ a-scene {
   background-color: white;
   padding: 8px;
   border-radius: 8px;
+}
+
+.addMarkerForm {
+  position: fixed;
+  right: 16px;
+  left: 16px;
+  bottom: 16px;
+  z-index: 1;
+  background-color: white;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.partiallyHidden {
+  transform: translateY(70%);
 }
 </style>
