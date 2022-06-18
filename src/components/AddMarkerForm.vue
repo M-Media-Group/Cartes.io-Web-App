@@ -28,9 +28,6 @@
       :options="async (query: string) => {
         return await getCategories(query)
       }"
-      :filter-results="false"
-      :limit="300"
-      :clear-on-search="true"
       @open="(select$: any) => {
         if (select$.noOptions) {
           select$.resolveOptions()
@@ -52,6 +49,11 @@
       :max-height="600"
       :show-no-results="false"
       :preserve-search="true"
+      :infinite="true"
+      :limit="12"
+      :attrs="{
+        'minlength': minCategoryNameLength,
+      }"
       required>
       <!-- <template slot="limit">Keep typing to refine your search</template>
       <template slot="noOptions">Search for or add a new label</template>
@@ -163,8 +165,6 @@ const props = defineProps({
 
 const { addMarker, isLoading, formErrors, hasErrors, validateMarkerForm, minCategoryNameLength } = useMarker();
 
-const categories = ref<Category[]>([]);
-
 const multiselect = ref<HTMLInputElement | null>(null);
 
 const submitData = reactive<MarkerForm>({
@@ -237,32 +237,25 @@ const getCategories = async (query = null as string | null) => {
   }
   const response = await fetch(url);
   const data = await response.json() as Category[];
-  categories.value.splice(0, categories.value.length);
-  data.forEach((category) => {
-    categories.value.push({
-      id: category.id,
-      name: category.name,
-      icon: category.icon,
-      slug: category.slug,
-    });
-  });
   isLoading.value = false;
   return data;
 }
 
 const addTag = async (newTag: { name: string; }) => {
+  if (newTag.name.length < minCategoryNameLength) {
+    formErrors.category_name = "Category name must be at least " + minCategoryNameLength + " characters long";
+    return false;
+  }
   const tag = {
     id: -1,
     name: newTag.name,
     icon: "/images/marker-01.svg",
     slug: newTag.name.toLowerCase().replace(/\s+/g, "-"),
   };
-  categories.value.push(tag);
-  // this.fullCategory = tag;
   submitData.category_name = tag.name;
-  //this.addMarker()
 
-  return newTag
+  //  it should return an object that contains at least the keys defined by valueProp, label & trackBy options.
+  return tag
 }
 
 const focusMultiselect = () => {

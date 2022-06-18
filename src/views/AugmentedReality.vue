@@ -115,33 +115,34 @@ const distanceToGround = ref(0);
 
 const { userPosition, setUrlPositionParameters } = useUrlPositionParameters();
 
-// Listen for GeolocationCoordinates.altitude changes
-navigator.geolocation.watchPosition((position) => {
-  const newValue = Math.round(position.coords.altitude ?? 0);
+if (supportsAR) {
+  // Listen for GeolocationCoordinates.altitude changes
+  navigator.geolocation.watchPosition((position) => {
+    const newValue = Math.round(position.coords.altitude ?? 0);
 
-  distanceToGround.value = newValue;
+    distanceToGround.value = newValue;
 
-  userPosition.value = {
-    lat: position.coords.latitude,
-    lng: position.coords.longitude,
-    elevation: position.coords.altitude,
-  };
+    userPosition.value = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+      elevation: position.coords.altitude,
+    };
 
-  setUrlPositionParameters(
-    position.coords.latitude,
-    position.coords.longitude,
-  );
+    setUrlPositionParameters(
+      position.coords.latitude,
+      position.coords.longitude,
+    );
 
-  markerRefs.value.forEach((markerRef) => {
-    if (markerRef) {
-      const altitudeToSet = (parseInt(markerRef.getAttribute("data-marker-elevation") ?? "0")) + (newValue * -1);
+    markerRefs.value.forEach((markerRef) => {
+      if (markerRef) {
+        const altitudeToSet = (parseInt(markerRef.getAttribute("data-marker-elevation") ?? "0")) + (newValue * -1);
 
-      // @ts-ignore we ignore the error because we know that the element is a AFRAME element
-      markerRef.object3D.position.y = altitudeToSet;
-    }
+        // @ts-ignore we ignore the error because we know that the element is a AFRAME element
+        markerRef.object3D.position.y = altitudeToSet;
+      }
+    });
   });
-});
-
+}
 
 const markerRefs = ref<HTMLElement[] | null[]>([]);
 
