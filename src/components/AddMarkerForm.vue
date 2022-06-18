@@ -103,6 +103,7 @@ watch(submitData, (newValue, oldValue) => {
 
   // Clear all the formErrors
   Object.keys(formErrors).forEach((key) => {
+    // @ts-ignore
     formErrors[key] = "";
   });
 

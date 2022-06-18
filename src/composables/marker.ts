@@ -72,6 +72,7 @@ export function useMarker() {
                             console.error("Malformed data: ", data);
                             // Fill the formErrors
                             Object.keys(data.errors).forEach((key) => {
+                                // @ts-ignore
                                 formErrors[key] = data.errors[key][0];
                             });
 
