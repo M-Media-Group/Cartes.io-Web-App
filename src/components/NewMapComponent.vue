@@ -42,36 +42,36 @@
           :icon-size="[30, 30]"
           :icon-anchor="[15, 25]" />
         <l-popup class="unset-select">
-          <p class="mb-1"
+          <p class="w-100"
             style="min-width: 200px">
             <b>{{ marker.category.name }}</b>
           </p>
-          <p class="mb-1 mt-0 w-100 d-block"
+          <p class="w-100"
             v-if="marker.description"
             v-html="marker.description"></p>
-          <small class="w-100 d-block"
+          <small class="w-100"
             v-if="marker.link"><a :href="marker.link"
               target="blank">{{
                   marker.link.split("/")[2]
               }}</a>
           </small>
-          <small class="w-100 d-block">Last update:
+          <small class="w-100">Last update:
             <span class="timestamp"
               :datetime="marker.updated_at">{{
                   marker.updated_at
               }}</span>.
           </small>
-          <small class="w-100 d-block"
+          <small class="w-100"
             v-if="marker.elevation">Elevation:
             {{ marker.elevation }} meters
           </small>
-          <!-- <small v-if="isMarkerExpired(marker.expires_at)" class="w-100 d-block">Expired:
+          <!-- <small v-if="isMarkerExpired(marker.expires_at)" class="w-100">Expired:
             <span class="timestamp" :datetime="marker.expires_at">{{
                 marker.expires_at
             }}</span>.</small> -->
           <!-- <details class="small">
             <summary>Click to see address</summary>
-            <p class="mt-0 mb-1">{{ marker.label }}</p>
+            <p class= ">{{ marker.label }}</p>
           </details> -->
           <a class="btn btn-link btn-sm text-danger"
             v-if="canDeleteMarker(marker)"
