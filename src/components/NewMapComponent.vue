@@ -133,45 +133,23 @@ const addMarkerPopup = ref();
 
 const addMarkerForm = ref<any>();
 
-const url = new URL(window.location.href);
-
 const canPost = "only_logged_in";
 
-const centerFromUrl = () => {
-  const lat = url.searchParams.get("lat");
-  const lng = url.searchParams.get("lng");
-  if (lat && lng) {
-    return {
-      lat: parseFloat(lat),
-      lng: parseFloat(lng),
-    };
-  }
-  return null;
-};
+const { setUrlPositionParameters, getUrlPositionParameters } = useUrlPositionParameters();
 
-const zoomFromUrl = () => {
-  const zoom = url.searchParams.get("zoom");
-  if (zoom) {
-    return parseInt(zoom);
-  }
-  return null;
-};
-
-const { setUrlPositionParameters } = useUrlPositionParameters();
-
-const zoom = ref(zoomFromUrl() || 2);
-const center = ref(centerFromUrl() || { lat: 0, lng: 0 });
+const zoom = ref(getUrlPositionParameters()['zoom'] || 2);
+const center = ref({ lat: getUrlPositionParameters()['lat'], lng: getUrlPositionParameters()['lng'] });
 const contextMenuPosition = ref({ lat: 0, lng: 0 });
 
 watch(center, (newVal) => {
-  if (newVal) {
+  if (newVal && newVal.lat && newVal.lng) {
     // Update the URL params and zoom
     setUrlPositionParameters(newVal.lat, newVal.lng, zoom.value);
   }
 });
 
 watch(zoom, (newVal) => {
-  if (newVal) {
+  if (newVal && center.value.lat && center.value.lng) {
     setUrlPositionParameters(center.value.lat, center.value.lng, newVal);
   }
 });
@@ -190,10 +168,6 @@ const handleNewMarkerEvent = (event: Marker) => {
 };
 
 const { canDeleteMarker, deleteMarker } = useMarker();
-
-const log = (a: any) => {
-  console.log(a);
-};
 
 </script>
 <style>

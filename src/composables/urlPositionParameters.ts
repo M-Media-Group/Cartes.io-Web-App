@@ -18,12 +18,24 @@ export function useUrlPositionParameters() {
         if (zoom) {
             url.searchParams.set("zoom", zoom.toString());
         }
-        window.history.pushState({}, "", url.href);
+        window.history.replaceState({}, "", url.href);
+    }
+
+    const getUrlPositionParameters = () => {
+        const lat = url.searchParams.get("lat");
+        const lng = url.searchParams.get("lng");
+        const zoom = url.searchParams.get("zoom");
+        return {
+            lat: lat ? parseFloat(lat) : null,
+            lng: lng ? parseFloat(lng) : null,
+            zoom: zoom ? parseFloat(zoom) : null,
+        };
     }
 
     return {
         distanceToGround,
         userPosition,
-        setUrlPositionParameters
+        setUrlPositionParameters,
+        getUrlPositionParameters
     };
 }
