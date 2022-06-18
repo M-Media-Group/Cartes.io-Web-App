@@ -3,7 +3,7 @@
   <template v-if="mapId">
     <AugmentedReality :mapId="mapId"
       :markers="markers"
-      @close="showMap = true"
+      @close="toggleMapVisibility()"
       v-if="!showMap"
       @addedMarker="addMarkerToMarkerArray($event)"
       @deletedMarker="removeMarkerFromMarkerArray($event)" />
@@ -14,7 +14,7 @@
       style="height: 70vh"
       @addedMarker="addMarkerToMarkerArray($event)"
       @deletedMarker="removeMarkerFromMarkerArray($event)"
-      @showAr="showMap = !showMap">
+      @showAr="toggleMapVisibility()">
     </NewMapComponent>
   </template>
   <template v-else>
@@ -44,15 +44,16 @@ onMounted(() => {
   }
 });
 
-const redirectToCartes = () => {
-  window.location.href = "https://cartes.io/maps/" + mapId;;
-}
-
 const addMarkerToMarkerArray = (marker: Marker) => {
   markers.value.push(marker);
 }
 
 const removeMarkerFromMarkerArray = (marker: Marker) => {
   markers.value = markers.value.filter((m) => m.id !== marker.id);
+}
+
+const toggleMapVisibility = () => {
+  showMap.value = !showMap.value;
+  searchParams.set("showAr", showMap.value ? "true" : "false");
 }
 </script>
