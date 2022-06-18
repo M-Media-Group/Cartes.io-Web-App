@@ -6,4 +6,5 @@ export interface Category {
     slug?: string;
     icon?: string;
     views_count?: number;
+    markers_count?: number;
 }

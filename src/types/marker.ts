@@ -9,7 +9,7 @@ export interface Marker {
     created_at: Date;
     updated_at: Date;
     description: string;
-    expires_at: null;
+    expires_at: Date | null;
     is_spam: boolean;
     link: string | null;
     elevation: number | null;
@@ -19,7 +19,7 @@ export interface Marker {
 
 export interface Location {
     type: string;
-    coordinates: number[];
+    coordinates: [number, number];
 }
 
 export interface MarkerForm {
