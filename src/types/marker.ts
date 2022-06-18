@@ -25,6 +25,7 @@ export interface Location {
 export interface MarkerForm {
     lat: string;
     lng: string;
+    elevation: string | number | null,
     category_name: string;
     description: string;
     link: string | null;

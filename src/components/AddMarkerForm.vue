@@ -1,9 +1,13 @@
 <template>
-  <form method="POST" action="/markers" @submit.prevent="addMarker(mapId, submitData)" :disabled="!canSubmit">
+  <form method="POST"
+    action="/markers"
+    @submit.prevent="addMarker(mapId, submitData)"
+    :disabled="!canSubmit">
 
     <slot name="form-top"></slot>
 
-    <div class="form-errors" v-if="hasErrors">
+    <div class="form-errors"
+      v-if="hasErrors">
       <ul>
         <template v-for="error in formErrors">
           <li v-if="error !== ''">{{ error }}</li>
@@ -14,36 +18,108 @@
       :options="categories">
     </Multiselect> -->
 
-    <slot name="form">
-      <label class="my-1 mr-2">Marker label:</label>
-      <Multiselect v-model="submitData.category_name" valueProp="name" ref="multiselect" label="name"
-        placeholder="Start typing..." tag-placeholder="Add this as new label" :options="categories"
-        :resolve-on-load="false" :searchable="true" :allow-empty="false" :create-option="true" :on-create="addTag"
-        :show-labels="false" class="your_custom_class" :loading="isLoading" :internal-search="false"
-        :clear-on-select="false" :options-limit="300" :min-chars="minCategoryNameLength" :max-height="600"
-        :show-no-results="false" :preserve-search="true" @search-change="getCategories($event)" required>
-        <!-- <template slot="limit">Keep typing to refine your search</template>
+    <label>Marker label:</label>
+    <Multiselect v-model="submitData.category_name"
+      valueProp="name"
+      ref="multiselect"
+      label="name"
+      placeholder="Start typing..."
+      tag-placeholder="Add this as new label"
+      :options="async (query: string) => {
+        return await getCategories(query)
+      }"
+      :filter-results="false"
+      :limit="300"
+      :clear-on-search="true"
+      @open="(select$: any) => {
+        if (select$.noOptions) {
+          select$.resolveOptions()
+        }
+      }"
+      :delay="250"
+      :resolve-on-load="false"
+      :searchable="true"
+      :allow-empty="false"
+      :create-option="true"
+      :on-create="addTag"
+      :show-labels="false"
+      class="your_custom_class"
+      :loading="isLoading"
+      :internal-search="false"
+      :clear-on-select="false"
+      :options-limit="300"
+      :min-chars="minCategoryNameLength"
+      :max-height="600"
+      :show-no-results="false"
+      :preserve-search="true"
+      required>
+      <!-- <template slot="limit">Keep typing to refine your search</template>
       <template slot="noOptions">Search for or add a new label</template>
       <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name }}</strong></template>
       <template slot="option" slot-scope="props"><img v-if="props.option.icon" class="rounded img-thumbnail mr-1"
           height="25" width="25" :src="props.option.icon" alt="" style="position: initial" />{{ props.option.name }}
       </template> -->
-      </Multiselect>
+    </Multiselect>
+    <textarea class="form-control mt-1"
+      id="description"
+      rows="2"
+      name="description"
+      v-model="submitData.description"
+      placeholder="Description (optional)"></textarea>
 
-      <div class="form-group mt-1">
-        <textarea class="form-control mt-1" id="description" rows="2" name="description"
-          v-model="submitData.description" placeholder="Description (optional)"></textarea>
-        <input v-if="showLinkInput === 'required' || showLinkInput === 'optional'" class="form-control mt-1" type="url"
-          pattern="https://.*" :placeholder="
-            'Link using https://' +
-            (showLinkInput === 'optional' ? ' (optional)' : '')
-          " :required="showLinkInput === 'required'" v-model="submitData.link" />
+    <input v-if="showLinkInput === 'required' || showLinkInput === 'optional'"
+      class="form-control mt-1"
+      type="url"
+      pattern="https://.*"
+      :placeholder="
+        'Link using https://' +
+        (showLinkInput === 'optional' ? ' (optional)' : '')
+      "
+      :required="showLinkInput === 'required'"
+      v-model="submitData.link" />
+
+    <!-- Expandable details with more options -->
+    <details v-if="allowLatLngElevationOverride">
+      <summary>More options</summary>
+      <div>
+        <label>Lat:</label>
+        <input type="number"
+          step="0.00000000000001"
+          min="-90"
+          max="90"
+          name="lat"
+          v-model="submitData.lat"
+          placeholder="Latitude"
+          required>
+
+        <label>Lng:</label>
+        <input type="number"
+          step="0.00000000000001"
+          min="-180"
+          max="180"
+          name="lng"
+          v-model="submitData.lng"
+          placeholder="Longitude"
+          required>
+
+        <label>Elevation (if blank, auto-inferred):</label>
+        <input type="number"
+          step="0.1"
+          min="-10000"
+          max="10000"
+          name="elevation"
+          v-model="submitData.elevation"
+          placeholder="Elevation (optional)">
+
       </div>
+    </details>
 
-      <button type="submit" class="btn btn-primary btn-sm my-1" :disabled="!canSubmit">
-        Add {{ submitData.category_name ?? "marker" }}
-      </button>
-    </slot>
+
+    <button type="submit"
+      class="btn btn-primary btn-sm my-1"
+      :disabled="!canSubmit">
+      Add {{ submitData.category_name ?? "marker" }}
+    </button>
   </form>
 </template>
 <script setup lang="ts">
@@ -73,6 +149,16 @@ const props = defineProps({
     default: "",
     required: false,
   },
+  markerElevation: {
+    type: Number as PropType<number | string | null>,
+    default: null,
+    required: false,
+  },
+  allowLatLngElevationOverride: {
+    type: Boolean as PropType<boolean>,
+    default: false,
+    required: false,
+  },
 })
 
 const { addMarker, isLoading, formErrors, hasErrors } = useMarker();
@@ -89,6 +175,7 @@ const submitData = reactive<MarkerForm>({
   category_name: "",
   description: "",
   link: "",
+  elevation: null,
 });
 
 const canSubmit = computed(() => {
@@ -137,6 +224,15 @@ watch(
   { immediate: true }
 );
 
+watch(
+  () => props.markerElevation,
+  (newValue) => {
+    submitData.elevation = newValue?.toString() ?? null;
+    formErrors.elevation = "";
+  },
+  { immediate: true }
+);
+
 const getCategories = async (query = null as string | null) => {
   isLoading.value = true;
   let url = "https://cartes.io/api/categories"
@@ -155,12 +251,8 @@ const getCategories = async (query = null as string | null) => {
     });
   });
   isLoading.value = false;
+  return data;
 }
-
-onMounted(() => {
-  // Get an initial list of categories
-  getCategories();
-});
 
 const addTag = async (newTag: { name: string; }) => {
   const tag = {
@@ -194,6 +286,7 @@ defineExpose({
 form {
   display: grid;
   gap: 1rem;
+  min-width: 300px;
 }
 
 input,

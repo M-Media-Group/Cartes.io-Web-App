@@ -1,7 +1,13 @@
 <template>
   <div>
-    <l-map :maxBoundsViscosity="1.0" :worldCopyJump="true" style="width: 100%; height: 100%" class="disable-select"
-      ref="map" v-model:zoom="zoom" v-model:center="center" @contextmenu="openAddMarkerPopup">
+    <l-map :maxBoundsViscosity="1.0"
+      :worldCopyJump="true"
+      style="width: 100%; height: 100%"
+      class="disable-select"
+      ref="map"
+      v-model:zoom="zoom"
+      v-model:center="center"
+      @contextmenu="openAddMarkerPopup($event)">
       <l-tile-layer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png"
         attribution='&copy; <a href="https://cartes.io">Cartes.io</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a> &copy; <a href="https://icons8.com/attributions">Icons8</a>'>
       </l-tile-layer>
@@ -12,30 +18,53 @@
 
       <l-layer-group ref="addMarkerPopup">
         <l-popup class="unset-select">
-          <AddMarkerForm ref="addMarkerForm" :mapId="mapId" :markers="markers" :markerLat="contextMenuPosition.lat"
-            :markerLng="contextMenuPosition.lng" @addedMarker="handleNewMarkerEvent($event)" />
+          <AddMarkerForm ref="addMarkerForm"
+            :mapId="mapId"
+            :markers="markers"
+            :markerLat="contextMenuPosition.lat"
+            :markerLng="contextMenuPosition.lng"
+            :allowLatLngElevationOverride="true"
+            @addedMarker="handleNewMarkerEvent($event)" />
         </l-popup>
       </l-layer-group>
 
-      <l-control class="leaflet-control-ar leaflet-bar leaflet-control" v-if="showAr">
-        <a :href="'https://cartesio.netlify.app/?mapId=' + mapId" target="_BLANK" @click.prevent="emit('showAr')">AR</a>
+      <l-control class="leaflet-control-ar leaflet-bar leaflet-control"
+        v-if="showAr">
+        <a :href="'https://cartesio.netlify.app/?mapId=' + mapId"
+          target="_BLANK"
+          @click.prevent="emit('showAr')">AR</a>
       </l-control>
 
-      <l-marker v-for="marker in props.markers" :lat-lng="marker.location.coordinates" :key="marker.id + 'marker'">
-        <l-icon :icon-url="marker.category.icon" :icon-size="[30, 30]" :icon-anchor="[15, 25]" />
+      <l-marker v-for="marker in props.markers"
+        :lat-lng="marker.location.coordinates"
+        :key="marker.id + 'marker'">
+        <l-icon :icon-url="marker.category.icon"
+          :icon-size="[30, 30]"
+          :icon-anchor="[15, 25]" />
         <l-popup class="unset-select">
-          <p class="mb-1" style="min-width: 200px">
+          <p class="mb-1"
+            style="min-width: 200px">
             <b>{{ marker.category.name }}</b>
           </p>
-          <p class="mb-1 mt-0 w-100 d-block" v-if="marker.description" v-html="marker.description"></p>
-          <small class="w-100 d-block" v-if="marker.link"><a :href="marker.link" target="blank">{{
-              marker.link.split("/")[2]
-          }}</a>
+          <p class="mb-1 mt-0 w-100 d-block"
+            v-if="marker.description"
+            v-html="marker.description"></p>
+          <small class="w-100 d-block"
+            v-if="marker.link"><a :href="marker.link"
+              target="blank">{{
+                  marker.link.split("/")[2]
+              }}</a>
           </small>
           <small class="w-100 d-block">Last update:
-            <span class="timestamp" :datetime="marker.updated_at">{{
-                marker.updated_at
-            }}</span>.</small>
+            <span class="timestamp"
+              :datetime="marker.updated_at">{{
+                  marker.updated_at
+              }}</span>.
+          </small>
+          <small class="w-100 d-block"
+            v-if="marker.elevation">Elevation:
+            {{ marker.elevation }} meters
+          </small>
           <!-- <small v-if="isMarkerExpired(marker.expires_at)" class="w-100 d-block">Expired:
             <span class="timestamp" :datetime="marker.expires_at">{{
                 marker.expires_at
@@ -44,7 +73,8 @@
             <summary>Click to see address</summary>
             <p class="mt-0 mb-1">{{ marker.label }}</p>
           </details> -->
-          <a class="btn btn-link btn-sm text-danger" v-if="canDeleteMarker(marker)"
+          <a class="btn btn-link btn-sm text-danger"
+            v-if="canDeleteMarker(marker)"
             @click="deleteMarker(mapId, marker)">Delete</a>
           <!--
           <a class="btn btn-link btn-sm text-warning" v-if="canMarkAsSpamPost(marker)" @click="markAsSpam(marker.id)"
@@ -191,5 +221,10 @@ const log = (a: any) => {
   /* Firefox */
   -ms-user-select: auto;
   /* Internet Explorer/Edge */
+}
+
+.w-100 {
+  width: 100%;
+  display: block;
 }
 </style>

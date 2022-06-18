@@ -1,6 +1,4 @@
-import { Marker, MarkerForm } from "@/types/marker";
-import { computed } from "@vue/reactivity";
-import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
+import { ref } from "vue";
 
 export function useUrlPositionParameters() {
 
@@ -11,6 +9,7 @@ export function useUrlPositionParameters() {
     const userPosition = ref({
         lat: 0,
         lng: 0,
+        elevation: null as number | null,
     });
 
     const setUrlPositionParameters = (lat: number, lng: number, zoom = null as number | null) => {

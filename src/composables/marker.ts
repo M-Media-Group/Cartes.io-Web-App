@@ -13,6 +13,7 @@ export function useMarker() {
     const formErrors = reactive<MarkerForm>({
         lat: "",
         lng: "",
+        elevation: null,
         category_name: "",
         description: "",
         link: "",

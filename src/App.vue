@@ -1,10 +1,19 @@
 <template>
   <h1>Cartes.io</h1>
   <template v-if="mapId">
-    <AugmentedReality :mapId="mapId" :markers="markers" @close="showMap = true" v-if="!showMap"
-      @addedMarker="addMarkerToMarkerArray($event)" @deletedMarker="removeMarkerFromMarkerArray($event)" />
-    <NewMapComponent v-if="showMap" :mapId="mapId" :show-ar="true" :markers="markers" style="height: 50vh"
-      @addedMarker="addMarkerToMarkerArray($event)" @deletedMarker="removeMarkerFromMarkerArray($event)"
+    <AugmentedReality :mapId="mapId"
+      :markers="markers"
+      @close="showMap = true"
+      v-if="!showMap"
+      @addedMarker="addMarkerToMarkerArray($event)"
+      @deletedMarker="removeMarkerFromMarkerArray($event)" />
+    <NewMapComponent v-if="showMap"
+      :mapId="mapId"
+      :show-ar="true"
+      :markers="markers"
+      style="height: 70vh"
+      @addedMarker="addMarkerToMarkerArray($event)"
+      @deletedMarker="removeMarkerFromMarkerArray($event)"
       @showAr="showMap = !showMap">
     </NewMapComponent>
   </template>

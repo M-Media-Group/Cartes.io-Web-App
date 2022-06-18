@@ -2,25 +2,38 @@
   <div v-if="supportsAR">
     <!-- <img alt="Vue logo" src="./assets/logo.png" />
   <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
-    <button class="close" @click="close()">Open map</button>
+    <button class="close"
+      @click="close()">Open map</button>
     <a-scene vr-mode-ui="enabled: false"
       arjs="trackingMethod: best; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; videoTexture: true; debugUIEnabled: false;"
-      loading-screen="dotsColor: blue; backgroundColor: black" @click="showAddForm = false">
+      loading-screen="dotsColor: blue; backgroundColor: black"
+      @click="showAddForm = false">
       <a-assets>
-        <img v-for="category in computedMarkerCategories" :key="'cat-' + category.id" :id="'cat-' + category.id"
-          :src="category.icon" crossorigin="anonymous" />
+        <img v-for="category in computedMarkerCategories"
+          :key="'cat-' + category.id"
+          :id="'cat-' + category.id"
+          :src="category.icon"
+          crossorigin="anonymous" />
       </a-assets>
-      <template v-for="marker in props.markers" :key="marker.id">
-        <a-entity ref="markerRefs" look-at="#camera1" :scale="scale" :data-marker-elevation="marker.elevation"
-          :position="'0 0 0'" :gps-projected-entity-place="
+      <template v-for="marker in props.markers"
+        :key="marker.id">
+        <a-entity ref="markerRefs"
+          look-at="#camera1"
+          :scale="scale"
+          :data-marker-elevation="marker.elevation"
+          :position="'0 0 0'"
+          :gps-projected-entity-place="
             'latitude: ' +
             marker.location.coordinates[0] +
             '; longitude: ' +
             marker.location.coordinates[1]
           ">
-          <a-text :value="marker.category.name" :position="'0 0.7 0'">
+          <a-text :value="marker.category.name"
+            :position="'0 0.7 0'">
           </a-text>
-          <a-text v-if="props.showDistance" marker-distance :position="'0 -0.7 0'">
+          <a-text v-if="props.showDistance"
+            marker-distance
+            :position="'0 -0.7 0'">
           </a-text>
           <!-- <a-entity position="0 1.6 -1" htmlembed :gps-projected-entity-place="
         'latitude: ' +
@@ -30,16 +43,27 @@
       ">
         <p>My HTML</p>
       </a-entity> -->
-          <a-image :title="marker.category.name" :src="'#cat-' + marker.category.id"></a-image>
+          <a-image :title="marker.category.name"
+            :src="'#cat-' + marker.category.id"></a-image>
         </a-entity>
       </template>
 
-      <a-camera id="camera1" look-controls-enabled="false" arjs-look-controls="smoothingFactor: 0.1"
-        gps-projected-camera="gpsMinDistance: 2" rotation-reader>
+      <a-camera id="camera1"
+        look-controls-enabled="false"
+        arjs-look-controls="smoothingFactor: 0.1"
+        gps-projected-camera="gpsMinDistance: 2"
+        rotation-reader>
       </a-camera>
     </a-scene>
-    <AddMarkerForm @click="showAddForm = true" :class="{ 'partiallyHidden': !showAddForm }" class="addMarkerForm"
-      ref="addMarkerForm" :mapId="mapId" :markers="markers" :markerLat="userPosition.lat" :markerLng="userPosition.lng"
+    <AddMarkerForm @click="showAddForm = true"
+      :class="{ 'partiallyHidden': !showAddForm }"
+      class="addMarkerForm"
+      ref="addMarkerForm"
+      :mapId="mapId"
+      :markers="markers"
+      :markerLat="userPosition.lat"
+      :markerLng="userPosition.lng"
+      :markerElevation="userPosition.elevation"
       @addedMarker="handleNewMarkerEvent($event)" />
   </div>
   <div v-else>
@@ -100,6 +124,7 @@ navigator.geolocation.watchPosition((position) => {
   userPosition.value = {
     lat: position.coords.latitude,
     lng: position.coords.longitude,
+    elevation: position.coords.altitude,
   };
 
   setUrlPositionParameters(
