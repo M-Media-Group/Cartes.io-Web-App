@@ -180,7 +180,7 @@ const submitData = reactive<MarkerForm>({
 
 const canSubmit = computed(() => {
   return !isLoading.value &&
-    validateMarkerForm(submitData) &&
+    (submitData.category_name && validateMarkerForm(submitData)) &&
     (props.showLinkInput === 'optional' || props.showLinkInput === 'disabled' || submitData.link)
 });
 
