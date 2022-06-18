@@ -161,7 +161,7 @@ const props = defineProps({
   },
 })
 
-const { addMarker, isLoading, formErrors, hasErrors } = useMarker();
+const { addMarker, isLoading, formErrors, hasErrors, validateMarkerForm } = useMarker();
 
 const categories = ref<Category[]>([]);
 
@@ -180,9 +180,7 @@ const submitData = reactive<MarkerForm>({
 
 const canSubmit = computed(() => {
   return !isLoading.value &&
-    submitData?.category_name?.length >= minCategoryNameLength &&
-    submitData.lat !== "" &&
-    submitData.lng !== "" &&
+    validateMarkerForm(submitData) &&
     (props.showLinkInput === 'optional' || props.showLinkInput === 'disabled' || submitData.link)
 });
 

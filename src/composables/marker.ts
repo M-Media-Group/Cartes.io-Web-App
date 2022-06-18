@@ -4,6 +4,8 @@ import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
 
 export function useMarker() {
 
+    const minCategoryNameLength = 3;
+
     const markers = ref<Marker[]>([]);
 
     const emit = getCurrentInstance()?.emit as any;
@@ -42,7 +44,37 @@ export function useMarker() {
             });
     };
 
+    const validateMarkerForm = (form: MarkerForm) => {
+        if (form.lat === "") {
+            formErrors.lat = "Enter a valid latitude";
+        }
+
+        if (form.lng === "") {
+            formErrors.lng = "Enter a valid longitude";
+        }
+
+        // if (form.elevation === null) {
+        //     formErrors.elevation = "Enter a valid elevation";
+        // }
+
+        if (form.category_name?.length < minCategoryNameLength) {
+            formErrors.category_name = "Enter a valid category name";
+        }
+
+        // if (form.description === "") {
+        //     formErrors.description = "Enter a valid description";
+        // }
+
+        // if (form.link === "") {
+        //     formErrors.link = "Enter a valid link";
+        // }
+        return !hasErrors.value;
+    };
+
     const addMarker = (mapId: number | string, data: any) => {
+        if (!validateMarkerForm(data)) {
+            return;
+        };
         isLoading.value = true;
         fetch("https://cartes.io/api/maps/" + mapId + "/markers", {
             method: "POST",
@@ -140,6 +172,7 @@ export function useMarker() {
         deleteMarker,
         addMarker,
         getAllMarkersForMap,
+        validateMarkerForm,
         isLoading,
         formErrors,
         markers,
