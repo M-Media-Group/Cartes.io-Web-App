@@ -97,9 +97,9 @@ const emit = defineEmits([
   "showAr"
 ])
 
-const map = ref<LMap>();
+const map = ref();
 
-const addMarkerPopup = ref<LPopup>();
+const addMarkerPopup = ref();
 
 const addMarkerForm = ref<any>();
 

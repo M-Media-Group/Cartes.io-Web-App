@@ -174,7 +174,7 @@ const computedMarkerCategories = computed(() => {
   const uniqueCategories = [...new Set(allCategories)];
   const categories = uniqueCategories.map((category) => {
     // If the icon does not start with https, it's a relative path - so append the base url
-    if (!category.icon.startsWith("https")) {
+    if (category.icon && !category.icon.startsWith("https")) {
       category.icon = "/marker.svg";
     }
     return category;
