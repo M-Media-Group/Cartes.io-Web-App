@@ -84,9 +84,6 @@ test('Displays AugmentedReality view', async () => {
   expect(wrapper.find('a-scene').exists()).toBe(true)
   expect(wrapper.find('a-camera').exists()).toBe(true)
 
-  // Expect the markers data to contain elements
-  console.log(wrapper)
-
   // Await trigger update
   await wrapper.vm.$nextTick()
 

@@ -174,8 +174,6 @@ const registerMarkerDistanceComponent = () => {
       this.markerDistance()
     },
     markerDistance: function (event: any) {
-      console.log("event", event, this.el.object3D)
-
       // @ts-ignore
       this.marker1.object3D.getWorldPosition(this.marker1Pos);
 

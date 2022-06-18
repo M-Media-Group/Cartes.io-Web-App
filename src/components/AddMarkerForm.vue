@@ -161,11 +161,9 @@ const props = defineProps({
   },
 })
 
-const { addMarker, isLoading, formErrors, hasErrors, validateMarkerForm } = useMarker();
+const { addMarker, isLoading, formErrors, hasErrors, validateMarkerForm, minCategoryNameLength } = useMarker();
 
 const categories = ref<Category[]>([]);
-
-const minCategoryNameLength = 3;
 
 const multiselect = ref<HTMLInputElement | null>(null);
 

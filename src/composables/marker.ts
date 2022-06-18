@@ -140,7 +140,6 @@ export function useMarker() {
     };
 
     const deleteMarker = (mapId: number | string, marker: Marker) => {
-        console.log("deleteMarker", marker.id);
         // Check that the marker exists and that it has a token field
         if (marker && canDeleteMarker(marker)) {
             // Delete the marker
@@ -177,5 +176,6 @@ export function useMarker() {
         formErrors,
         markers,
         hasErrors,
+        minCategoryNameLength
     };
 }
