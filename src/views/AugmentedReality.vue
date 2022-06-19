@@ -74,7 +74,7 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import { ref, nextTick, watch, computed, PropType } from "vue";
+import { ref, nextTick, watch, computed, PropType, onUnmounted } from "vue";
 import AddMarkerForm from "@/components/AddMarkerForm.vue";
 // import HelloWorld from "./components/HelloWorld.vue";
 import { Marker } from "@/types/marker";
@@ -207,6 +207,12 @@ const handleNewMarkerEvent = (event: Marker) => {
   showAddForm.value = false;
   emit('addedMarker', event);
 };
+
+onUnmounted(() => {
+  // Seems to be some bug/issue in a-frame that keeps this class in html when unloaded
+  // Remove the a-fullscreen class from the html element
+  document.querySelector("html")?.classList.remove("a-fullscreen");
+});
 
 </script>
 

@@ -1,5 +1,5 @@
 import userDevice from "@/classes/userDevice";
-import { Map } from "@/types/map";
+import { Map, MapForm } from "@/types/map";
 import { computed } from "@vue/reactivity";
 import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
 
@@ -37,12 +37,11 @@ export function useMap() {
     const isLoading = ref(false);
 
     const formErrors = reactive<MapForm>({
-        lat: "",
-        lng: "",
-        elevation: null,
-        category_name: "",
-        description: "",
-        link: "",
+        title: null,
+        slug: null,
+        description: null,
+        privacy: null,
+        users_can_create_markers: null,
     });
 
     const getAllMaps = async () => {
@@ -83,39 +82,19 @@ export function useMap() {
     });
 
     const validateMapForm = (form: MapForm) => {
-        if (form.lat === "") {
-            formErrors.lat = "Enter a valid latitude";
+        if (form.title && form.title.length < minCategoryNameLength) {
+            formErrors.title = "Enter a valid title";
         }
-
-        if (form.lng === "") {
-            formErrors.lng = "Enter a valid longitude";
-        }
-
-        // if (form.elevation === null) {
-        //     formErrors.elevation = "Enter a valid elevation";
-        // }
-
-        if (form.category_name?.length < minCategoryNameLength) {
-            formErrors.category_name = "Enter a valid category name";
-        }
-
-        // if (form.description === "") {
-        //     formErrors.description = "Enter a valid description";
-        // }
-
-        // if (form.link === "") {
-        //     formErrors.link = "Enter a valid link";
-        // }
         return !hasErrors.value;
     };
 
-    const addMap = (mapId: number | string, data: any) => {
+    const addMap = (data = null as MapForm | null, redirect = false) => {
+        if (data && !validateMapForm(data)) {
+            return;
+        };
         if (!userDevice.online) {
             return alert("You must be online to add a map.");
         }
-        if (!validateMapForm(data)) {
-            return;
-        };
         isLoading.value = true;
         fetch("https://cartes.io/api/maps", {
             method: "POST",
@@ -163,7 +142,11 @@ export function useMap() {
                     // if (data.category.icon && !data.category.icon.startsWith("https")) {
                     //     data.category.icon = "/map.svg";
                     // }
-                    // localStorage["post_" + data.uuid] = data.token;
+                    console.log("New map: ", data);
+                    localStorage["map_" + data.uuid] = data.token;
+                    if (redirect) {
+                        window.location.href = "?mapId=" + data.uuid;
+                    }
                     emit("addedMap", data);
                 }
             })
@@ -177,29 +160,31 @@ export function useMap() {
     };
 
     const canDeleteMap = (map: Map) => {
-        return map.token || localStorage.getItem("post_" + map.uuid);
+        return map.token || localStorage.getItem("map_" + map.uuid);
     };
 
-    const deleteMap = (mapId: number | string, map: Map) => {
+    const deleteMap = (map: Map) => {
         if (!userDevice.online) {
             return alert("You must be online to delete a map.");
         }
         // Check that the map exists and that it has a token field
-        if (map && canDeleteMap(map)) {
+        if (canDeleteMap(map)) {
             // Delete the map
-            fetch(`https://cartes.io/api/maps/${mapId}`, {
+            fetch(`https://cartes.io/api/maps/${map.uuid}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                 },
                 body: JSON.stringify({
-                    token: map.token || localStorage.getItem("post_" + map.uuid),
+                    token: map.token || localStorage.getItem("map_" + map.uuid),
                 }),
             })
                 .then((response) => {
                     if (response.ok) {
-                        localStorage.removeItem("post_" + map.uuid);
+                        localStorage.removeItem("map_" + map.uuid);
+                        alert("Map deleted.");
+                        window.location.href = "/";
                         emit('deletedMap', map);
                     }
                 })
@@ -207,6 +192,8 @@ export function useMap() {
                     alert(error);
                     console.error(error);
                 });
+        } else {
+            alert("This map could not be deleted.");
         }
     };
 

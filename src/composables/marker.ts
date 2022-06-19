@@ -160,7 +160,7 @@ export function useMarker() {
             return alert("You need to be online to delete a marker");
         }
         // Check that the marker exists and that it has a token field
-        if (marker && canDeleteMarker(marker)) {
+        if (canDeleteMarker(marker)) {
             // Delete the marker
             fetch(`https://cartes.io/api/maps/${mapId}/markers/${marker.id}`, {
                 method: "DELETE",

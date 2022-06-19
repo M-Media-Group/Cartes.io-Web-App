@@ -26,3 +26,11 @@ export interface Options {
     default_expiration_time: number | null;
     limit_to_geographical_body_type: "land" | "water" | "no" | null;
 }
+
+export interface MapForm {
+    title?: string | null;
+    slug?: string | null;
+    description?: string | null;
+    privacy?: privacyOptions | null;
+    users_can_create_markers?: usersCanCreateMarkersOptions | null;
+}

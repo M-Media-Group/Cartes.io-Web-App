@@ -22,7 +22,9 @@
       </a>
     </div>
   </template>
-  <button>Create new map</button>
+  <button v-if="Maps.canDeleteMap(Maps.map)"
+    @click="Maps.deleteMap(Maps.map)">Delete map</button>
+  <button @click="Maps.addMap(null, true)">Create new map</button>
 </template>
 
 <script setup lang="ts">
