@@ -87,6 +87,9 @@ export function useMarker() {
         if (!validateMarkerForm(data)) {
             return;
         };
+        if (localStorage.getItem("map_" + mapId)) {
+            data.map_token = localStorage.getItem("map_" + mapId);
+        }
         if (!userDevice.online) {
             return alert("You need to be online to add a marker");
         }
