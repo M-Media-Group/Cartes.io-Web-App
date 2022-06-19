@@ -1,19 +1,42 @@
 import userDevice from "@/classes/userDevice";
-import { Marker, MarkerForm } from "@/types/marker";
+import { Map } from "@/types/map";
 import { computed } from "@vue/reactivity";
 import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
 
-const markers = ref<Marker[]>([]);
+const maps = ref<Map[]>([]);
 
-export function useMarker() {
+// reactive maps
+// const maps = reactive<Map[]>([]);
+
+
+export function useMap() {
 
     const minCategoryNameLength = 3;
+
+    // reactive map
+    const map = reactive<Map>({
+        uuid: "",
+        title: "",
+        slug: "",
+        description: "",
+        created_at: new Date(),
+        updated_at: new Date(),
+        privacy: "unlisted",
+        users_can_create_markers: "only_logged_in",
+        options: {
+            links: "optional",
+            default_expiration_time: null,
+            limit_to_geographical_body_type: "no",
+        },
+        categories: [],
+        markers: [],
+    });
 
     const emit = getCurrentInstance()?.emit as any;
 
     const isLoading = ref(false);
 
-    const formErrors = reactive<MarkerForm>({
+    const formErrors = reactive<MapForm>({
         lat: "",
         lng: "",
         elevation: null,
@@ -22,41 +45,44 @@ export function useMarker() {
         link: "",
     });
 
-    const addMarkerToMarkerArray = (marker: Marker) => {
-        markers.value.push(marker);
+    const getAllMaps = async () => {
+        if (!userDevice.isOnline) {
+            return alert("You must be online to get all maps.");
+        }
+        // Fetch the maps from the api https://cartes.io/api/maps
+        fetch("https://cartes.io/api/maps")
+            .then((response) => response.json())
+            .then((data) => {
+                maps.value = data.data;
+                return data.data;
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
     }
 
-    const removeMarkerFromMarkerArray = (marker: Marker) => {
-        markers.value = markers.value.filter((m) => m.id !== marker.id);
+    const getMap = (mapId: string | number) => {
+        if (!userDevice.isOnline) {
+            return alert("You must be online to get a map.");
+        }
+        // Fetch the markers from the api https://cartes.io/api/maps/3bdc0bdc-8a77-40e3-8c34-c70466443980
+        fetch("https://cartes.io/api/maps/" + mapId)
+            .then((response) => response.json())
+            .then((data) => {
+                Object.assign(map, data) // equivalent to reassign
+            }
+            )
+            .catch((error) => {
+                console.error("Error:", error);
+            }
+            );
     }
 
     const hasErrors = computed(() => {
         return Object.values(formErrors).some((error) => error !== "");
     });
 
-    const getAllMarkersForMap = (mapId: string | number) => {
-        if (!userDevice.isOnline) {
-            return alert("You need to be online to add a marker");
-        }
-        // Fetch the markers from the api https://cartes.io/api/maps/3bdc0bdc-8a77-40e3-8c34-c70466443980/markers
-        fetch("https://cartes.io/api/maps/" + mapId + "/markers")
-            .then((response) => response.json())
-            .then((data) => {
-
-                data.forEach((marker: Marker) => {
-                    if (marker.category.icon && !marker.category.icon.startsWith("https")) {
-                        marker.category.icon = "/marker.svg";
-                    }
-                });
-
-                markers.value = data;
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    };
-
-    const validateMarkerForm = (form: MarkerForm) => {
+    const validateMapForm = (form: MapForm) => {
         if (form.lat === "") {
             formErrors.lat = "Enter a valid latitude";
         }
@@ -83,15 +109,15 @@ export function useMarker() {
         return !hasErrors.value;
     };
 
-    const addMarker = (mapId: number | string, data: any) => {
-        if (!validateMarkerForm(data)) {
+    const addMap = (mapId: number | string, data: any) => {
+        if (!userDevice.isOnline) {
+            return alert("You must be online to add a map.");
+        }
+        if (!validateMapForm(data)) {
             return;
         };
-        if (!userDevice.isOnline) {
-            return alert("You need to be online to add a marker");
-        }
         isLoading.value = true;
-        fetch("https://cartes.io/api/maps/" + mapId + "/markers", {
+        fetch("https://cartes.io/api/maps", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -112,7 +138,7 @@ export function useMarker() {
                     case 401:
                         throw new Error("You are not logged in.");
                     case 403:
-                        throw new Error("You are not authorized to add markers to this map.");
+                        throw new Error("You are not authorized to add maps to this map.");
                     case 404:
                         throw new Error("The map does not exist.");
                     case 422:
@@ -127,19 +153,18 @@ export function useMarker() {
                             throw new Error(data.message);
                         });
                     case 429:
-                        throw new Error("You are creating markers too quickly. Please wait a moment and try again.");
+                        throw new Error("You are creating maps too quickly. Please wait a moment and try again.");
                     default:
                         throw new Error("The server encountered an error.");
                 }
             })
-            .then((data: Marker) => {
-                if (data.id) {
-                    if (data.category.icon && !data.category.icon.startsWith("https")) {
-                        data.category.icon = "/marker.svg";
-                    }
-                    addMarkerToMarkerArray(data);
-                    localStorage["post_" + data.id] = data.token;
-                    emit("addedMarker", data);
+            .then((data: Map) => {
+                if (data.uuid) {
+                    // if (data.category.icon && !data.category.icon.startsWith("https")) {
+                    //     data.category.icon = "/map.svg";
+                    // }
+                    // localStorage["post_" + data.uuid] = data.token;
+                    emit("addedMap", data);
                 }
             })
             .catch((error) => {
@@ -151,32 +176,31 @@ export function useMarker() {
             });
     };
 
-    const canDeleteMarker = (marker: Marker) => {
-        return marker.token || localStorage.getItem("post_" + marker.id);
+    const canDeleteMap = (map: Map) => {
+        return map.token || localStorage.getItem("post_" + map.uuid);
     };
 
-    const deleteMarker = (mapId: number | string, marker: Marker) => {
+    const deleteMap = (mapId: number | string, map: Map) => {
         if (!userDevice.isOnline) {
-            return alert("You need to be online to delete a marker");
+            return alert("You must be online to delete a map.");
         }
-        // Check that the marker exists and that it has a token field
-        if (marker && canDeleteMarker(marker)) {
-            // Delete the marker
-            fetch(`https://cartes.io/api/maps/${mapId}/markers/${marker.id}`, {
+        // Check that the map exists and that it has a token field
+        if (map && canDeleteMap(map)) {
+            // Delete the map
+            fetch(`https://cartes.io/api/maps/${mapId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                 },
                 body: JSON.stringify({
-                    token: marker.token || localStorage.getItem("post_" + marker.id),
+                    token: map.token || localStorage.getItem("post_" + map.uuid),
                 }),
             })
                 .then((response) => {
                     if (response.ok) {
-                        removeMarkerFromMarkerArray(marker);
-                        localStorage.removeItem("post_" + marker.id);
-                        emit('deletedMarker', marker);
+                        localStorage.removeItem("post_" + map.uuid);
+                        emit('deletedMap', map);
                     }
                 })
                 .catch((error) => {
@@ -187,15 +211,17 @@ export function useMarker() {
     };
 
     return {
-        canDeleteMarker,
-        deleteMarker,
-        addMarker,
-        getAllMarkersForMap,
-        validateMarkerForm,
+        canDeleteMap,
+        deleteMap,
+        addMap,
+        validateMapForm,
+        getMap,
+        getAllMaps,
         isLoading,
         formErrors,
-        markers,
         hasErrors,
-        minCategoryNameLength
+        minCategoryNameLength,
+        map,
+        maps,
     };
 }

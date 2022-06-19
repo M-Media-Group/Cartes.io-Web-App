@@ -8,7 +8,7 @@ export type usersCanCreateMarkersOptions = "yes" | "no" | "only_logged_in";
 
 export interface Map {
     slug: string;
-    title: string;
+    title: string | null;
     description: string;
     privacy: privacyOptions;
     users_can_create_markers: usersCanCreateMarkersOptions;
@@ -22,7 +22,7 @@ export interface Map {
 }
 
 export interface Options {
-    links: "required" | "optional" | "disabled";
+    links: "required" | "optional" | "disabled" | null;
     default_expiration_time: number | null;
-    limit_to_geographical_body_type: "land" | "water" | "no";
+    limit_to_geographical_body_type: "land" | "water" | "no" | null;
 }

@@ -131,6 +131,7 @@ import Multiselect from '@vueform/multiselect'
 import { MarkerForm } from "@/types/marker";
 import { Category } from "@/types/category";
 import { useMarker } from "@/composables/marker";
+import userDevice from "@/classes/userDevice";
 
 const props = defineProps({
   showLinkInput: {
@@ -230,6 +231,10 @@ watch(
 );
 
 const getCategories = async (query = null as string | null) => {
+  if (!userDevice.isOnline) {
+    alert("You must be online to fetch categories.");
+    return [];
+  }
   isLoading.value = true;
   let url = "https://cartes.io/api/categories"
   if (query && query.length >= minCategoryNameLength) {

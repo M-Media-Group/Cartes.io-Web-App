@@ -29,7 +29,7 @@
       </l-layer-group>
 
       <l-control class="leaflet-control-ar leaflet-bar leaflet-control"
-        v-if="showAr">
+        v-if="showAr && userDevice.supportsAr">
         <a :href="'https://cartesio.netlify.app/?mapId=' + mapId"
           target="_BLANK"
           @click.prevent="emit('showAr')">AR</a>
@@ -104,6 +104,11 @@ import AddMarkerForm from "@/components/AddMarkerForm.vue";
 import { computed, PropType, ref, watch } from "vue";
 import { useMarker } from "@/composables/marker";
 import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
+import userDevice from "@/classes/userDevice";
+
+const isOnline = computed(() => {
+  return userDevice.isOnline;
+});
 
 const props = defineProps({
   showAr: {

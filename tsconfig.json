@@ -29,7 +29,7 @@
     "types": [
       "vite/client",
       "@types/jest"
-    ],
+    ]
   },
   "include": [
     "src/**/*.ts",

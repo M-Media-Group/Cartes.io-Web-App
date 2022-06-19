@@ -1,5 +1,5 @@
 <template>
-  <div v-if="supportsAR">
+  <div v-if="userDevice.supportsAr">
     <!-- <img alt="Vue logo" src="./assets/logo.png" />
   <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
     <button class="close"
@@ -79,6 +79,7 @@ import AddMarkerForm from "@/components/AddMarkerForm.vue";
 // import HelloWorld from "./components/HelloWorld.vue";
 import { Marker } from "@/types/marker";
 import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
+import userDevice from "@/classes/userDevice";
 
 const props = defineProps({
   markers: {
@@ -99,23 +100,13 @@ const emit = defineEmits(['close', 'addedMarker'])
 
 const showAddForm = ref(false)
 
-// Determine if the device supports AR (has camera and GPS)
-const supportsAR =
-  navigator.geolocation &&
-  "geolocation" in navigator &&
-  navigator.mediaDevices &&
-  "mediaDevices" in navigator &&
-  // Check if the device has accelerometer and gyroscope
-  window.DeviceOrientationEvent &&
-  "DeviceOrientationEvent" in window
-
 const scale = "40 40 40";
 
 const distanceToGround = ref(0);
 
 const { userPosition, setUrlPositionParameters } = useUrlPositionParameters();
 
-if (supportsAR) {
+if (userDevice.supportsAr) {
   // Listen for GeolocationCoordinates.altitude changes
   navigator.geolocation.watchPosition((position) => {
     const newValue = Math.round(position.coords.altitude ?? 0);
