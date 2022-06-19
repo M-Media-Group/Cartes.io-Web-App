@@ -30,7 +30,7 @@ class userDevice {
 
     get supportsAr() {
         if (this.#hasArSupport === null) {
-            this.#hasArSupport = this.supportsGeolocation && this.supportsMediaDevices && this.supportsDeviceOrientation && this.supportsDeviceMotion && this.hasVideoMediaDevice;
+            this.#hasArSupport = this.supportsGeolocation && this.supportsMediaDevices && this.supportsDeviceOrientation && this.supportsDeviceMotion;
         }
         return this.#hasArSupport;
     }

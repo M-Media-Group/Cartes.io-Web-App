@@ -18,13 +18,15 @@
 
       <l-layer-group ref="addMarkerPopup">
         <l-popup class="unset-select">
-          <AddMarkerForm ref="addMarkerForm"
+          <AddMarkerForm v-if="canCreateMarker()"
+            ref="addMarkerForm"
             :mapId="mapId"
             :markers="markers"
             :markerLat="contextMenuPosition.lat"
             :markerLng="contextMenuPosition.lng"
             :allowLatLngElevationOverride="true"
             @addedMarker="handleNewMarkerEvent($event)" />
+          <div v-else>You must be logged in to create markers on this map.</div>
         </l-popup>
       </l-layer-group>
 
@@ -172,7 +174,7 @@ const handleNewMarkerEvent = (event: Marker) => {
   addMarkerPopup.value.leafletObject.closePopup();
 };
 
-const { canDeleteMarker, deleteMarker } = useMarker();
+const { canDeleteMarker, deleteMarker, canCreateMarker } = useMarker();
 
 </script>
 <style>

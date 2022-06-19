@@ -1,11 +1,15 @@
 import userDevice from "@/classes/userDevice";
+import { Map } from "@/types/map";
 import { Marker, MarkerForm } from "@/types/marker";
 import { computed } from "@vue/reactivity";
 import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
+import { useMap } from "./map";
 
 const markers = ref<Marker[]>([]);
 
 export function useMarker() {
+
+    const Map = useMap();
 
     const minCategoryNameLength = 3;
 
@@ -83,7 +87,20 @@ export function useMarker() {
         return !hasErrors.value;
     };
 
+    const canCreateMarkerForMap = (map: Map) => {
+        return Map.canCreateMarkers(map);
+    }
+
+    const canCreateMarker = () => {
+        return canCreateMarkerForMap(Map.map);
+    }
+
     const addMarker = (mapId: number | string, data: any) => {
+        if (Map.map.uuid == mapId) {
+            if (!canCreateMarker()) {
+                return alert("You need to be logged in to add a marker");
+            }
+        }
         if (!validateMarkerForm(data)) {
             return;
         };
@@ -195,6 +212,7 @@ export function useMarker() {
         addMarker,
         getAllMarkersForMap,
         validateMarkerForm,
+        canCreateMarker,
         isLoading,
         formErrors,
         markers,

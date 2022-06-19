@@ -86,7 +86,7 @@
       <div>
         <label>Lat:</label>
         <input type="number"
-          step="0.00000000000001"
+          step="0.000000000000001"
           min="-90"
           max="90"
           name="lat"
@@ -96,7 +96,7 @@
 
         <label>Lng:</label>
         <input type="number"
-          step="0.00000000000001"
+          step="0.000000000000001"
           min="-180"
           max="180"
           name="lng"
@@ -164,7 +164,7 @@ const props = defineProps({
   },
 })
 
-const { addMarker, isLoading, formErrors, hasErrors, validateMarkerForm, minCategoryNameLength } = useMarker();
+const { addMarker, isLoading, formErrors, hasErrors, validateMarkerForm, minCategoryNameLength, canCreateMarker } = useMarker();
 
 const multiselect = ref<HTMLInputElement | null>(null);
 
@@ -179,7 +179,9 @@ const submitData = reactive<MarkerForm>({
 
 const canSubmit = computed(() => {
   return !isLoading.value &&
-    (submitData.category_name && validateMarkerForm(submitData)) &&
+    (submitData.category_name &&
+      validateMarkerForm(submitData)) &&
+    canCreateMarker() &&
     (props.showLinkInput === 'optional' || props.showLinkInput === 'disabled' || submitData.link)
 });
 

@@ -5,6 +5,24 @@ import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
 
 const maps = ref<Map[]>([]);
 
+// reactive map
+const map = reactive<Map>({
+    uuid: "",
+    title: "",
+    slug: "",
+    description: "",
+    created_at: new Date(),
+    updated_at: new Date(),
+    privacy: "unlisted",
+    users_can_create_markers: "only_logged_in",
+    options: {
+        links: "optional",
+        default_expiration_time: null,
+        limit_to_geographical_body_type: "no",
+    },
+    categories: [],
+    markers: [],
+});
 // reactive maps
 // const maps = reactive<Map[]>([]);
 
@@ -12,25 +30,6 @@ const maps = ref<Map[]>([]);
 export function useMap() {
 
     const minCategoryNameLength = 3;
-
-    // reactive map
-    const map = reactive<Map>({
-        uuid: "",
-        title: "",
-        slug: "",
-        description: "",
-        created_at: new Date(),
-        updated_at: new Date(),
-        privacy: "unlisted",
-        users_can_create_markers: "only_logged_in",
-        options: {
-            links: "optional",
-            default_expiration_time: null,
-            limit_to_geographical_body_type: "no",
-        },
-        categories: [],
-        markers: [],
-    });
 
     const emit = getCurrentInstance()?.emit as any;
 
@@ -163,6 +162,14 @@ export function useMap() {
         return map.token || localStorage.getItem("map_" + map.uuid);
     };
 
+    const canUpdateMap = (map: Map) => {
+        return canDeleteMap(map);
+    }
+
+    const canCreateMarkers = (map: Map) => {
+        return map.users_can_create_markers === 'yes' || map.token || localStorage.getItem("map_" + map.uuid);
+    }
+
     const deleteMap = (map: Map) => {
         if (!userDevice.online) {
             return alert("You must be online to delete a map.");
@@ -199,11 +206,13 @@ export function useMap() {
 
     return {
         canDeleteMap,
+        canUpdateMap,
         deleteMap,
         addMap,
         validateMapForm,
         getMap,
         getAllMaps,
+        canCreateMarkers,
         isLoading,
         formErrors,
         hasErrors,
