@@ -46,7 +46,7 @@ export function useMap() {
     });
 
     const getAllMaps = async () => {
-        if (!userDevice.isOnline) {
+        if (!userDevice.online) {
             return alert("You must be online to get all maps.");
         }
         // Fetch the maps from the api https://cartes.io/api/maps
@@ -62,7 +62,7 @@ export function useMap() {
     }
 
     const getMap = (mapId: string | number) => {
-        if (!userDevice.isOnline) {
+        if (!userDevice.online) {
             return alert("You must be online to get a map.");
         }
         // Fetch the markers from the api https://cartes.io/api/maps/3bdc0bdc-8a77-40e3-8c34-c70466443980
@@ -110,7 +110,7 @@ export function useMap() {
     };
 
     const addMap = (mapId: number | string, data: any) => {
-        if (!userDevice.isOnline) {
+        if (!userDevice.online) {
             return alert("You must be online to add a map.");
         }
         if (!validateMapForm(data)) {
@@ -181,7 +181,7 @@ export function useMap() {
     };
 
     const deleteMap = (mapId: number | string, map: Map) => {
-        if (!userDevice.isOnline) {
+        if (!userDevice.online) {
             return alert("You must be online to delete a map.");
         }
         // Check that the map exists and that it has a token field

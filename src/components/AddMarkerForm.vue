@@ -231,7 +231,7 @@ watch(
 );
 
 const getCategories = async (query = null as string | null) => {
-  if (!userDevice.isOnline) {
+  if (!userDevice.online) {
     alert("You must be online to fetch categories.");
     return [];
   }

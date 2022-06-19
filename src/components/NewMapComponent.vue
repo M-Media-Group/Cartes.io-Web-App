@@ -107,7 +107,7 @@ import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
 import userDevice from "@/classes/userDevice";
 
 const isOnline = computed(() => {
-  return userDevice.isOnline;
+  return userDevice.online;
 });
 
 const props = defineProps({

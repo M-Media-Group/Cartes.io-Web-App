@@ -35,7 +35,7 @@ export function useMarker() {
     });
 
     const getAllMarkersForMap = (mapId: string | number) => {
-        if (!userDevice.isOnline) {
+        if (!userDevice.online) {
             return alert("You need to be online to add a marker");
         }
         // Fetch the markers from the api https://cartes.io/api/maps/3bdc0bdc-8a77-40e3-8c34-c70466443980/markers
@@ -87,7 +87,7 @@ export function useMarker() {
         if (!validateMarkerForm(data)) {
             return;
         };
-        if (!userDevice.isOnline) {
+        if (!userDevice.online) {
             return alert("You need to be online to add a marker");
         }
         isLoading.value = true;
@@ -156,7 +156,7 @@ export function useMarker() {
     };
 
     const deleteMarker = (mapId: number | string, marker: Marker) => {
-        if (!userDevice.isOnline) {
+        if (!userDevice.online) {
             return alert("You need to be online to delete a marker");
         }
         // Check that the marker exists and that it has a token field

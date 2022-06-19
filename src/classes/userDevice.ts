@@ -1,36 +1,38 @@
 class userDevice {
 
-    hasArSupport = null as null | Boolean;
-    isOnline = navigator.onLine;
+    #hasArSupport = null as null | Boolean;
+    #isOnline = navigator.onLine;
+    #deviceMediaDevices: MediaDeviceInfo[] = [];
 
     constructor() {
         this.listenForOnlineStatusChange();
+        this.getAllMediaDevices();
     }
 
     listenForOnlineStatusChange() {
         window.addEventListener("online", () => {
-            this.isOnline = true;
+            this.#isOnline = true;
         });
         window.addEventListener("offline", () => {
             alert("You are offline");
-            this.isOnline = false;
+            this.#isOnline = false;
         });
     }
 
     stopListeningForOnlineStatusChange() {
         window.removeEventListener("online", () => {
-            this.isOnline = true;
+            this.#isOnline = true;
         });
         window.removeEventListener("offline", () => {
-            this.isOnline = false;
+            this.#isOnline = false;
         });
     }
 
     get supportsAr() {
-        if (this.hasArSupport === null) {
-            this.hasArSupport = this.supportsGeolocation && this.supportsMediaDevices && this.supportsDeviceOrientation && this.supportsDeviceMotion;
+        if (this.#hasArSupport === null) {
+            this.#hasArSupport = this.supportsGeolocation && this.supportsMediaDevices && this.supportsDeviceOrientation && this.supportsDeviceMotion && this.hasVideoMediaDevice;
         }
-        return this.hasArSupport;
+        return this.#hasArSupport;
     }
 
     get supportsGeolocation() {
@@ -41,6 +43,36 @@ class userDevice {
     get supportsMediaDevices() {
         return navigator.mediaDevices &&
             "mediaDevices" in navigator
+    }
+
+    getAllMediaDevices() {
+        navigator.mediaDevices.enumerateDevices()
+            .then((devices) => {
+                this.#deviceMediaDevices = devices;
+            })
+            .catch(function (err) {
+                console.log(err.name + ": " + err.message);
+            });
+    }
+
+    get mediaDevices() {
+        return this.#deviceMediaDevices;
+    }
+
+    get hasMediaDevices() {
+        return this.#deviceMediaDevices.length > 0;
+    }
+
+    get hasGivenPermissionForMediaDevices() {
+        return this.#deviceMediaDevices.some((device) => device.label !== "");
+    }
+
+    get hasVideoMediaDevice() {
+        return this.#deviceMediaDevices.some((device) => device.kind === "videoinput");
+    }
+
+    get hasAudioMediaDevice() {
+        return this.#deviceMediaDevices.some((device) => device.kind === "audioinput");
     }
 
     get supportsDeviceOrientation() {
@@ -70,7 +102,7 @@ class userDevice {
     }
 
     get online() {
-        return this.isOnline;
+        return this.#isOnline;
     }
 
 }
