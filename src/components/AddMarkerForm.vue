@@ -216,6 +216,16 @@ defineExpose({
         'minlength': minCategoryNameLength,
       }"
       required>
+      <template #option="{ option }">
+        <img v-if="option.icon"
+          class="rounded img-thumbnail mr-1"
+          height="25"
+          width="25"
+          :src="option.icon"
+          alt=""
+          style="position: initial" />{{ option.name }}
+      </template>
+
       <!-- <template slot="limit">Keep typing to refine your search</template>
       <template slot="noOptions">Search for or add a new label</template>
       <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name }}</strong></template>
