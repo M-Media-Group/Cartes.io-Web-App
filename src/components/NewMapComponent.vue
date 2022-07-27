@@ -16,6 +16,8 @@ import "leaflet/dist/leaflet.css";
 
 import AddMarkerForm from "@/components/AddMarkerForm.vue";
 
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+
 import { computed, PropType, ref, watch } from "vue";
 import { useMarker } from "@/composables/marker";
 import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
@@ -47,6 +49,8 @@ const emit = defineEmits([
   "showAr"
 ])
 
+const ready = ref(false);
+
 const map = ref();
 
 const addMarkerPopup = ref();
@@ -64,17 +68,6 @@ const maxBounds = [
   [-90, -180],
   [90, 180],
 ];
-
-//Bounds set slightly higher than actual world max to create a "padding" on the map
-watch(map, (newValue) => {
-  console.log(map.value, newValue);
-  // if (newValue) {
-  //   newValue.setMaxBounds([
-  //     [-90, -180],
-  //     [90, 180],
-  //   ]);
-  // }
-});
 
 watch(center, (newVal) => {
   if (newVal && newVal.lat && newVal.lng) {
@@ -104,6 +97,44 @@ const handleNewMarkerEvent = (event: Marker) => {
 
 const { canDeleteMarker, deleteMarker, canCreateMarker } = useMarker();
 
+const provider = new OpenStreetMapProvider();
+
+const searchControl = new GeoSearchControl({
+  provider: provider,
+  showMarker: false, // optional: true|false  - default true
+  autoClose: true, // optional: true|false  - default false
+  updateMap: false, // optional: true|false  - default true
+});
+
+const searchResults = ref();
+
+const searchLocation = (string) => {
+  if (string) {
+    provider.search({ query: string }).then(results => {
+      if (results.length > 0) {
+        searchResults.value = results;
+        const result = results[0];
+        goToLocation({ location: result });
+      }
+    });
+  }
+};
+
+//Bounds set slightly higher than actual world max to create a "padding" on the map
+watch(ready, (newValue) => {
+  map.value.leafletObject.addControl(searchControl);
+  map.value.leafletObject.on('geosearch/showlocation', goToLocation);
+});
+
+const goToLocation = (event: { location: any; }) => {
+  const result = event.location;
+  center.value = { lat: result.y, lng: result.x };
+  // Count how many decimal places there are in the lat/lng, and zoom in accordingly
+  const latDecimalPlaces = result.y.toString().split('.')[1].length;
+  const lngDecimalPlaces = result.x.toString().split('.')[1].length;
+  zoom.value = Math.max(latDecimalPlaces, lngDecimalPlaces) + 3;
+};
+
 </script>
 <template>
   <div>
@@ -115,7 +146,8 @@ const { canDeleteMarker, deleteMarker, canCreateMarker } = useMarker();
       v-model:max-bounds="maxBounds"
       v-model:zoom="zoom"
       v-model:center="center"
-      @contextmenu="openAddMarkerPopup($event)">
+      @contextmenu="openAddMarkerPopup($event)"
+      @ready="ready = true">
       <l-tile-layer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png"
         attribution='&copy; <a href="https://cartes.io">Cartes.io</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a> &copy; <a href="https://icons8.com/attributions">Icons8</a>'>
       </l-tile-layer>
@@ -194,7 +226,10 @@ const { canDeleteMarker, deleteMarker, canCreateMarker } = useMarker();
     </l-map>
   </div>
 </template>
+
 <style>
+@import 'leaflet-geosearch/dist/geosearch.css';
+
 .disable-select {
   user-select: none;
   /* supported by Chrome and Opera */
