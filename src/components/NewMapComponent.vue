@@ -99,26 +99,31 @@ const { canDeleteMarker, deleteMarker, canCreateMarker } = useMarker();
 
 const provider = new OpenStreetMapProvider();
 
-const searchControl = new GeoSearchControl({
+const geosearchControlOptions = {
   provider: provider,
   showMarker: false, // optional: true|false  - default true
   autoClose: true, // optional: true|false  - default false
   updateMap: false, // optional: true|false  - default true
-});
+  keepResult: true, // optional: true|false  - default false
+};
+
+const searchControl = new (GeoSearchControl as any)(geosearchControlOptions);
 
 const searchResults = ref();
 
-const searchLocation = (string) => {
-  if (string) {
-    provider.search({ query: string }).then(results => {
-      if (results.length > 0) {
-        searchResults.value = results;
-        const result = results[0];
-        goToLocation({ location: result });
-      }
-    });
-  }
-};
+// const searchLocation = async (string: string, goTo = true) => {
+//   if (string) {
+//     const results = await provider.search({ query: string });
+//     searchResults.value = results;
+
+//     if (results.length > 0) {
+//       if (goTo) {
+//         goToLocation({ location: results[0] });
+//       }
+//     }
+//     return results;
+//   }
+// };
 
 //Bounds set slightly higher than actual world max to create a "padding" on the map
 watch(ready, (newValue) => {
@@ -212,8 +217,10 @@ const goToLocation = (event: { location: any; }) => {
                 marker.expires_at
             }}</span>.</small> -->
           <!-- <details class="small">
-            <summary>Click to see address</summary>
-            <p class= ">{{ marker.label }}</p>
+            <summary
+              @click='searchLocation(marker.location.coordinates[0] + " " + marker.location.coordinates[1], false)'>
+              Click to see address</summary>
+            <p>{{ searchResults }}</p>
           </details> -->
           <a class="btn btn-link btn-sm text-danger"
             v-if="canDeleteMarker(marker)"
