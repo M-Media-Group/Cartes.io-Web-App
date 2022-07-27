@@ -60,10 +60,10 @@ const { setUrlPositionParameters, getUrlPositionParameters } = useUrlPositionPar
 const zoom = ref(getUrlPositionParameters()['zoom'] || 2);
 const center = ref({ lat: getUrlPositionParameters()['lat'], lng: getUrlPositionParameters()['lng'] });
 const contextMenuPosition = ref({ lat: 0, lng: 0 });
-const maxBounds = ref([
+const maxBounds = [
   [-90, -180],
   [90, 180],
-]);
+];
 
 //Bounds set slightly higher than actual world max to create a "padding" on the map
 watch(map, (newValue) => {
