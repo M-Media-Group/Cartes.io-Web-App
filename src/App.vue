@@ -34,6 +34,7 @@ import AugmentedReality from "./views/AugmentedReality.vue";
 import NewMapComponent from "@/components/NewMapComponent.vue"
 import { useMarker } from "./composables/marker";
 import { useMap } from "./composables/map";
+import userDevice from "@/classes/userDevice";
 
 const { markers, getAllMarkersForMap } = useMarker();
 
@@ -44,7 +45,7 @@ const searchParams = new URLSearchParams(window.location.search);
 // Get the map ID from the url ?mapId parameter
 const mapId = searchParams.get("mapId");
 
-const showMap = ref(searchParams.get("showAr") ?? false);
+const showMap = ref((userDevice.supportsAr && searchParams.get("showAr")) ?? true);
 
 onMounted(() => {
   if (mapId) {

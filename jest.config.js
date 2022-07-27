@@ -10,6 +10,9 @@ module.exports = {
         '^.+\\.ts$': 'ts-jest',
         '^.+\\.vue$': 'vue-jest'
     },
+    moduleNameMapper: {
+        "^@/(.*)$": "<rootDir>/src/$1"
+    },
     globals: {
         'vue-jest': {
             compilerOptions: {
