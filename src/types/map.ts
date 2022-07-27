@@ -28,6 +28,7 @@ export interface Options {
 }
 
 export interface MapForm {
+    token?: string | null;
     title?: string | null;
     slug?: string | null;
     description?: string | null;

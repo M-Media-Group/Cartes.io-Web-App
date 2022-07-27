@@ -1,12 +1,13 @@
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
 import AugmentedReality from "./views/AugmentedReality.vue";
-import NewMapComponent from "@/components/NewMapComponent.vue"
+import NewMapComponent from "@/components/maps/NewMapComponent.vue"
 import { useMarker } from "./composables/marker";
 import { useMap } from "./composables/map";
 import userDevice from "@/classes/userDevice";
-import MapCards from "./components/MapCards.vue";
+import MapCards from "./components/maps/MapCards.vue";
+import EditMapForm from "./components/maps/EditMapForm.vue";
 
 const { markers, getAllMarkersForMap } = useMarker();
 
@@ -36,20 +37,23 @@ const toggleMapVisibility = () => {
 
 <template>
   <h1>{{ Maps.map?.title ?? "Cartes.io" }}</h1>
-  <template v-if="mapId">
+  <template v-if="mapId && Maps.map">
     <AugmentedReality :mapId="mapId"
       :markers="markers"
       @close="toggleMapVisibility()"
       v-if="!showMap" />
-    <NewMapComponent v-if="showMap"
-      :mapId="mapId"
-      :show-ar="true"
-      :markers="markers"
-      style="height: 70vh"
-      @showAr="toggleMapVisibility()">
-    </NewMapComponent>
-    <MapCards :markers="markers" />
-    <p>{{ Maps.map?.description }}</p>
+    <template v-else>
+      <NewMapComponent :mapId="mapId"
+        :show-ar="true"
+        :markers="markers"
+        style="height: 70vh"
+        @showAr="toggleMapVisibility()">
+      </NewMapComponent>
+      <MapCards :markers="markers" />
+      <EditMapForm v-if="Maps.canUpdateMap(Maps.map)"
+        :map="Maps.map" />
+      <p>{{ Maps.map?.description }}</p>
+    </template>
   </template>
   <template v-else>
     <p>No map selected</p>

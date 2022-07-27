@@ -22,6 +22,8 @@ import { computed, PropType, ref, watch } from "vue";
 import { useMarker } from "@/composables/marker";
 import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
 import userDevice from "@/classes/userDevice";
+import MapMarker from "./MapMarker.vue";
+import MapMarkers from "./MapMarkers.vue";
 
 const isOnline = computed(() => {
   return userDevice.online;
@@ -182,54 +184,8 @@ const goToLocation = (event: { location: any; }) => {
           @click.prevent="emit('showAr')">AR</a>
       </l-control>
 
-      <l-marker v-for="marker in props.markers"
-        :lat-lng="marker.location.coordinates"
-        :key="marker.id + 'marker'">
-        <l-icon :icon-url="marker.category.icon"
-          :icon-size="[30, 30]"
-          :icon-anchor="[15, 25]" />
-        <l-popup class="unset-select">
-          <p class="w-100"
-            style="min-width: 200px">
-            <b>{{ marker.category.name }}</b>
-          </p>
-          <p class="w-100"
-            v-if="marker.description"
-            v-html="marker.description"></p>
-          <small class="w-100"
-            v-if="marker.link"><a :href="marker.link"
-              target="blank">{{
-                  marker.link.split("/")[2]
-              }}</a>
-          </small>
-          <small class="w-100">Last update:
-            <span class="timestamp"
-              :datetime="marker.updated_at">{{
-                  marker.updated_at
-              }}</span>.
-          </small>
-          <small class="w-100"
-            v-if="marker.elevation">Elevation:
-            {{ marker.elevation }} meters
-          </small>
-          <!-- <small v-if="isMarkerExpired(marker.expires_at)" class="w-100">Expired:
-            <span class="timestamp" :datetime="marker.expires_at">{{
-                marker.expires_at
-            }}</span>.</small> -->
-          <!-- <details class="small">
-            <summary
-              @click='searchLocation(marker.location.coordinates[0] + " " + marker.location.coordinates[1], false)'>
-              Click to see address</summary>
-            <p>{{ searchResults }}</p>
-          </details> -->
-          <a class="btn btn-link btn-sm text-danger"
-            v-if="canDeleteMarker(marker)"
-            @click="deleteMarker(mapId, marker)">Delete</a>
-          <!--
-          <a class="btn btn-link btn-sm text-warning" v-if="canMarkAsSpamPost(marker)" @click="markAsSpam(marker.id)"
-            :disabled="submit_data.loading">Report as spam</a> -->
-        </l-popup>
-      </l-marker>
+      <MapMarkers :mapId="mapId"
+        :markers="markers"></MapMarkers>
     </l-map>
   </div>
 </template>

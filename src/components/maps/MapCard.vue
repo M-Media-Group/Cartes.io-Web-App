@@ -9,8 +9,8 @@ defineProps({
         required: true,
     },
     description: {
-        type: String as PropType<string | number>,
-        required: true,
+        type: String as PropType<string | number | null>,
+        required: false,
     },
     link: {
         type: String as PropType<string | number | null>,
@@ -29,7 +29,7 @@ defineProps({
         required: true,
     },
     id: {
-        type: String as PropType<string | number>,
+        type: Number,
         required: true,
     },
 })

@@ -178,6 +178,72 @@ export function useMap() {
         return map.users_can_create_markers === 'yes' || map.token || localStorage.getItem("map_" + map.uuid);
     }
 
+    const updateMap = (map: Map, data: MapForm) => {
+        if (!canUpdateMap(map)) {
+            return;
+        }
+        if (!userDevice.online) {
+            return alert("You must be online to update a map.");
+        }
+        // Add token: map.token || localStorage.getItem("map_" + map.uuid), to the data
+        data.token = map.token || localStorage.getItem("map_" + map.uuid);
+
+        isLoading.value = true;
+        fetch("https://cartes.io/api/maps/" + map.uuid, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                // Switch the response codes to determine the message
+                switch (response.status) {
+                    case 400:
+                        return response.json().then((data) => {
+                            throw new Error(data.message);
+                        });
+                    case 401:
+                        throw new Error("You are not logged in.");
+                    case 403:
+                        throw new Error("You are not authorized to update this map.");
+                    case 404:
+                        throw new Error("The map does not exist.");
+                    case 422:
+                        return response.json().then((data) => {
+                            console.error("Malformed data: ", data);
+                            // Fill the formErrors
+                            Object.keys(data.errors).forEach((key) => {
+                                // @ts-ignore
+                                formErrors[key] = data.errors[key][0];
+                            });
+
+                            throw new Error(data.message);
+                        });
+                    case 429:
+                        throw new Error("You are updating maps too quickly. Please wait a moment and try again.");
+                    default:
+                        throw new Error("The server encountered an error.");
+                }
+            })
+            .then((data: Map) => {
+                if (data.uuid) {
+                    emit("updatedMap", data);
+                }
+            })
+            .catch((error) => {
+                alert(error.message || "An unknown request error occurred.");
+                console.error("Error:", error);
+            })
+            .finally(() => {
+                isLoading.value = false;
+            });
+    };
+
     const deleteMap = (map: Map) => {
         if (!userDevice.online) {
             return alert("You must be online to delete a map.");
@@ -221,6 +287,7 @@ export function useMap() {
         getMap,
         getAllMaps,
         canCreateMarkers,
+        updateMap,
         isLoading,
         formErrors,
         hasErrors,
