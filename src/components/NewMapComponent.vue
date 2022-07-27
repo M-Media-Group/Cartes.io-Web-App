@@ -1,3 +1,110 @@
+
+<script setup lang="ts">
+import { Marker } from "@/types/marker";
+import {
+  LMap,
+  LIcon,
+  LTileLayer,
+  LMarker,
+  LControlLayers,
+  LTooltip,
+  LPopup,
+  LLayerGroup,
+  LControl,
+} from "@vue-leaflet/vue-leaflet";
+import "leaflet/dist/leaflet.css";
+
+import AddMarkerForm from "@/components/AddMarkerForm.vue";
+
+import { computed, PropType, ref, watch } from "vue";
+import { useMarker } from "@/composables/marker";
+import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
+import userDevice from "@/classes/userDevice";
+
+const isOnline = computed(() => {
+  return userDevice.online;
+});
+
+const props = defineProps({
+  showAr: {
+    type: Boolean,
+    default: false,
+  },
+  mapId: {
+    // Type of either string, number, or null
+    type: String as PropType<string | number>,
+    required: true,
+  },
+  markers: {
+    type: Array as PropType<Marker[]>,
+    required: true,
+  },
+})
+
+const emit = defineEmits([
+  "addedMarker",
+  "deletedMarker",
+  "showAr"
+])
+
+const map = ref();
+
+const addMarkerPopup = ref();
+
+const addMarkerForm = ref<any>();
+
+const canPost = "only_logged_in";
+
+const { setUrlPositionParameters, getUrlPositionParameters } = useUrlPositionParameters();
+
+const zoom = ref(getUrlPositionParameters()['zoom'] || 2);
+const center = ref({ lat: getUrlPositionParameters()['lat'], lng: getUrlPositionParameters()['lng'] });
+const contextMenuPosition = ref({ lat: 0, lng: 0 });
+const maxBounds = ref([
+  [-90, -180],
+  [90, 180],
+]);
+
+//Bounds set slightly higher than actual world max to create a "padding" on the map
+watch(map, (newValue) => {
+  console.log(map.value, newValue);
+  // if (newValue) {
+  //   newValue.setMaxBounds([
+  //     [-90, -180],
+  //     [90, 180],
+  //   ]);
+  // }
+});
+
+watch(center, (newVal) => {
+  if (newVal && newVal.lat && newVal.lng) {
+    // Update the URL params and zoom
+    setUrlPositionParameters(newVal.lat, newVal.lng, zoom.value);
+  }
+});
+
+watch(zoom, (newVal) => {
+  if (newVal && center.value.lat && center.value.lng) {
+    setUrlPositionParameters(center.value.lat, center.value.lng, newVal);
+  }
+});
+
+const openAddMarkerPopup = (event: { latlng: any; }) => {
+  if (addMarkerPopup.value && event.latlng) {
+    contextMenuPosition.value = event.latlng;
+    addMarkerPopup.value.leafletObject.openPopup(contextMenuPosition.value);
+    addMarkerForm.value.focusMultiselect();
+  }
+};
+
+const handleNewMarkerEvent = (event: Marker) => {
+  emit('addedMarker', event);
+  addMarkerPopup.value.leafletObject.closePopup();
+};
+
+const { canDeleteMarker, deleteMarker, canCreateMarker } = useMarker();
+
+</script>
 <template>
   <div>
     <l-map :maxBoundsViscosity="1.0"
@@ -5,6 +112,7 @@
       style="width: 100%; height: 100%"
       class="disable-select"
       ref="map"
+      v-model:max-bounds="maxBounds"
       v-model:zoom="zoom"
       v-model:center="center"
       @contextmenu="openAddMarkerPopup($event)">
@@ -86,97 +194,6 @@
     </l-map>
   </div>
 </template>
-<script setup lang="ts">
-import { Marker } from "@/types/marker";
-import {
-  LMap,
-  LIcon,
-  LTileLayer,
-  LMarker,
-  LControlLayers,
-  LTooltip,
-  LPopup,
-  LLayerGroup,
-  LControl,
-} from "@vue-leaflet/vue-leaflet";
-import "leaflet/dist/leaflet.css";
-
-import AddMarkerForm from "@/components/AddMarkerForm.vue";
-
-import { computed, PropType, ref, watch } from "vue";
-import { useMarker } from "@/composables/marker";
-import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
-import userDevice from "@/classes/userDevice";
-
-const isOnline = computed(() => {
-  return userDevice.online;
-});
-
-const props = defineProps({
-  showAr: {
-    type: Boolean,
-    default: false,
-  },
-  mapId: {
-    // Type of either string, number, or null
-    type: String as PropType<string | number>,
-    required: true,
-  },
-  markers: {
-    type: Array as PropType<Marker[]>,
-    required: true,
-  },
-})
-
-const emit = defineEmits([
-  "addedMarker",
-  "deletedMarker",
-  "showAr"
-])
-
-const map = ref();
-
-const addMarkerPopup = ref();
-
-const addMarkerForm = ref<any>();
-
-const canPost = "only_logged_in";
-
-const { setUrlPositionParameters, getUrlPositionParameters } = useUrlPositionParameters();
-
-const zoom = ref(getUrlPositionParameters()['zoom'] || 2);
-const center = ref({ lat: getUrlPositionParameters()['lat'], lng: getUrlPositionParameters()['lng'] });
-const contextMenuPosition = ref({ lat: 0, lng: 0 });
-
-watch(center, (newVal) => {
-  if (newVal && newVal.lat && newVal.lng) {
-    // Update the URL params and zoom
-    setUrlPositionParameters(newVal.lat, newVal.lng, zoom.value);
-  }
-});
-
-watch(zoom, (newVal) => {
-  if (newVal && center.value.lat && center.value.lng) {
-    setUrlPositionParameters(center.value.lat, center.value.lng, newVal);
-  }
-});
-
-const openAddMarkerPopup = (event: { latlng: any; }) => {
-  if (addMarkerPopup.value && event.latlng) {
-    contextMenuPosition.value = event.latlng;
-    addMarkerPopup.value.leafletObject.openPopup(contextMenuPosition.value);
-    addMarkerForm.value.focusMultiselect();
-  }
-};
-
-const handleNewMarkerEvent = (event: Marker) => {
-  emit('addedMarker', event);
-  addMarkerPopup.value.leafletObject.closePopup();
-};
-
-const { canDeleteMarker, deleteMarker, canCreateMarker } = useMarker();
-
-</script>
 <style>
 .disable-select {
   user-select: none;
