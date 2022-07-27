@@ -52,13 +52,12 @@ const settings = reactive({
                 value: 'no',
                 label: 'No one',
                 description: 'You can still create markers regardless of this setting',
-                disabled: true,
             },
         ],
     },
     'options.default_expiration_time': {
         title: "Default expiration time",
-        value: '',
+        value: props.map.options.default_expiration_time ?? '',
         options: [
             {
                 value: '4320',
@@ -76,7 +75,7 @@ const settings = reactive({
     },
     'options.limit_to_geographical_body_type': {
         title: "Limit to geographical body type",
-        value: '',
+        value: props.map.options.limit_to_geographical_body_type ?? '',
         options: [
             {
                 value: '',
@@ -97,7 +96,7 @@ const settings = reactive({
     },
     'options.links': {
         title: "Are links allowed",
-        value: 'optional',
+        value: props.map.options.links ?? '',
         options: [
             {
                 value: 'required',
@@ -116,9 +115,21 @@ const settings = reactive({
 })
 
 const updateMapSettings = (mapId: string, settings: any) => {
-    // Convert any settings with keys that use dot notation into nested objects
-    const settingsToUpdate = Object.keys(settings).reduce((acc, key) => {
+
+    // Simplify each nested data object to just key: value
+    const settingsToUpdateSimplified = Object.keys(settings).reduce((acc, key) => {
         const value = settings[key];
+        if (typeof value === 'object') {
+            acc[key] = value.value;
+        } else {
+            acc[key] = value;
+        }
+        return acc;
+    }, {});
+
+    // Convert any settings with keys that use dot notation into nested objects
+    const settingsToUpdate = Object.keys(settingsToUpdateSimplified).reduce((acc, key) => {
+        const value = settingsToUpdateSimplified[key];
         const parts = key.split('.');
         if (parts.length > 1) {
             const last = parts.pop();
@@ -130,17 +141,8 @@ const updateMapSettings = (mapId: string, settings: any) => {
         return acc;
     }, {});
 
-    // Simplify each nested data object to just key: value
-    const settingsToUpdateSimplified = Object.keys(settingsToUpdate).reduce((acc, key) => {
-        const value = settingsToUpdate[key];
-        if (typeof value === 'object') {
-            acc[key] = value.value;
-        } else {
-            acc[key] = value;
-        }
-        return acc;
-    }, {});
-    Maps.updateMap(props.map, settingsToUpdateSimplified);
+
+    Maps.updateMap(props.map, settingsToUpdate);
 }
 </script>
 
