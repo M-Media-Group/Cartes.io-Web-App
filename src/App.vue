@@ -16,7 +16,8 @@
   </template>
   <template v-else>
     <p>No map selected</p>
-    <div v-for="map in Maps.maps.value">
+    <div v-for="map in Maps.maps.value"
+      :key="map.uuid">
       <a :href="'?mapId=' + map.uuid">
         {{ map.title ?? "No title" }}
       </a>

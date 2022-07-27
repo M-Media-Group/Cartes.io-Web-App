@@ -48,7 +48,11 @@ export function useMap() {
             return alert("You must be online to get all maps.");
         }
         // Fetch the maps from the api https://cartes.io/api/maps
-        fetch("https://cartes.io/api/maps")
+        fetch("https://cartes.io/api/maps", {
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
             .then((response) => response.json())
             .then((data) => {
                 maps.value = data.data;
@@ -64,7 +68,11 @@ export function useMap() {
             return alert("You must be online to get a map.");
         }
         // Fetch the markers from the api https://cartes.io/api/maps/3bdc0bdc-8a77-40e3-8c34-c70466443980
-        fetch("https://cartes.io/api/maps/" + mapId)
+        fetch("https://cartes.io/api/maps/" + mapId, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
             .then((response) => response.json())
             .then((data) => {
                 Object.assign(map, data) // equivalent to reassign

@@ -242,7 +242,11 @@ const getCategories = async (query = null as string | null) => {
   if (query && query.length >= minCategoryNameLength) {
     url += "?query=" + query;
   }
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    headers: {
+      'Accept': 'application/json'
+    }
+  });
   const data = await response.json() as Category[];
   isLoading.value = false;
   return data;
