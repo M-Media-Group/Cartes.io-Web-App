@@ -1,32 +1,3 @@
-<template>
-  <h1>{{ Maps.map?.title ?? "Cartes.io" }}</h1>
-  <template v-if="mapId">
-    <AugmentedReality :mapId="mapId"
-      :markers="markers"
-      @close="toggleMapVisibility()"
-      v-if="!showMap" />
-    <NewMapComponent v-if="showMap"
-      :mapId="mapId"
-      :show-ar="true"
-      :markers="markers"
-      style="height: 70vh"
-      @showAr="toggleMapVisibility()">
-    </NewMapComponent>
-    <p>{{ Maps.map?.description }}</p>
-  </template>
-  <template v-else>
-    <p>No map selected</p>
-    <div v-for="map in Maps.maps.value"
-      :key="map.uuid">
-      <a :href="'?mapId=' + map.uuid">
-        {{ map.title ?? "No title" }}
-      </a>
-    </div>
-  </template>
-  <button v-if="Maps.canDeleteMap(Maps.map)"
-    @click="Maps.deleteMap(Maps.map)">Delete map</button>
-  <button @click="Maps.addMap(null, true)">Create new map</button>
-</template>
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
@@ -35,6 +6,7 @@ import NewMapComponent from "@/components/NewMapComponent.vue"
 import { useMarker } from "./composables/marker";
 import { useMap } from "./composables/map";
 import userDevice from "@/classes/userDevice";
+import MapCards from "./components/MapCards.vue";
 
 const { markers, getAllMarkersForMap } = useMarker();
 
@@ -61,3 +33,34 @@ const toggleMapVisibility = () => {
   searchParams.set("showAr", showMap.value ? "true" : "false");
 }
 </script>
+
+<template>
+  <h1>{{ Maps.map?.title ?? "Cartes.io" }}</h1>
+  <template v-if="mapId">
+    <AugmentedReality :mapId="mapId"
+      :markers="markers"
+      @close="toggleMapVisibility()"
+      v-if="!showMap" />
+    <NewMapComponent v-if="showMap"
+      :mapId="mapId"
+      :show-ar="true"
+      :markers="markers"
+      style="height: 70vh"
+      @showAr="toggleMapVisibility()">
+    </NewMapComponent>
+    <MapCards :markers="markers" />
+    <p>{{ Maps.map?.description }}</p>
+  </template>
+  <template v-else>
+    <p>No map selected</p>
+    <div v-for="map in Maps.maps.value"
+      :key="map.uuid">
+      <a :href="'?mapId=' + map.uuid">
+        {{ map.title ?? "No title" }}
+      </a>
+    </div>
+  </template>
+  <button v-if="Maps.canDeleteMap(Maps.map)"
+    @click="Maps.deleteMap(Maps.map)">Delete map</button>
+  <button @click="Maps.addMap(null, true)">Create new map</button>
+</template>
