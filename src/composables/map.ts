@@ -52,7 +52,7 @@ export function useMap() {
         maps.value = data.data;
     }
 
-    const getMap = async (mapId: string | number) => {
+    const getMap = async (mapId: string) => {
         if (!userDevice.online) {
             return alert("You must be online to get a map.");
         }

@@ -39,7 +39,7 @@ export function useMarker() {
         return Object.values(formErrors).some((error) => error !== "");
     });
 
-    const getAllMarkersForMap = async (mapId: string | number) => {
+    const getAllMarkersForMap = async (mapId: string) => {
         if (!userDevice.online) {
             return alert("You need to be online to add a marker");
         }
@@ -91,7 +91,7 @@ export function useMarker() {
         return canCreateMarkerForMap(Map.map);
     }
 
-    const addMarker = async (mapId: number | string, formData: any) => {
+    const addMarker = async (mapId: string, formData: any) => {
         if (Map.map.uuid == mapId) {
             if (!canCreateMarker()) {
                 return alert("You need to be logged in to add a marker");
@@ -125,7 +125,7 @@ export function useMarker() {
         return marker.token || localStorage.getItem("post_" + marker.id);
     };
 
-    const deleteMarker = async (mapId: number | string, marker: Marker) => {
+    const deleteMarker = async (mapId: string, marker: Marker) => {
         if (!userDevice.online) {
             return alert("You need to be online to delete a marker");
         }
