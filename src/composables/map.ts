@@ -2,7 +2,7 @@ import userDevice from "@/classes/userDevice";
 import { Map, MapForm } from "@/types/map";
 import { computed } from "@vue/reactivity";
 import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
-import cartes from "@/classes/cartes";
+import cartes from "@m-media/npm-cartes-io";
 
 const maps = ref<Map[]>([]);
 

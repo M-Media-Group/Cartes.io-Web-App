@@ -4,7 +4,7 @@ import { Marker, MarkerForm } from "@/types/marker";
 import { computed } from "@vue/reactivity";
 import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
 import { useMap } from "./map";
-import cartes from "@/classes/cartes";
+import cartes from "@m-media/npm-cartes-io";
 
 const markers = ref<Marker[]>([]);
 
@@ -108,7 +108,6 @@ export function useMarker() {
 
         isLoading.value = true;
         const data = await cartes.maps(mapId, localStorage.getItem("map_" + mapId)).markers().create(formData);
-
         if (data.id) {
             if (data.category.icon && !data.category.icon.startsWith("https")) {
                 data.category.icon = "/marker.svg";
