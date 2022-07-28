@@ -57,7 +57,7 @@ const settings = reactive({
     },
     'options.default_expiration_time': {
         title: "Default expiration time",
-        value: props.map.options.default_expiration_time ?? '',
+        value: props.map.options?.default_expiration_time ?? '',
         options: [
             {
                 value: '4320',
@@ -75,7 +75,7 @@ const settings = reactive({
     },
     'options.limit_to_geographical_body_type': {
         title: "Limit to geographical body type",
-        value: props.map.options.limit_to_geographical_body_type ?? '',
+        value: props.map.options?.limit_to_geographical_body_type ?? '',
         options: [
             {
                 value: '',
@@ -96,7 +96,7 @@ const settings = reactive({
     },
     'options.links': {
         title: "Are links allowed",
-        value: props.map.options.links ?? '',
+        value: props.map.options?.links ?? '',
         options: [
             {
                 value: 'required',

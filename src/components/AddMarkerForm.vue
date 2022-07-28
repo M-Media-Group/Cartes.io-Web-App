@@ -172,8 +172,7 @@ defineExpose({
 
     <slot name="form-top"></slot>
 
-    <div class="form-errors"
-      v-if="hasErrors">
+    <div v-if="hasErrors">
       <ul>
         <template v-for="error in formErrors"
           :key="error">
@@ -201,7 +200,6 @@ defineExpose({
       :create-option="true"
       :on-create="addTag"
       :show-labels="false"
-      class="your_custom_class"
       :loading="isLoading"
       :internal-search="false"
       :clear-on-select="false"
@@ -218,7 +216,6 @@ defineExpose({
       required>
       <template #option="{ option }">
         <img v-if="option.icon"
-          class="rounded img-thumbnail mr-1"
           height="25"
           width="25"
           :src="option.icon"
@@ -229,19 +226,17 @@ defineExpose({
       <!-- <template slot="limit">Keep typing to refine your search</template>
       <template slot="noOptions">Search for or add a new label</template>
       <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name }}</strong></template>
-      <template slot="option" slot-scope="props"><img v-if="props.option.icon" class="rounded img-thumbnail mr-1"
+      <template slot="option" slot-scope="props"><img v-if="props.option.icon"
           height="25" width="25" :src="props.option.icon" alt="" style="position: initial" />{{ props.option.name }}
       </template> -->
     </Multiselect>
-    <textarea class="form-control mt-1"
-      id="description"
+    <textarea id="description"
       rows="2"
       name="description"
       v-model="submitData.description"
       placeholder="Description (optional)"></textarea>
 
     <input v-if="showLinkInput === 'required' || showLinkInput === 'optional'"
-      class="form-control mt-1"
       type="url"
       pattern="https://.*"
       :placeholder="
@@ -287,9 +282,7 @@ defineExpose({
       </div>
     </details>
 
-
     <button type="submit"
-      class="btn btn-primary btn-sm my-1"
       :disabled="!canSubmit">
       Add {{ submitData.category_name ?? "marker" }}
     </button>

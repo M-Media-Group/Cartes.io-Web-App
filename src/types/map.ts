@@ -12,7 +12,7 @@ export interface Map {
     description: string;
     privacy: privacyOptions;
     users_can_create_markers: usersCanCreateMarkersOptions;
-    options: Options;
+    options: Options | null;
     uuid: string;
     created_at: Date;
     updated_at: Date;
