@@ -142,7 +142,7 @@ const settings = reactive({
 const updateMapSettings = (mapId: string, settings: any) => {
 
     // Simplify each nested data object to just key: value
-    const settingsToUpdateSimplified = Object.keys(settings).reduce((acc, key) => {
+    const settingsToUpdateSimplified = Object.keys(settings).reduce((acc: any, key) => {
         const value = settings[key];
         if (typeof value === 'object') {
             acc[key] = value.value;
@@ -153,11 +153,11 @@ const updateMapSettings = (mapId: string, settings: any) => {
     }, {});
 
     // Convert any settings with keys that use dot notation into nested objects
-    const settingsToUpdate = Object.keys(settingsToUpdateSimplified).reduce((acc, key) => {
+    const settingsToUpdate = Object.keys(settingsToUpdateSimplified).reduce((acc: any, key) => {
         const value = settingsToUpdateSimplified[key];
         const parts = key.split('.');
         if (parts.length > 1) {
-            const last = parts.pop();
+            const last = parts.pop() as string;
             const obj = parts.reduce((acc, part) => acc[part] || (acc[part] = {}), acc);
             obj[last] = value;
         } else {
