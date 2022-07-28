@@ -112,6 +112,31 @@ class cartes {
         return this;
     }
 
+    public categories(id = null as string | number | null): cartes {
+        if (id) {
+            this.#request_url = this.#api_url + "categories/" + id;
+        } else {
+            this.#request_url = this.#api_url + "categories";
+        }
+
+        return this;
+    }
+
+    public markers(id = null as string | number | null, token = null as string | null): cartes {
+        if (id) {
+            // Append to the url
+            this.#request_url += "/markers/" + id;
+        } else {
+            this.#request_url += "/markers";
+        }
+
+        if (token) {
+            this.#params.token = token;
+        }
+
+        return this;
+    }
+
     // Public method "get"
     public get(): Promise<any> {
         return this.handleRequest("GET");
