@@ -24,14 +24,18 @@ const settings = reactive({
                 value: 'public',
                 label: 'Everyone',
                 description: 'Anyone can see this map',
+                disabled: false,
             },
             {
                 value: 'unlisted',
                 label: 'Only people with the link',
+                description: '',
+                disabled: false,
             },
             {
                 value: 'private',
                 label: 'Private',
+                description: '',
                 disabled: true,
             },
         ],
@@ -43,15 +47,20 @@ const settings = reactive({
             {
                 value: 'yes',
                 label: 'Everyone',
+                description: '',
+                disabled: false,
             },
             {
                 value: 'only_logged_in',
                 label: 'Only people that are logged in',
+                description: '',
+                disabled: false,
             },
             {
                 value: 'no',
                 label: 'No one',
                 description: 'You can still create markers regardless of this setting',
+                disabled: false,
             },
         ],
     },
@@ -62,14 +71,20 @@ const settings = reactive({
             {
                 value: '4320',
                 label: '3 days',
+                description: '',
+                disabled: false,
             },
             {
                 value: '180',
                 label: '3 hours',
+                description: '',
+                disabled: false,
             },
             {
                 value: '',
                 label: 'Never',
+                description: '',
+                disabled: false,
             },
         ],
     },
@@ -80,16 +95,20 @@ const settings = reactive({
             {
                 value: '',
                 label: 'Anywhere',
+                description: '',
+                disabled: false,
             },
             {
                 value: 'land',
                 label: 'Land',
-                description: 'Setting this to "water" or "land" will also drastically limit how many markers can be created on this map per minute'
+                description: 'Setting this to "water" or "land" will also drastically limit how many markers can be created on this map per minute',
+                disabled: false,
             },
             {
                 value: 'water',
                 label: 'Water',
-                description: 'Setting this to "water" or "land" will also drastically limit how many markers can be created on this map per minute'
+                description: 'Setting this to "water" or "land" will also drastically limit how many markers can be created on this map per minute',
+                disabled: false,
             },
         ],
 
@@ -101,14 +120,20 @@ const settings = reactive({
             {
                 value: 'required',
                 label: 'Required',
+                description: '',
+                disabled: false,
             },
             {
                 value: 'optional',
                 label: 'Optional',
+                description: '',
+                disabled: false,
             },
             {
                 value: '',
                 label: 'Disabled',
+                description: '',
+                disabled: false,
             },
         ],
     },
