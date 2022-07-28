@@ -71,31 +71,35 @@ class cartes {
                 if (response.ok) {
                     return response.json();
                 }
-                // Switch the response codes to determine the message
-                switch (response.status) {
-                    case 400:
-                        return response.json().then((data) => {
-                            throw new Error(data.message);
-                        });
-                    case 401:
-                        throw new Error("You are not logged in.");
-                    case 403:
-                        throw new Error("You are not authorized to add markers to this map.");
-                    case 404:
-                        throw new Error("Map not found.");
-                    case 500:
-                        throw new Error("Internal server error.");
-                    default:
-                        throw new Error("Unknown error.");
-                }
+                return this.handleError(response);
             })
             .then((data) => {
-                console.log("Got");
                 return data;
             })
             .catch((error) => {
                 console.error("Error:", error);
             });
+    }
+
+    private handleError(response: Response) {
+        switch (response.status) {
+            case 400:
+                return response.json().then((data) => {
+                    throw new Error(data.message);
+                });
+            case 401:
+                throw new Error("You are not logged in.");
+            case 403:
+                throw new Error("You are not authorized to do this action.");
+            case 404:
+                throw new Error("Map not found.");
+            case 429:
+                throw new Error("You have reached the maximum number of requests per minute. Please wait a minute before trying again.");
+            case 500:
+                throw new Error("Internal server error.");
+            default:
+                throw new Error("Unknown error.");
+        }
     }
 
     public addParam(key: string, value: any): cartes {
