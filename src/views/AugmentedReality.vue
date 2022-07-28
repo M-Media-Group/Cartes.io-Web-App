@@ -1,7 +1,5 @@
 <template>
   <div v-if="userDevice.supportsAr">
-    <!-- <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
     <button class="close"
       @click="close()">Open map</button>
     <a-scene vr-mode-ui="enabled: false"
@@ -76,7 +74,7 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { ref, nextTick, watch, computed, PropType, onUnmounted } from "vue";
 import AddMarkerForm from "@/components/AddMarkerForm.vue";
-// import HelloWorld from "./components/HelloWorld.vue";
+
 import { Marker } from "@/types/marker";
 import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
 import userDevice from "@/classes/userDevice";
