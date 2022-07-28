@@ -31,3 +31,5 @@ We need to:
 - [ ] Add a 404 page
 - [ ] Add vue-router
 - [ ] Finalise the UI draft version 1.0
+
+Note that the current roadmap is to define functionality first, and then look at styling.

@@ -98,6 +98,11 @@ class cartes {
             });
     }
 
+    public addParam(key: string, value: any): cartes {
+        this.#params[key] = value;
+        return this;
+    }
+
     public maps(uuid = null as string | number | null, token = null as string | null): cartes {
         if (uuid) {
             this.#request_url = this.#api_url + "maps/" + uuid;
