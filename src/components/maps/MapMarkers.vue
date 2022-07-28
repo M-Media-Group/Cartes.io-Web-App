@@ -31,7 +31,7 @@ const { canDeleteMarker, deleteMarker, canCreateMarker } = useMarker();
 
 <template>
     <l-marker v-for="marker in markers"
-        :lat-lng="marker.location.coordinates"
+        :lat-lng="[marker.location.coordinates[1], marker.location.coordinates[0]]"
         :key="marker.id + 'marker'">
         <l-icon :icon-url="marker.category.icon"
             :icon-size="[30, 30]"

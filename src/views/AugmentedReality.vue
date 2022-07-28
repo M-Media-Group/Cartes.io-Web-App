@@ -22,9 +22,9 @@
           :position="'0 0 0'"
           :gps-projected-entity-place="
             'latitude: ' +
-            marker.location.coordinates[0] +
+            marker.location.coordinates[1] +
             '; longitude: ' +
-            marker.location.coordinates[1]
+            marker.location.coordinates[0]
           ">
           <a-text :value="marker.category.name"
             :position="'0 0.7 0'">
