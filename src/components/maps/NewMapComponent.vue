@@ -11,6 +11,7 @@ import {
   LPopup,
   LLayerGroup,
   LControl,
+  LControlAttribution,
 } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -155,11 +156,25 @@ const goToLocation = (event: { location: any; }) => {
       v-model:center="center"
       @contextmenu="openAddMarkerPopup($event)"
       @ready="ready = true">
-      <l-tile-layer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png"
-        attribution='&copy; <a href="https://cartes.io">Cartes.io</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a> &copy; <a href="https://icons8.com/attributions">Icons8</a>'>
+
+      <l-control-attribution position="bottomleft"
+        prefix='&copy; <a href="https://cartes.io">Cartes.io</a> &copy; <a href="https://icons8.com/attributions">Icons8</a>'>
+      </l-control-attribution>
+
+      <l-control-layers />
+
+      <l-tile-layer name="Street"
+        attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> &copy; <a href='https://carto.com/attributions'>CARTO</a>"
+        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png"
+        layer-type="base">
       </l-tile-layer>
 
-      <!-- <l-control-layers /> -->
+      <l-tile-layer name="Topology"
+        url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://opentopomap.org">OpenTopoMap</a> &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
+        :visible="false"
+        layer-type="base">
+      </l-tile-layer>
 
       <!-- <l-locatecontrol /> -->
 
