@@ -16,6 +16,14 @@ const Maps = useMap();
 console.log(props.map.privacy);
 
 const settings = reactive({
+    title: {
+        title: "Title",
+        value: props.map.title,
+    },
+    description: {
+        title: "Description",
+        value: props.map.description,
+    },
     privacy: {
         title: "Who can see this map",
         value: props.map.privacy,
@@ -176,20 +184,28 @@ const updateMapSettings = (mapId: string, settings: any) => {
         <div v-for="(setting, key) in settings"
             :key="key">
             <h2>{{ setting.title }}</h2>
-            <!-- Radio box with setting options -->
-            <template v-for="(option, index) in setting.options"
-                :key="option.value">
-                <label>
-                    <input type="radio"
-                        v-model="setting.value"
-                        :value="option.value"
-                        :disabled="option.disabled"
-                        :key="index">
-                    {{ option.label }}
-                    <small v-if="option.description">{{ option.description }}</small>
-                </label>
+            <template v-if="'options' in setting">
+                <!-- Radio box with setting options -->
+                <template v-for="(option, index) in setting.options"
+                    :key="option.value">
+                    <label>
+                        <input type="radio"
+                            v-model="setting.value"
+                            :value="option.value"
+                            :disabled="option.disabled"
+                            :key="index">
+                        {{ option.label }}
+                        <small v-if="option.description">{{ option.description }}</small>
+                    </label>
+                </template>
+            </template>
+            <template v-else>
+                <!-- Text input -->
+                <input type="text"
+                    v-model="setting.value"
+                    :placeholder="setting.title">
             </template>
         </div>
-        <button type="submit">Go</button>
+        <button type="submit">Save</button>
     </form>
 </template>
