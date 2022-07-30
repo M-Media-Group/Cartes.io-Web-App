@@ -112,6 +112,7 @@ export function useMap() {
         isLoading.value = true;
         const data = await cartes.maps(map.uuid, map.token || localStorage.getItem("map_" + map.uuid)).update(formData);
         if (data.uuid) {
+            alert("Map updated");
             emit("updatedMap", data);
         }
         isLoading.value = false;
@@ -126,7 +127,7 @@ export function useMap() {
             // Delete the map
             await cartes.maps(map.uuid, map.token || localStorage.getItem("map_" + map.uuid)).delete();
             localStorage.removeItem("map_" + map.uuid);
-            alert("Map deleted.");
+            alert("Map deleted");
             window.location.href = "/";
             emit('deletedMap', map);
         } else {
