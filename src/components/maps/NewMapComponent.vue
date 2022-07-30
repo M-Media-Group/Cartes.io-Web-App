@@ -19,7 +19,7 @@ import AddMarkerForm from "@/components/AddMarkerForm.vue";
 
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
-import { computed, PropType, ref, watch } from "vue";
+import { computed, nextTick, PropType, ref, watch } from "vue";
 import { useMarker } from "@/composables/marker";
 import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
 import userDevice from "@/classes/userDevice";
@@ -55,6 +55,8 @@ const emit = defineEmits([
 const ready = ref(false);
 
 const map = ref();
+
+const leafletObject = ref();
 
 const addMarkerPopup = ref();
 
@@ -130,8 +132,8 @@ const searchResults = ref();
 
 //Bounds set slightly higher than actual world max to create a "padding" on the map
 watch(ready, (newValue) => {
-  map.value.leafletObject.addControl(searchControl);
-  map.value.leafletObject.on('geosearch/showlocation', goToLocation);
+  leafletObject.value.addControl(searchControl);
+  leafletObject.value.on('geosearch/showlocation', goToLocation);
 });
 
 const goToLocation = (event: { location: any; }) => {
@@ -143,6 +145,12 @@ const goToLocation = (event: { location: any; }) => {
   zoom.value = Math.max(latDecimalPlaces, lngDecimalPlaces) + 3;
 };
 
+const setReady = async () => {
+  await nextTick();
+  ready.value = true;
+  leafletObject.value = map.value.leafletObject;
+};
+
 </script>
 <template>
   <div>
@@ -152,10 +160,11 @@ const goToLocation = (event: { location: any; }) => {
       class="disable-select"
       ref="map"
       v-model:max-bounds="maxBounds"
+      :maxZoom="18"
       v-model:zoom="zoom"
       v-model:center="center"
       @contextmenu="openAddMarkerPopup($event)"
-      @ready="ready = true">
+      @ready="setReady">
 
       <l-control-attribution position="bottomleft"
         prefix='&copy; <a href="https://cartes.io">Cartes.io</a> &copy; <a href="https://icons8.com/attributions">Icons8</a>'>
