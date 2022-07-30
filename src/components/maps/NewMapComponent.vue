@@ -165,7 +165,9 @@ const setReady = async () => {
       v-model:center="center"
       @contextmenu="openAddMarkerPopup($event)"
       @ready="setReady"
-      :options="{ attributionControl: false }">
+      :options="{ attributionControl: false }"
+      :zoomAnimation="true"
+      :fadeAnimation="true">
 
       <l-control-attribution position="bottomright"
         prefix='&copy; <a href="https://cartes.io">Cartes.io</a> &copy; <a href="https://icons8.com/attributions">Icons8</a>'>
