@@ -184,6 +184,7 @@ defineExpose({
     </Multiselect> -->
 
     <label>Marker label:</label>
+
     <Multiselect v-model="submitData.category_name"
       valueProp="name"
       ref="multiselect"
@@ -299,5 +300,42 @@ defineExpose({
 <style>
 form {
   min-width: 300px;
+}
+
+.multiselect {
+  margin-bottom: var(--spacing);
+  background: transparent;
+  border: none;
+}
+
+.multiselect-search,
+.multiselect-dropdown,
+.multiselect-option.is-pointed {
+  background-color: var(--background-color);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
+  color: inherit;
+}
+
+.multiselect-option.is-pointed {
+  background-color: var(--primary-hover);
+  color: var(--primary-inverse);
+}
+
+.multiselect-option.is-selected.is-pointed,
+.multiselect-option.is-selected {
+  background-color: var(--primary);
+  color: var(--primary-inverse);
+}
+
+input:not([type=checkbox]):not([type=radio]):not([type=range]).multiselect-fake-input {
+  height: 1px;
+  padding: 0;
+  border: none;
+  pointer-events: none;
+}
+
+input:not([type=checkbox]):not([type=radio]):not([type=range]).multiselect-search {
+  height: 100%;
 }
 </style>
