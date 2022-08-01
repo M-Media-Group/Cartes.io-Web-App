@@ -19,8 +19,6 @@ const mapId = searchParams.get("mapId");
 
 const showMap = ref((userDevice.supportsAr && searchParams.get("showAr")) ?? true);
 
-const related = ref();
-
 onMounted(() => {
   if (mapId) {
     Maps.getMap(mapId);

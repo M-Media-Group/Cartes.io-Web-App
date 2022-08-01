@@ -44,7 +44,7 @@ export function useMarker() {
             return alert("You need to be online to add a marker");
         }
 
-        const data = await cartes.maps(mapId).markers().get();
+        const data = await cartes.maps(mapId).markers().addParam('show_expired', 'true').get();
 
         data.forEach((marker: Marker) => {
             if (marker.category.icon && !marker.category.icon.startsWith("https")) {

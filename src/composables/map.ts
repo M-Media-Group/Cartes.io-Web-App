@@ -124,7 +124,19 @@ export function useMap() {
         if (data.uuid) {
             alert("Map updated");
             emit("updatedMap", data);
+
+            // If the map updated, we need to update the map in the maps array
+            const mapIndex = maps.value.findIndex((m) => m.uuid === data.uuid);
+            if (mapIndex > -1) {
+                maps.value[mapIndex] = data;
+            }
         }
+
+        // If the map updated is the current one in the map, we need to update the map in the map
+        if (data.uuid && map.uuid === data.uuid) {
+            Object.assign(map, data);
+        }
+
         isLoading.value = false;
     };
 
