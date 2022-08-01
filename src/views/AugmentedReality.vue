@@ -248,10 +248,8 @@ a-scene {
   position: fixed;
   right: 16px;
   top: 16px;
+  width: auto;
   z-index: 1;
-  background-color: white;
-  padding: 8px;
-  border-radius: 8px;
 }
 
 .addMarkerForm {
