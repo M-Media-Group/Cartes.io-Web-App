@@ -258,7 +258,7 @@ a-scene {
   left: 16px;
   bottom: 16px;
   z-index: 1;
-  background-color: white;
+  background-color: var(--background-color);
   padding: 8px;
   border-radius: 8px;
 }
