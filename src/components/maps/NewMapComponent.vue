@@ -37,7 +37,7 @@ const props = defineProps({
   },
   mapId: {
     // Type of either string, number, or null
-    type: String as PropType<string | number>,
+    type: String,
     required: true,
   },
   markers: {
