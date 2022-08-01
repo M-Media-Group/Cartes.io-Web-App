@@ -184,28 +184,30 @@ const updateMapSettings = (mapId: string, settings: any) => {
         <form @submit.prevent="updateMapSettings(map.uuid, settings)">
             <div v-for="(setting, key) in settings"
                 :key="key">
-                <h3>{{ setting.title }}</h3>
-                <template v-if="'options' in setting">
-                    <!-- Radio box with setting options -->
-                    <template v-for="(option, index) in setting.options"
-                        :key="option.value">
-                        <label>
-                            <input type="radio"
-                                v-model="setting.value"
-                                :value="option.value"
-                                :disabled="option.disabled"
-                                :key="index">
-                            {{ option.label }}
-                            <small v-if="option.description">{{ option.description }}</small>
-                        </label>
+                <label>{{ setting.title }}
+                    <template v-if="'options' in setting">
+                        <!-- Radio box with setting options -->
+                        <template v-for="(option, index) in setting.options"
+                            :key="option.value">
+                            <label>
+                                <input type="radio"
+                                    v-model="setting.value"
+                                    :value="option.value"
+                                    :disabled="option.disabled"
+                                    :key="index">
+                                {{ option.label }}
+                                <small style="margin-top:0.5rem;"
+                                    v-if="option.description">{{ option.description }}</small>
+                            </label>
+                        </template>
                     </template>
-                </template>
-                <template v-else>
-                    <!-- Text input -->
-                    <input type="text"
-                        v-model="setting.value"
-                        :placeholder="setting.title">
-                </template>
+                    <template v-else>
+                        <!-- Text input -->
+                        <input type="text"
+                            v-model="setting.value"
+                            :placeholder="setting.title">
+                    </template>
+                </label>
             </div>
             <button type="submit">Save</button>
         </form>

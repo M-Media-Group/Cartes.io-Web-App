@@ -107,7 +107,7 @@ const AR = defineAsyncComponent(() =>
           </div>
         </section>
 
-        <section>
+        <section v-if="Maps.map.related && Maps.map.related.length > 0">
           <h2>Related maps</h2>
           <ul>
             <li v-for="map in Maps.map.related"
