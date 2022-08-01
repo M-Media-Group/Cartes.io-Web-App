@@ -39,6 +39,24 @@ const AR = defineAsyncComponent(() =>
   import("./views/AugmentedReality.vue")
 )
 
+const share = async () => {
+  // Current url
+  const url = window.location.href;
+  // Trigger the Share Web API, or copy to clipboard if not supported
+  const sharer = navigator.share;
+  if (navigator.share) {
+    await navigator.share({
+      title: "Cartes.io map",
+      text: `Check out this map I made! ${url}`,
+      url: url,
+    });
+  } else {
+    // Copy to clipboard
+    await navigator.clipboard.writeText(url);
+    alert("Copied to clipboard!");
+  }
+}
+
 </script>
 
 <template>
@@ -81,7 +99,7 @@ const AR = defineAsyncComponent(() =>
           </div>
           <div>
 
-            <button>Share this map</button>
+            <button @click="share()">Share this map</button>
 
             <!-- Markers -->
             <details>
