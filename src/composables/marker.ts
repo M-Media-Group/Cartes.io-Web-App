@@ -138,6 +138,36 @@ export function useMarker() {
         }
     };
 
+
+    const listenForNewMarkers = async (mapId: string) => {
+
+        window.Echo.channel("maps." + mapId).listen(
+            "MarkerCreated",
+            (e) => {
+                if (e.marker.category.icon && !e.marker.category.icon.startsWith("https")) {
+                    e.marker.category.icon = "/marker.svg";
+                }
+                addMarkerToMarkerArray(e.marker);
+                emit("addedMarker", e.marker);
+            }
+        );
+
+    }
+
+    const listenForDeletedMarkers = async (mapId: string) => {
+        window.Echo.channel("maps." + mapId).listen(
+            "MarkerDeleted",
+            (e) => {
+                removeMarkerFromMarkerArray(e.marker);
+            }
+        );
+    }
+
+    const listenForMarkerChangesOnMap = async (mapId: string) => {
+        listenForDeletedMarkers(mapId);
+        listenForNewMarkers(mapId);
+    }
+
     return {
         canDeleteMarker,
         deleteMarker,
@@ -145,6 +175,9 @@ export function useMarker() {
         getAllMarkersForMap,
         validateMarkerForm,
         canCreateMarker,
+        listenForNewMarkers,
+        listenForDeletedMarkers,
+        listenForMarkerChangesOnMap,
         isLoading,
         formErrors,
         markers,

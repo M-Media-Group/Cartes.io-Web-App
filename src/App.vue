@@ -8,7 +8,7 @@ import userDevice from "@/classes/userDevice";
 import MapCards from "./components/maps/MapCards.vue";
 import EditMapForm from "./components/maps/EditMapForm.vue";
 
-const { markers, getAllMarkersForMap } = useMarker();
+const { markers, getAllMarkersForMap, listenForMarkerChangesOnMap } = useMarker();
 
 const Maps = useMap();
 
@@ -26,6 +26,7 @@ onMounted(() => {
     Maps.getMap(mapId);
     getAllMarkersForMap(mapId);
     Maps.getRelatedMaps(mapId);
+    listenForMarkerChangesOnMap(mapId);
   } else {
     Maps.getAllMaps();
   }
@@ -81,6 +82,7 @@ const AR = defineAsyncComponent(() =>
             <p>{{ Maps.map?.description }}</p>
           </div>
           <div>
+
             <button>Share this map</button>
 
             <!-- Markers -->
@@ -88,7 +90,7 @@ const AR = defineAsyncComponent(() =>
               <summary aria-haspopup="listbox"
                 role="button"
                 class="secondary">
-                Markers
+                <i class="fa fa-circle text-danger blink"></i> Live feed
               </summary>
               <MapCards role="listbox"
                 :markers="markers" />
@@ -139,4 +141,75 @@ const AR = defineAsyncComponent(() =>
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.blink {
+  height: 8px;
+  width: 8px;
+  aspect-ratio: 1;
+  animation: blink 1s infinite;
+  background: red;
+  border-radius: 50%;
+}
+
+.blink::before {
+  /* content: "x"; */
+  height: 8px;
+  width: 8px;
+  aspect-ratio: 1;
+  opacity: 0;
+}
+
+/* Blink animation */
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* .blink {
+  -webkit-font-smoothing: antialiased;
+  animation-delay: 0s;
+  animation-direction: normal;
+  animation-duration: 1.5s;
+  animation-fill-mode: none;
+  animation-iteration-count: infinite;
+  animation-name: blinker;
+  animation-play-state: running;
+  animation-timing-function: cubic-bezier(0.5, 0, 1, 1);
+  box-sizing: border-box;
+  color: rgb(227, 52, 47);
+  cursor: pointer;
+  display: inline-block;
+  font-family: FontAwesome;
+  font-size: 20px;
+  font-stretch: normal;
+  font-style: normal;
+  font-variant-caps: normal;
+  font-weight: 400;
+  height: 20px;
+  line-height: 20px;
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+  text-align: left;
+  text-rendering: auto;
+  width: 17.15625px;
+  word-wrap: break-word;
+}
+
+.blink::before {
+  box-sizing: border-box;
+  content: "";
+  display: inline;
+  height: auto;
+  width: auto;
+} */
 </style>
