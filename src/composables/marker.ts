@@ -143,7 +143,7 @@ export function useMarker() {
 
         window.Echo.channel("maps." + mapId).listen(
             "MarkerCreated",
-            (e) => {
+            (e: { marker: Marker; }) => {
                 if (e.marker.category.icon && !e.marker.category.icon.startsWith("https")) {
                     e.marker.category.icon = "/marker.svg";
                 }
@@ -157,7 +157,7 @@ export function useMarker() {
     const listenForDeletedMarkers = async (mapId: string) => {
         window.Echo.channel("maps." + mapId).listen(
             "MarkerDeleted",
-            (e) => {
+            (e: { marker: Marker; }) => {
                 removeMarkerFromMarkerArray(e.marker);
             }
         );
