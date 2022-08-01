@@ -37,8 +37,8 @@ defineProps({
 
 <template>
     <div>
-        <h2>{{ category.name }}</h2>
-        <p>{{ description }}</p>
+        <h3>{{ category.name }}</h3>
+        <p v-if="description">{{ description }}</p>
         <time>{{ created_at }}</time>
     </div>
 </template>

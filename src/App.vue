@@ -112,7 +112,7 @@ const AR = defineAsyncComponent(() =>
           <ul>
             <li v-for="map in Maps.map.related"
               :key="map.uuid">
-              <div :to="` /maps?mapId=${map.uuid}`">{{ map.title }}</div>
+              <a :href="'?mapId=' + map.uuid">{{ map.title }}</a>
             </li>
           </ul>
         </section>
@@ -121,15 +121,15 @@ const AR = defineAsyncComponent(() =>
 
   </template>
 
-  <template v-else>
+  <div class="container"
+    v-else>
     <h1>Cartes.io</h1>
-    <p>No map selected</p>
     <div v-for="map in Maps.maps.value"
       :key="map.uuid">
       <a :href="'?mapId=' + map.uuid">
         {{ map.title ?? "No title" }}
       </a>
     </div>
-  </template>
+  </div>
 
 </template>
