@@ -41,11 +41,10 @@ const toggleMapVisibility = () => {
 <template>
   <nav>
     <ul>
-      <li><strong>Cartes.io</strong></li>
+      <li><a href="/"><strong>Cartes.io</strong></a></li>
     </ul>
     <ul>
-      <li><a href="#">Link</a></li>
-      <li><a href="#">Link</a></li>
+      <li><a href="https://cartes.io/login">Login</a></li>
       <li>
         <button @click="Maps.addMap(null, true)">Create new map</button>
       </li>
@@ -72,6 +71,8 @@ const toggleMapVisibility = () => {
           <p>{{ Maps.map?.description }}</p>
         </div>
         <div>
+          <button>Share this map</button>
+
           <!-- Markers -->
           <details>
             <summary aria-haspopup="listbox"

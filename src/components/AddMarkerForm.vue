@@ -247,10 +247,8 @@ defineExpose({
       v-model="submitData.link" />
 
     <!-- Expandable details with more options -->
-    <details v-if="allowLatLngElevationOverride"
-      role="list">
+    <details v-if="allowLatLngElevationOverride">
       <summary aria-haspopup="listbox"
-        role="button"
         class="secondary">More options</summary>
 
       <div>
