@@ -53,7 +53,7 @@ const share = async () => {
   } else {
     // Copy to clipboard
     await navigator.clipboard.writeText(url);
-    alert("Copied to clipboard!");
+    alert("Map link copied to clipboard!");
   }
 }
 
@@ -61,7 +61,7 @@ const share = async () => {
 
 <template>
   <div class="container-fluid">This is an alpha version of Cartes.io 2 point O. View the original full app <a
-      href="https://cartes.io/login">here</a>
+      href="https://cartes.io">here</a>
   </div>
 
   <nav class="container-fluid">
@@ -116,7 +116,7 @@ const share = async () => {
               <summary aria-haspopup="listbox"
                 role="button"
                 class="secondary">
-                Settings
+                Map settings
               </summary>
               <EditMapForm role="listbox"
                 :map="Maps.map" />
