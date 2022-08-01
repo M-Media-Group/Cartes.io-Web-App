@@ -1,7 +1,6 @@
 
 <script setup lang="ts">
-import { onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
-import AugmentedReality from "./views/AugmentedReality.vue";
+import { onBeforeMount, onBeforeUnmount, onMounted, ref, defineAsyncComponent } from "vue";
 import NewMapComponent from "@/components/maps/NewMapComponent.vue"
 import { useMarker } from "./composables/marker";
 import { useMap } from "./composables/map";
@@ -36,6 +35,11 @@ const toggleMapVisibility = () => {
   showMap.value = !showMap.value;
   searchParams.set("showAr", showMap.value ? "true" : "false");
 }
+
+const AR = defineAsyncComponent(() =>
+  import("./views/AugmentedReality.vue")
+)
+
 </script>
 
 <template>
@@ -57,7 +61,7 @@ const toggleMapVisibility = () => {
 
   <template v-if="mapId && Maps.map">
 
-    <AugmentedReality :mapId="mapId"
+    <AR :mapId="mapId"
       :markers="markers"
       @close="toggleMapVisibility()"
       v-if="!showMap" />
