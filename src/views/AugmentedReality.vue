@@ -72,8 +72,10 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import { ref, nextTick, watch, computed, PropType, onUnmounted } from "vue";
+import { ref, nextTick, watch, computed, PropType, onUnmounted, onBeforeMount } from "vue";
 import AddMarkerForm from "@/components/AddMarkerForm.vue";
+
+import 'aframe'
 
 import { Marker } from "@/types/marker";
 import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
@@ -206,6 +208,22 @@ const handleNewMarkerEvent = (event: Marker) => {
   emit('addedMarker', event);
 };
 
+onBeforeMount(() => {
+  var scripts = [
+    'https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js',
+    'https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js'
+  ];
+  scripts.forEach(script => {
+    let tag = document.head.querySelector(`[src="${script}"`);
+    if (!tag) {
+      tag = document.createElement("script");
+      tag.setAttribute("src", script);
+      tag.setAttribute("type", 'text/javascript');
+      document.head.appendChild(tag);
+    }
+  });
+})
+
 onUnmounted(() => {
   // Seems to be some bug/issue in a-frame that keeps this class in html when unloaded
   // Remove the a-fullscreen class from the html element
@@ -215,12 +233,6 @@ onUnmounted(() => {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 a-scene {
   /* aspect ratio */
   width: 100%;
