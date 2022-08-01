@@ -12,7 +12,8 @@ defineProps({
 </script>
 
 <template>
-    <div>
+    <div style="max-height: 57vh;
+overflow-y: scroll;">
         <MapCard v-for="marker in markers"
             :key="marker.id"
             :description="marker.description"

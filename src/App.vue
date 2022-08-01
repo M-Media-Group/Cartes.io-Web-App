@@ -21,15 +21,16 @@ const showMap = ref((userDevice.supportsAr && searchParams.get("showAr")) ?? tru
 
 const canCreateMarkers = ref();
 
-onMounted(async () => {
+onMounted(() => {
   if (mapId) {
     getAllMarkersForMap(mapId);
     Maps.getRelatedMaps(mapId);
     listenForMarkerChangesOnMap(mapId);
-    await Maps.getMap(mapId);
-    canCreateMarkers.value = Maps.canCreateMarkers(Maps.map);
+    Maps.getMap(mapId).then(() => {
+      canCreateMarkers.value = Maps.canCreateMarkers(Maps.map);
+    });
   } else {
-    await Maps.getAllMaps();
+    Maps.getAllMaps();
   }
 });
 
