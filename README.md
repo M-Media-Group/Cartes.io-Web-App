@@ -33,3 +33,6 @@ We need to:
 - [ ] Finalise the UI draft version 1.0
 
 Note that the current roadmap is to define functionality first, and then look at styling.
+
+Nice to have:
+- [ ] Offline first support (save to indexeddb probably)
