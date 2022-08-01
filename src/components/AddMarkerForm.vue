@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import "leaflet/dist/leaflet.css";
 import { computed, onMounted, PropType, reactive, ref, watch } from "vue";
 import Multiselect from '@vueform/multiselect'
 import { MarkerForm } from "@/types/marker";
@@ -230,6 +229,7 @@ defineExpose({
           height="25" width="25" :src="props.option.icon" alt="" style="position: initial" />{{ props.option.name }}
       </template> -->
     </Multiselect>
+
     <textarea id="description"
       rows="2"
       name="description"
@@ -247,37 +247,44 @@ defineExpose({
       v-model="submitData.link" />
 
     <!-- Expandable details with more options -->
-    <details v-if="allowLatLngElevationOverride">
-      <summary>More options</summary>
+    <details v-if="allowLatLngElevationOverride"
+      role="list">
+      <summary aria-haspopup="listbox"
+        role="button"
+        class="secondary">More options</summary>
+
       <div>
-        <label>Lat:</label>
-        <input type="number"
-          step="0.000000000000001"
-          min="-90"
-          max="90"
-          name="lat"
-          v-model="submitData.lat"
-          placeholder="Latitude"
-          required>
+        <label>Lat:
+          <input type="number"
+            step="0.000000000000001"
+            min="-90"
+            max="90"
+            name="lat"
+            v-model="submitData.lat"
+            placeholder="Latitude"
+            required>
+        </label>
 
-        <label>Lng:</label>
-        <input type="number"
-          step="0.000000000000001"
-          min="-180"
-          max="180"
-          name="lng"
-          v-model="submitData.lng"
-          placeholder="Longitude"
-          required>
+        <label>Lng:
+          <input type="number"
+            step="0.000000000000001"
+            min="-180"
+            max="180"
+            name="lng"
+            v-model="submitData.lng"
+            placeholder="Longitude"
+            required>
+        </label>
 
-        <label>Elevation (if blank, auto-inferred):</label>
-        <input type="number"
-          step="0.1"
-          min="-10000"
-          max="10000"
-          name="elevation"
-          v-model="submitData.elevation"
-          placeholder="Elevation (optional)">
+        <label>Elevation (if blank, auto-inferred):
+          <input type="number"
+            step="0.1"
+            min="-10000"
+            max="10000"
+            name="elevation"
+            v-model="submitData.elevation"
+            placeholder="Elevation (optional)">
+        </label>
 
       </div>
     </details>
@@ -293,21 +300,6 @@ defineExpose({
 </style>
 <style>
 form {
-  display: grid;
-  gap: 1rem;
   min-width: 300px;
-}
-
-input,
-textarea,
-form>button {
-  /* Reset the inputs */
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  font-size: 16px;
-  padding: 0.5rem 1rem;
-  width: 100%;
-  border-radius: 8px;
-  min-width: 200px;
 }
 </style>

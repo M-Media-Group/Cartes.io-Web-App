@@ -83,8 +83,10 @@ const groupedMarkersByCategory = computed(() => {
               Click to see address</summary>
             <p>{{ searchResults }}</p>
           </details> -->
-                <a v-if="canDeleteMarker(marker)"
-                    @click="deleteMarker(mapId, marker)">Delete</a>
+                <a href="#"
+                    role="button"
+                    v-if="canDeleteMarker(marker)"
+                    @click.prevent="deleteMarker(mapId, marker)">Delete</a>
                 <!--
           <a  v-if="canMarkAsSpamPost(marker)" @click="markAsSpam(marker.id)"
             :disabled="submit_data.loading">Report as spam</a> -->

@@ -251,4 +251,31 @@ const setReady = async () => {
   width: 100%;
   display: block;
 }
+
+.leaflet-touch .leaflet-bar a,
+.leaflet-control {
+  padding: inherit;
+  border: none;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip,
+.leaflet-bar a,
+.leaflet-control-layers-toggle {
+  background-color: var(--card-background-color);
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  color: inherit;
+}
+
+.leaflet-marker-icon {
+  background-color: unset;
+  border: unset;
+}
+
+.leaflet-container a {
+  color: inherit;
+}
 </style>

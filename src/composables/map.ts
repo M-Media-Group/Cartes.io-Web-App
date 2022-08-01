@@ -93,6 +93,7 @@ export function useMap() {
         localStorage["map_" + data.uuid] = data.token;
         if (redirect) {
             window.location.href = "?mapId=" + data.uuid;
+            alert("Map created!");
         }
         emit("addedMap", data);
 

@@ -39,7 +39,18 @@ const toggleMapVisibility = () => {
 </script>
 
 <template>
-  <h1>{{ Maps.map?.title ?? "Cartes.io" }}</h1>
+  <nav>
+    <ul>
+      <li><strong>Cartes.io</strong></li>
+    </ul>
+    <ul>
+      <li><a href="#">Link</a></li>
+      <li><a href="#">Link</a></li>
+      <li>
+        <button @click="Maps.addMap(null, true)">Create new map</button>
+      </li>
+    </ul>
+  </nav>
 
   <template v-if="mapId && Maps.map">
 
@@ -55,24 +66,51 @@ const toggleMapVisibility = () => {
         style="height: 70vh"
         @showAr="toggleMapVisibility()">
       </NewMapComponent>
-      <MapCards :markers="markers" />
-      <EditMapForm v-if="Maps.canUpdateMap(Maps.map)"
-        :map="Maps.map" />
+      <section class="container grid">
+        <div>
+          <h1>{{ Maps.map.title }}</h1>
+          <p>{{ Maps.map?.description }}</p>
+        </div>
+        <div>
+          <!-- Markers -->
+          <details>
+            <summary aria-haspopup="listbox"
+              role="button"
+              class="secondary">
+              Markers
+            </summary>
+            <MapCards role="listbox"
+              :markers="markers" />
+          </details>
+          <!-- Settings -->
+          <details v-if="Maps.canUpdateMap(Maps.map)">
+            <summary aria-haspopup="listbox"
+              role="button"
+              class="secondary">
+              Settings
+            </summary>
+            <EditMapForm role="listbox"
+              :map="Maps.map" />
+          </details>
 
-      <p>{{ Maps.map?.description }}</p>
+        </div>
+      </section>
 
-      <h2>Related maps</h2>
-      <ul>
-        <li v-for="map in Maps.map.related"
-          :key="map.uuid">
-          <div :to="` /maps?mapId=${map.uuid}`">{{ map.title }}</div>
-        </li>
-      </ul>
+      <section>
+        <h2>Related maps</h2>
+        <ul>
+          <li v-for="map in Maps.map.related"
+            :key="map.uuid">
+            <div :to="` /maps?mapId=${map.uuid}`">{{ map.title }}</div>
+          </li>
+        </ul>
+      </section>
     </template>
 
   </template>
 
   <template v-else>
+    <h1>Cartes.io</h1>
     <p>No map selected</p>
     <div v-for="map in Maps.maps.value"
       :key="map.uuid">
@@ -81,7 +119,5 @@ const toggleMapVisibility = () => {
       </a>
     </div>
   </template>
-  <button v-if="Maps.canDeleteMap(Maps.map)"
-    @click="Maps.deleteMap(Maps.map)">Delete map</button>
-  <button @click="Maps.addMap(null, true)">Create new map</button>
+
 </template>
