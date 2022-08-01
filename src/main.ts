@@ -7,6 +7,13 @@ const app = createApp(App)
 
 app.config.globalProperties.window = window
 
+declare global {
+    interface Window {
+        Pusher: any;
+        Echo: any;
+    }
+}
+
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
