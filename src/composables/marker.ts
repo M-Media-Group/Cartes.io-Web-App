@@ -178,6 +178,7 @@ export function useMarker() {
         listenForNewMarkers,
         listenForDeletedMarkers,
         listenForMarkerChangesOnMap,
+        canCreateMarkerForMap,
         isLoading,
         formErrors,
         markers,

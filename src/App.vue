@@ -19,14 +19,17 @@ const mapId = searchParams.get("mapId");
 
 const showMap = ref((userDevice.supportsAr && searchParams.get("showAr")) ?? true);
 
-onMounted(() => {
+const canCreateMarkers = ref();
+
+onMounted(async () => {
   if (mapId) {
-    Maps.getMap(mapId);
     getAllMarkersForMap(mapId);
     Maps.getRelatedMaps(mapId);
     listenForMarkerChangesOnMap(mapId);
+    await Maps.getMap(mapId);
+    canCreateMarkers.value = Maps.canCreateMarkers(Maps.map);
   } else {
-    Maps.getAllMaps();
+    await Maps.getAllMaps();
   }
 });
 
@@ -102,7 +105,7 @@ const share = async () => {
             <button @click="share()">Share this map</button>
 
             <!-- Markers -->
-            <details>
+            <details open>
               <summary aria-haspopup="listbox"
                 role="button"
                 class="secondary">
@@ -122,11 +125,17 @@ const share = async () => {
                 :map="Maps.map" />
             </details>
 
+            <p v-if="canCreateMarkers">Right click (or long-tap on mobile) on the map to create a
+              marker. You can
+              choose
+              one of the existing
+              labels or create your own.</p>
+
             <!-- Developer -->
             <details>
               <summary>Developer info</summary>
               <p>
-                Use standard API requests to get data from this map. No
+                Use standard API requests to interact with this map. No
                 authentication required for public and unlisted maps.
                 <a href="https://github.com/M-Media-Group/Cartes.io/wiki/API"
                   rel="noopener"
