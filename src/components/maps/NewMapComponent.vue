@@ -167,7 +167,8 @@ const setReady = async () => {
       @ready="setReady"
       :options="{ attributionControl: false }"
       :zoomAnimation="true"
-      :fadeAnimation="true">
+      :fadeAnimation="true"
+      :markerZoomAnimation="true">
 
       <l-control-attribution position="bottomright"
         prefix='&copy; <a href="https://cartes.io">Cartes.io</a> &copy; <a href="https://icons8.com/attributions">Icons8</a>'>
