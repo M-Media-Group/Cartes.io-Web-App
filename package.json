@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@ar-js-org/ar.js": "^3.4.0",
-    "@m-media/npm-cartes-io": "^0.0.2",
+    "@m-media/npm-cartes-io": "^0.0.4",
     "@vueform/multiselect": "^2.4.2",
     "idb": "^7.0.2",
     "vue": "^3.2.25"
@@ -26,6 +26,7 @@
     "jest-fetch-mock": "^3.0.3",
     "leaflet-geosearch": "^3.6.1",
     "leaflet.locatecontrol": "^0.76.1",
+    "leaflet.markercluster": "^1.5.3",
     "ts-jest": "^26.5.6",
     "typescript": "^4.5.4",
     "vite": "^2.9.9",

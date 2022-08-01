@@ -19,6 +19,7 @@ export interface Map {
     token?: string;
     categories?: Category[];
     markers?: Marker[];
+    related?: Map[];
 }
 
 export interface Options {

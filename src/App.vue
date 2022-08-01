@@ -20,10 +20,13 @@ const mapId = searchParams.get("mapId");
 
 const showMap = ref((userDevice.supportsAr && searchParams.get("showAr")) ?? true);
 
+const related = ref();
+
 onMounted(() => {
   if (mapId) {
     Maps.getMap(mapId);
     getAllMarkersForMap(mapId);
+    Maps.getRelatedMaps(mapId);
   } else {
     Maps.getAllMaps();
   }
@@ -37,11 +40,14 @@ const toggleMapVisibility = () => {
 
 <template>
   <h1>{{ Maps.map?.title ?? "Cartes.io" }}</h1>
+
   <template v-if="mapId && Maps.map">
+
     <AugmentedReality :mapId="mapId"
       :markers="markers"
       @close="toggleMapVisibility()"
       v-if="!showMap" />
+
     <template v-else>
       <NewMapComponent :mapId="mapId"
         :show-ar="true"
@@ -52,9 +58,20 @@ const toggleMapVisibility = () => {
       <MapCards :markers="markers" />
       <EditMapForm v-if="Maps.canUpdateMap(Maps.map)"
         :map="Maps.map" />
+
       <p>{{ Maps.map?.description }}</p>
+
+      <h2>Related maps</h2>
+      <ul>
+        <li v-for="map in Maps.map.related"
+          :key="map.uuid">
+          <div :to="` /maps?mapId=${map.uuid}`">{{ map.title }}</div>
+        </li>
+      </ul>
     </template>
+
   </template>
+
   <template v-else>
     <p>No map selected</p>
     <div v-for="map in Maps.maps.value"

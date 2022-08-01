@@ -23,6 +23,7 @@ const map = reactive<Map>({
     },
     categories: [],
     markers: [],
+    related: [],
 });
 // reactive maps
 // const maps = reactive<Map[]>([]);
@@ -58,6 +59,14 @@ export function useMap() {
         }
         const data = await cartes.maps(mapId).get();
         Object.assign(map, data) // equivalent to reassign
+    }
+
+    const getRelatedMaps = async (mapId: string) => {
+        if (!userDevice.online) {
+            return alert("You must be online to get related maps.");
+        }
+        map.related = await cartes.maps(mapId).related().get();
+        return map.related;
     }
 
     const hasErrors = computed(() => {
@@ -142,6 +151,7 @@ export function useMap() {
         addMap,
         validateMapForm,
         getMap,
+        getRelatedMaps,
         getAllMaps,
         canCreateMarkers,
         updateMap,

@@ -180,10 +180,11 @@ const updateMapSettings = (mapId: string, settings: any) => {
 </script>
 
 <template>
+    <h2>Settings</h2>
     <form @submit.prevent="updateMapSettings(map.uuid, settings)">
         <div v-for="(setting, key) in settings"
             :key="key">
-            <h2>{{ setting.title }}</h2>
+            <h3>{{ setting.title }}</h3>
             <template v-if="'options' in setting">
                 <!-- Radio box with setting options -->
                 <template v-for="(option, index) in setting.options"
