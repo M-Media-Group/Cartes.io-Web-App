@@ -39,7 +39,11 @@ const toggleMapVisibility = () => {
 </script>
 
 <template>
-  <nav>
+  <div class="container-fluid">This is an alpha version of Cartes.io 2 point O. View the original full app <a
+      href="https://cartes.io/login">here</a>
+  </div>
+
+  <nav class="container-fluid">
     <ul>
       <li><a href="/"><strong>Cartes.io</strong></a></li>
     </ul>
@@ -65,47 +69,50 @@ const toggleMapVisibility = () => {
         style="height: 70vh"
         @showAr="toggleMapVisibility()">
       </NewMapComponent>
-      <section class="container grid">
-        <div>
-          <h1>{{ Maps.map.title }}</h1>
-          <p>{{ Maps.map?.description }}</p>
-        </div>
-        <div>
-          <button>Share this map</button>
+      <div class="container"
+        style="margin-top:var(--nav-element-spacing-vertical);">
+        <section class=" grid">
+          <div>
+            <h1>{{ Maps.map.title }}</h1>
+            <p>{{ Maps.map?.description }}</p>
+          </div>
+          <div>
+            <button>Share this map</button>
 
-          <!-- Markers -->
-          <details>
-            <summary aria-haspopup="listbox"
-              role="button"
-              class="secondary">
-              Markers
-            </summary>
-            <MapCards role="listbox"
-              :markers="markers" />
-          </details>
-          <!-- Settings -->
-          <details v-if="Maps.canUpdateMap(Maps.map)">
-            <summary aria-haspopup="listbox"
-              role="button"
-              class="secondary">
-              Settings
-            </summary>
-            <EditMapForm role="listbox"
-              :map="Maps.map" />
-          </details>
+            <!-- Markers -->
+            <details>
+              <summary aria-haspopup="listbox"
+                role="button"
+                class="secondary">
+                Markers
+              </summary>
+              <MapCards role="listbox"
+                :markers="markers" />
+            </details>
+            <!-- Settings -->
+            <details v-if="Maps.canUpdateMap(Maps.map)">
+              <summary aria-haspopup="listbox"
+                role="button"
+                class="secondary">
+                Settings
+              </summary>
+              <EditMapForm role="listbox"
+                :map="Maps.map" />
+            </details>
 
-        </div>
-      </section>
+          </div>
+        </section>
 
-      <section>
-        <h2>Related maps</h2>
-        <ul>
-          <li v-for="map in Maps.map.related"
-            :key="map.uuid">
-            <div :to="` /maps?mapId=${map.uuid}`">{{ map.title }}</div>
-          </li>
-        </ul>
-      </section>
+        <section>
+          <h2>Related maps</h2>
+          <ul>
+            <li v-for="map in Maps.map.related"
+              :key="map.uuid">
+              <div :to="` /maps?mapId=${map.uuid}`">{{ map.title }}</div>
+            </li>
+          </ul>
+        </section>
+      </div>
     </template>
 
   </template>
