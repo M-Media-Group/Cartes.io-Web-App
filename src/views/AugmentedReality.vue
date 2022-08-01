@@ -76,6 +76,7 @@ import { ref, nextTick, watch, computed, PropType, onUnmounted, onBeforeMount } 
 import AddMarkerForm from "@/components/AddMarkerForm.vue";
 
 import 'aframe'
+import 'aframe-look-at-component'
 
 import { Marker } from "@/types/marker";
 import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
@@ -210,7 +211,6 @@ const handleNewMarkerEvent = (event: Marker) => {
 
 onBeforeMount(() => {
   var scripts = [
-    'https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js',
     'https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js'
   ];
   scripts.forEach(script => {
