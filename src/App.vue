@@ -61,6 +61,17 @@ const share = async () => {
   }
 }
 
+const isLive = ref(false);
+
+window.Echo.connector.pusher.connection.bind("connected", () => {
+  isLive.value = true;
+});
+
+window.Echo.connector.pusher.connection.bind("disconnected", () => {
+  isLive.value = false;
+});
+
+
 </script>
 
 <template>
@@ -110,7 +121,7 @@ const share = async () => {
               <summary aria-haspopup="listbox"
                 role="button"
                 class="secondary">
-                <i class="fa fa-circle text-danger blink"></i> Live feed
+                <i class="fa fa-circle text-danger blink"></i> {{ isLive ? 'Live feed' : 'Feed' }}
               </summary>
               <MapCards role="listbox"
                 :markers="markers" />
