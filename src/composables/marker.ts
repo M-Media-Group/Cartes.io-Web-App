@@ -68,7 +68,6 @@ export function useMarker() {
         });
 
         markers.value = data;
-
     };
 
     const validateMarkerForm = (form: MarkerForm) => {
@@ -186,6 +185,19 @@ export function useMarker() {
         listenForNewMarkers(mapId);
     }
 
+    const showExpired = ref(false)
+
+    const nonExpiredMarkers = computed(() => {
+        return markers.value.filter((m) => !m.expires_at || m.expires_at > new Date());
+    })
+
+    const displayableMarkers = computed(() => {
+        if (showExpired.value) {
+            return markers.value;
+        }
+        return nonExpiredMarkers.value;
+    })
+
     return {
         canDeleteMarker,
         deleteMarker,
@@ -197,10 +209,13 @@ export function useMarker() {
         listenForDeletedMarkers,
         listenForMarkerChangesOnMap,
         canCreateMarkerForMap,
+        nonExpiredMarkers,
+        displayableMarkers,
         isLoading,
         formErrors,
         markers,
         hasErrors,
-        minCategoryNameLength
+        minCategoryNameLength,
+        showExpired
     };
 }

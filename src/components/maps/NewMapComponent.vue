@@ -92,7 +92,9 @@ const openAddMarkerPopup = (event: { latlng: any; }) => {
   if (addMarkerPopup.value && event.latlng) {
     contextMenuPosition.value = event.latlng;
     addMarkerPopup.value.leafletObject.openPopup(contextMenuPosition.value);
-    addMarkerForm.value.focusMultiselect();
+    if (canCreateMarker()) {
+      addMarkerForm.value.focusMultiselect();
+    }
   }
 };
 

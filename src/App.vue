@@ -10,7 +10,7 @@ import EditMapForm from "@/components/maps/EditMapForm.vue";
 import DeveloperInfo from "@/components/DeveloperInfo.vue";
 import AppLayout from "./templates/AppLayout.vue";
 
-const { markers, getAllMarkersForMap, listenForMarkerChangesOnMap } = useMarker();
+const { displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap, showExpired } = useMarker();
 
 const Maps = useMap();
 
@@ -83,14 +83,14 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
       v-if="mapId && Maps.map">
 
       <AR :mapId="Maps.map.uuid"
-        :markers="markers"
+        :markers="displayableMarkers"
         @close="toggleMapVisibility()"
         v-if="!showMap" />
 
       <NewMapComponent v-else
         :mapId="Maps.map.uuid"
         :show-ar="true"
-        :markers="markers"
+        :markers="displayableMarkers"
         style="height: 70vh"
         @showAr="toggleMapVisibility()" />
     </template>
@@ -100,7 +100,7 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
         <section class="grid">
           <div>
             <h1>{{ Maps.map.title ?? "Untitled map" }}</h1>
-            <p>{{ Maps.map?.description }}</p>
+            <p style="white-space: pre-wrap;">{{ Maps.map?.description }}</p>
           </div>
           <div>
 
@@ -108,7 +108,7 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
 
             <!-- Markers -->
             <details open
-              v-if="markers.length > 0">
+              v-if="displayableMarkers.length > 0">
               <summary aria-haspopup="listbox"
                 role="button"
                 class="secondary">
@@ -116,8 +116,21 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
                   class="blink"></div> {{ isLive ? 'Live feed' : 'Feed' }}
               </summary>
               <MapCards role="listbox"
-                :markers="markers" />
+                :markers="displayableMarkers" />
             </details>
+
+            <!-- Map display options -->
+            <details>
+              <summary role="button"
+                class="secondary">Map display options</summary>
+              <!-- Checkbox to show expired -->
+              <label>
+                <input type="checkbox"
+                  v-model="showExpired" />
+                Show expired markers
+              </label>
+            </details>
+
             <!-- Settings -->
             <details v-if="Maps.canUpdateMap(Maps.map)">
               <summary aria-haspopup="listbox"
