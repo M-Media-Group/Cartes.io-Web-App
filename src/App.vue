@@ -80,7 +80,7 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
   <AppLayout>
 
     <template #header
-      v-if="Maps.map">
+      v-if="mapId && Maps.map">
 
       <AR :mapId="Maps.map.uuid"
         :markers="markers"
@@ -95,7 +95,7 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
         @showAr="toggleMapVisibility()" />
     </template>
 
-    <template v-if="Maps.map && showMap">
+    <template v-if="mapId && Maps.map && showMap">
       <div style="margin-top:var(--nav-element-spacing-vertical);">
         <section class="grid">
           <div>

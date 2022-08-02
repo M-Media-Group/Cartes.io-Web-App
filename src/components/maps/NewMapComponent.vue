@@ -25,6 +25,7 @@ import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
 import userDevice from "@/classes/userDevice";
 import MapMarker from "./MapMarker.vue";
 import MapMarkers from "./MapMarkers.vue";
+import { useMap } from "@/composables/map";
 
 const isOnline = computed(() => {
   return userDevice.online;
@@ -151,6 +152,8 @@ const setReady = async () => {
   leafletObject.value = map.value.leafletObject;
 };
 
+const mapInstance = useMap();
+
 </script>
 <template>
   <div>
@@ -200,6 +203,7 @@ const setReady = async () => {
             :markerLat="contextMenuPosition.lat"
             :markerLng="contextMenuPosition.lng"
             :allowLatLngElevationOverride="false"
+            :showLinkInput="mapInstance.map?.options?.links ?? 'disabled'"
             @addedMarker="handleNewMarkerEvent($event)" />
           <div v-else>You must be logged in to create markers on this map.</div>
         </l-popup>
