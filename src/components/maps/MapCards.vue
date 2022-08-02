@@ -1,20 +1,26 @@
 <script setup lang="ts">
 import { Marker } from '@/types/marker';
-import { PropType } from 'vue';
+import { computed, PropType } from 'vue';
 import MapCard from './MapCard.vue';
 
-defineProps({
+const props = defineProps({
     markers: {
         type: Array as PropType<Marker[]>,
         required: true,
     },
 })
+
+const sortedMarkers = computed(() => {
+    return props.markers.sort((a, b) => {
+        return a.created_at < b.created_at ? 1 : -1;
+    });
+});
 </script>
 
 <template>
     <div style="max-height: 57vh;
 overflow-y: scroll;">
-        <MapCard v-for="marker in markers"
+        <MapCard v-for="marker in sortedMarkers"
             :key="marker.id"
             :description="marker.description"
             :created_at="marker.created_at"

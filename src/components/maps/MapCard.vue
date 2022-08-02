@@ -36,9 +36,34 @@ defineProps({
 </script>
 
 <template>
-    <div>
-        <h3>{{ category.name }}</h3>
-        <p v-if="description">{{ description }}</p>
-        <time>{{ created_at }}</time>
+    <div class="card">
+        <header>
+            <h3>{{ category.name }}</h3>
+        </header>
+        <template v-if="description">{{ description }}</template>
+        <footer>
+            <time :datetime="created_at.toString()">{{ new Date(created_at).toLocaleString() }}</time>
+        </footer>
     </div>
 </template>
+<style scoped>
+.card {
+    /* margin-top: calc(var(--block-spacing-vertical) / 2 * -1); */
+    margin-bottom: calc(var(--block-spacing-vertical) * 0.33);
+    padding: calc(var(--block-spacing-vertical) * .33) var(--block-spacing-horizontal);
+    background-color: var(--card-background-color);
+    border-radius: var(--border-radius);
+
+    border-radius: var(--border-radius);
+    background: var(--card-background-color);
+    box-shadow: var(--card-box-shadow);
+}
+
+.card>header>h3 {
+    margin-bottom: calc(var(--block-spacing-vertical) * 0.33);
+}
+
+.card footer {
+    margin-top: calc(var(--block-spacing-vertical) * 0.33);
+}
+</style>

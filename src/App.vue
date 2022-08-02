@@ -179,7 +179,7 @@ GET https://cartes.io/api/maps/{{ Maps.map.uuid }}/markers</code></pre>
           <ul>
             <li v-for="map in Maps.map.related"
               :key="map.uuid">
-              <a :href="'?mapId=' + map.uuid">{{ map.title }}</a>
+              <a :href="'?mapId=' + map.uuid">{{ map.title ?? "No title" }}</a>
             </li>
           </ul>
         </section>
