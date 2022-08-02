@@ -206,7 +206,7 @@ export default {
     new CustomNotification(
       "success",
       "Marker created!",
-      ["alert"]
+      ["browser"]
     ).show();
   },
   went_offline: () => {
