@@ -96,9 +96,8 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
     </template>
 
     <template v-if="Maps.map && showMap">
-      <div class="container"
-        style="margin-top:var(--nav-element-spacing-vertical);">
-        <section class=" grid">
+      <div style="margin-top:var(--nav-element-spacing-vertical);">
+        <section class="grid">
           <div>
             <h1>{{ Maps.map.title ?? "Untitled map" }}</h1>
             <p>{{ Maps.map?.description }}</p>
