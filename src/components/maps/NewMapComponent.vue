@@ -269,8 +269,14 @@ const setReady = async () => {
 .leaflet-control-layers-toggle,
 .leaflet-control-geosearch form,
 .leaflet-control-geosearch .results.active,
-.leaflet-control-geosearch a.reset {
+.leaflet-control-geosearch a.reset,
+.leaflet-control-layers {
   background-color: var(--card-background-color);
+  color: inherit;
+}
+
+.leaflet-control-layers-list {
+  padding: calc(var(--block-spacing-vertical) * .1) var(--block-spacing-horizontal);
 }
 
 .leaflet-popup-content-wrapper,
