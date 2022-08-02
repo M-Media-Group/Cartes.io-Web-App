@@ -117,7 +117,8 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
             <button @click="share()">Share this map</button>
 
             <!-- Markers -->
-            <details open>
+            <details open
+              v-if="markers.length > 0">
               <summary aria-haspopup="listbox"
                 role="button"
                 class="secondary">

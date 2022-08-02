@@ -18,8 +18,8 @@ const sortedMarkers = computed(() => {
 </script>
 
 <template>
-    <div style="max-height: 57vh;
-overflow-y: scroll;">
+    <div style="max-height: 57vh;overflow-y: scroll;"
+        v-if="sortedMarkers.length > 0">
         <MapCard v-for="marker in sortedMarkers"
             :key="marker.id"
             :description="marker.description"
@@ -30,4 +30,5 @@ overflow-y: scroll;">
             :link="marker.link"
             :elevation="marker.elevation" />
     </div>
+    <div v-else>No markers yet</div>
 </template>

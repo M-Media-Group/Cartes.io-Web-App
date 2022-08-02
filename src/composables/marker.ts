@@ -28,7 +28,22 @@ export function useMarker() {
     });
 
     const addMarkerToMarkerArray = (marker: Marker) => {
-        markers.value.push(marker);
+        if (!markerExistsInArray(marker)) {
+            markers.value.push(marker);
+        } else {
+            updateMarkerInMarkerArray(marker);
+        }
+    }
+
+    const updateMarkerInMarkerArray = (marker: Marker) => {
+        const index = markers.value.findIndex((m) => m.id === marker.id);
+        if (index !== -1) {
+            markers.value[index] = marker;
+        }
+    }
+
+    const markerExistsInArray = (marker: Marker) => {
+        return !!markers.value.find(m => m.id === marker.id);
     }
 
     const removeMarkerFromMarkerArray = (marker: Marker) => {
@@ -146,6 +161,9 @@ export function useMarker() {
             (e: { marker: Marker; }) => {
                 if (e.marker.category.icon && !e.marker.category.icon.startsWith("https")) {
                     e.marker.category.icon = "/marker.svg";
+                }
+                if (markerExistsInArray(e.marker)) {
+                    return;
                 }
                 addMarkerToMarkerArray(e.marker);
                 emit("addedMarker", e.marker);
