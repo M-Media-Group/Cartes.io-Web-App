@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import { onBeforeMount, onBeforeUnmount, onMounted, ref, defineAsyncComponent } from "vue";
+import { onBeforeMount, onBeforeUnmount, onMounted, ref, defineAsyncComponent, computed } from "vue";
 import NewMapComponent from "@/components/maps/NewMapComponent.vue"
 import { useMarker } from "@/composables/marker";
 import { useMap } from "@/composables/map";
@@ -9,6 +9,8 @@ import MapCards from "@/components/maps/MapCards.vue";
 import EditMapForm from "@/components/maps/EditMapForm.vue";
 import DeveloperInfo from "@/components/DeveloperInfo.vue";
 import AppLayout from "./templates/AppLayout.vue";
+
+import { now } from "@/composables/time";
 
 const { displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap, showExpired } = useMarker();
 
@@ -73,7 +75,20 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
   isLive.value = false;
 });
 
+const mapAgeInMinutes = computed(() => {
+  if (Maps.map) {
+    const createdAt = new Date(Maps.map.created_at);
+    const diff = now.value - createdAt.getTime();
+    return Math.round(diff / 60000);
+  }
+  return 0;
+});
 
+const mapCreatedTimeAgo = computed(() => {
+  if (Maps.map) {
+    return new Intl.RelativeTimeFormat("en-US").format(-mapAgeInMinutes.value, 'minute');
+  }
+})
 </script>
 
 <template>
@@ -99,6 +114,15 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
       <div style="margin-top:var(--nav-element-spacing-vertical);">
         <section class="grid">
           <div>
+
+            <div style="display: none;">
+              <img height="16"
+                width="16"
+                src="https://via.placeholder.com/16"
+                alt="Cartes.io logo" />
+              Anonymous
+            </div>
+
             <h1>{{ Maps.map.title ?? "Untitled map" }}</h1>
             <p style="white-space: pre-wrap;">{{ Maps.map?.description }}</p>
           </div>
@@ -123,11 +147,22 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
             <details>
               <summary role="button"
                 class="secondary">Map display options</summary>
+              <label style="display: none;"
+                v-if="!showExpired"
+                for="range">Timeline
+                <input type="range"
+                  min="0"
+                  :max="mapAgeInMinutes"
+                  :value="mapAgeInMinutes"
+                  id="range"
+                  name="range">
+                <small>From {{ mapCreatedTimeAgo }} to now</small>
+              </label>
               <!-- Checkbox to show expired -->
               <label>
                 <input type="checkbox"
                   v-model="showExpired" />
-                Show expired markers
+                Show all markers
               </label>
             </details>
 
@@ -274,42 +309,12 @@ summary {
   }
 }
 
-/* .blink {
-  -webkit-font-smoothing: antialiased;
-  animation-delay: 0s;
-  animation-direction: normal;
-  animation-duration: 1.5s;
-  animation-fill-mode: none;
-  animation-iteration-count: infinite;
-  animation-name: blinker;
-  animation-play-state: running;
-  animation-timing-function: cubic-bezier(0.5, 0, 1, 1);
-  box-sizing: border-box;
-  color: rgb(227, 52, 47);
-  cursor: pointer;
-  display: inline-block;
-  font-family: FontAwesome;
-  font-size: 20px;
-  font-stretch: normal;
-  font-style: normal;
-  font-variant-caps: normal;
-  font-weight: 400;
-  height: 20px;
-  line-height: 20px;
-  list-style-image: none;
-  list-style-position: outside;
-  list-style-type: none;
-  text-align: left;
-  text-rendering: auto;
-  width: 17.15625px;
-  word-wrap: break-word;
-}
+.alert {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
 
-.blink::before {
-  box-sizing: border-box;
-  content: "";
-  display: inline;
-  height: auto;
-  width: auto;
-} */
+}
 </style>
