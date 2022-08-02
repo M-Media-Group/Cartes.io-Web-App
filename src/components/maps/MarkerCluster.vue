@@ -6,18 +6,21 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import {
     inject,
+    InjectionKey,
     nextTick,
     onBeforeUnmount,
     onMounted,
     provide,
+    Ref,
     ref,
     useAttrs,
     useSlots,
+    VueElement,
 } from "vue";
 import { propsBinder, remapEvents } from "@vue-leaflet/vue-leaflet/src/utils";
 import {
@@ -34,23 +37,23 @@ const props = defineProps({
     },
 })
 
-const leafletRef = ref({});
+const leafletRef = ref({}) as any;
 const ready = ref(false);
 
-const addLayerToMainMap = inject("addLayer");
-const removeLayerFromMainMap = inject("removeLayer");
+const addLayerToMainMap = inject("addLayer") as any;
+const removeLayerFromMainMap = inject("removeLayer") as any;
 
 provide("canSetParentHtml", () => !!leafletRef.value.getElement());
 provide(
     "setParentHtml",
-    (html) => (leafletRef.value.getElement().innerHTML = html)
+    (html: any) => (leafletRef.value.getElement().innerHTML = html)
 );
 // provide('setIcon', (newIcon) => leafletRef.value.setIcon && leafletRef.value.setIcon(newIcon))
-provide("addLayer", (layer) => {
+provide("addLayer", (layer: { leafletObject: any; }) => {
     // replace the provided addLayer function for child components of MarkerCluster so they add to the cluster rather than the map
     leafletRef.value.addLayer(layer.leafletObject);
 });
-provide("removeLayer", (layer) => {
+provide("removeLayer", (layer: { leafletObject: any; }) => {
     leafletRef.value.removeLayer(layer.leafletObject);
 });
 
@@ -59,7 +62,7 @@ const slots = useSlots();
 const attrs = useAttrs();
 const emit = defineEmits(['ready']);
 
-const context = [props, attrs, slots];
+const context = { props, attrs, slots };
 
 const { methods } = layerSetup(props, leafletRef, context);
 
