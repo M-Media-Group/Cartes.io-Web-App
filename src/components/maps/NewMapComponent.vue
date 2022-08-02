@@ -221,6 +221,11 @@ const setReady = async () => {
 <style>
 @import 'leaflet-geosearch/dist/geosearch.css';
 
+.geosearch form input:not([type=checkbox]):not([type=radio]) {
+  margin-bottom: 0;
+  font-size: inherit;
+}
+
 .disable-select {
   user-select: none;
   /* supported by Chrome and Opera */
@@ -261,7 +266,10 @@ const setReady = async () => {
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip,
 .leaflet-bar a,
-.leaflet-control-layers-toggle {
+.leaflet-control-layers-toggle,
+.leaflet-control-geosearch form,
+.leaflet-control-geosearch .results.active,
+.leaflet-control-geosearch a.reset {
   background-color: var(--card-background-color);
 }
 
@@ -277,5 +285,10 @@ const setReady = async () => {
 
 .leaflet-container a {
   color: inherit;
+}
+
+.leaflet-control-geosearch a.leaflet-bar-part:after,
+.leaflet-control-geosearch a.leaflet-bar-part:before {
+  border-color: inherit;
 }
 </style>
