@@ -14,7 +14,7 @@ export function useMarker() {
 
     const minCategoryNameLength = 3;
 
-    const emit = getCurrentInstance()?.emit as any;
+    const { emit } = getCurrentInstance() as NonNullable<ReturnType<typeof getCurrentInstance>>;
 
     const isLoading = ref(false);
 
@@ -38,7 +38,13 @@ export function useMarker() {
     const updateMarkerInMarkerArray = (marker: Marker) => {
         const index = markers.value.findIndex((m) => m.id === marker.id);
         if (index !== -1) {
-            markers.value[index] = marker;
+            // Get all the current marker values
+            const currentMarker = markers.value[index];
+            // Update only the changed values
+            markers.value[index] = {
+                ...currentMarker,
+                ...marker,
+            };
         }
     }
 
