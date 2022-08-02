@@ -7,8 +7,8 @@ import { useMap } from "@/composables/map";
 import userDevice from "@/classes/userDevice";
 import MapCards from "@/components/maps/MapCards.vue";
 import EditMapForm from "@/components/maps/EditMapForm.vue";
-import NavBar from "@/components/NavBar.vue";
 import DeveloperInfo from "@/components/DeveloperInfo.vue";
+import AppLayout from "./templates/AppLayout.vue";
 
 const { markers, getAllMarkersForMap, listenForMarkerChangesOnMap } = useMarker();
 
@@ -77,26 +77,24 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
 </script>
 
 <template>
-  <div class="container-fluid">This is an alpha version of Cartes.io 2 point O. View the original full app <a
-      href="https://cartes.io">here</a>
-  </div>
+  <AppLayout>
 
-  <NavBar />
+    <template #header
+      v-if="Maps.map">
 
-  <template v-if="mapId && Maps.map">
+      <AR :mapId="Maps.map.uuid"
+        :markers="markers"
+        @close="toggleMapVisibility()"
+        v-if="!showMap" />
 
-    <AR :mapId="mapId"
-      :markers="markers"
-      @close="toggleMapVisibility()"
-      v-if="!showMap" />
-
-    <template v-else>
-      <NewMapComponent :mapId="mapId"
+      <NewMapComponent :mapId="Maps.map.uuid"
         :show-ar="true"
         :markers="markers"
         style="height: 70vh"
-        @showAr="toggleMapVisibility()">
-      </NewMapComponent>
+        @showAr="toggleMapVisibility()" />
+    </template>
+
+    <template v-if="Maps.map && showMap">
       <div class="container"
         style="margin-top:var(--nav-element-spacing-vertical);">
         <section class=" grid">
@@ -158,27 +156,18 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
       </div>
     </template>
 
-  </template>
-
-  <div class="container"
-    v-else>
-    <h1>Cartes.io</h1>
-    <div v-for="map in Maps.maps.value"
-      :key="map.uuid">
-      <a :href="'?mapId=' + map.uuid">
-        {{ map.title ?? "Untitled map" }}
-      </a>
-    </div>
-  </div>
-
+    <template v-else>
+      <h1>Cartes.io</h1>
+      <div v-for="map in Maps.maps.value"
+        :key="map.uuid">
+        <a :href="'?mapId=' + map.uuid">
+          {{ map.title ?? "Untitled map" }}
+        </a>
+      </div>
+    </template>
+  </AppLayout>
 </template>
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 summary {
   position: relative;
 }
