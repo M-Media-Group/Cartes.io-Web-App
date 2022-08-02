@@ -2,6 +2,7 @@
 import { useMap } from '@/composables/map';
 const Maps = useMap();
 </script>
+
 <template>
     <nav class="container-fluid">
         <ul>
