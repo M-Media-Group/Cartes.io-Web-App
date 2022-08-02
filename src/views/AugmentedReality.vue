@@ -92,7 +92,7 @@ const props = defineProps({
     default: true,
   },
   mapId: {
-    type: String as PropType<string | number>,
+    type: String,
     required: true,
   },
 })
