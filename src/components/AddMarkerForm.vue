@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, PropType, reactive, ref, watch } from "vue";
+import { computed, PropType, reactive, ref, watch } from "vue";
 import Multiselect from '@vueform/multiselect'
 import { MarkerForm } from "@/types/marker";
 import { Category } from "@/types/category";
