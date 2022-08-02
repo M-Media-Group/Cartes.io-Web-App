@@ -1,3 +1,5 @@
+import $bus, { eventTypes } from "@/eventBus/events";
+
 class userDevice {
 
     #hasArSupport = null as null | Boolean;
@@ -12,9 +14,10 @@ class userDevice {
     listenForOnlineStatusChange() {
         window.addEventListener("online", () => {
             this.#isOnline = true;
+            $bus.$emit(eventTypes.came_online);
         });
         window.addEventListener("offline", () => {
-            alert("You are offline");
+            $bus.$emit(eventTypes.went_offline);
             this.#isOnline = false;
         });
     }

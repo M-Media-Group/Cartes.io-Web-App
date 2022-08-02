@@ -3,6 +3,7 @@ import { Map, MapForm } from "@/types/map";
 import { computed } from "@vue/reactivity";
 import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
 import cartes from "@m-media/npm-cartes-io";
+import $bus, { eventTypes } from "@/eventBus/events";
 
 const maps = ref<Map[]>([]);
 
@@ -89,11 +90,10 @@ export function useMap() {
         }
         isLoading.value = true;
         const data = await cartes.maps().create(formData);
-        console.log("New map: ", data);
         localStorage["map_" + data.uuid] = data.token;
         if (redirect) {
             window.location.href = "?mapId=" + data.uuid;
-            alert("Map created!");
+            $bus.$emit(eventTypes.created_map, data);
         }
         emit("addedMap", data);
 
@@ -122,7 +122,7 @@ export function useMap() {
         isLoading.value = true;
         const data = await cartes.maps(map.uuid, map.token || localStorage.getItem("map_" + map.uuid)).update(formData);
         if (data.uuid) {
-            alert("Map updated");
+            $bus.$emit(eventTypes.updated_map, data);
             emit("updatedMap", data);
 
             // If the map updated, we need to update the map in the maps array
@@ -147,9 +147,9 @@ export function useMap() {
         // Check that the map exists and that it has a token field
         if (canDeleteMap(map)) {
             // Delete the map
-            await cartes.maps(map.uuid, map.token || localStorage.getItem("map_" + map.uuid)).delete();
+            await cartes.maps(map.uuid, map.token ?? localStorage.getItem("map_" + map.uuid)).delete();
             localStorage.removeItem("map_" + map.uuid);
-            alert("Map deleted");
+            $bus.$emit(eventTypes.deleted_map, map);
             window.location.href = "/";
             emit('deletedMap', map);
         } else {
