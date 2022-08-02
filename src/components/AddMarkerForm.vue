@@ -12,7 +12,7 @@ const props = defineProps({
     default: "optional",
   },
   mapId: {
-    type: String as PropType<string | number>,
+    type: String,
     required: true,
   },
   markerLat: {
