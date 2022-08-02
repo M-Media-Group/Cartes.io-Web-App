@@ -87,7 +87,8 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
         @close="toggleMapVisibility()"
         v-if="!showMap" />
 
-      <NewMapComponent :mapId="Maps.map.uuid"
+      <NewMapComponent v-else
+        :mapId="Maps.map.uuid"
         :show-ar="true"
         :markers="markers"
         style="height: 70vh"
