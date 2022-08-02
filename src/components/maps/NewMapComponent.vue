@@ -199,7 +199,7 @@ const setReady = async () => {
             :markers="markers"
             :markerLat="contextMenuPosition.lat"
             :markerLng="contextMenuPosition.lng"
-            :allowLatLngElevationOverride="true"
+            :allowLatLngElevationOverride="false"
             @addedMarker="handleNewMarkerEvent($event)" />
           <div v-else>You must be logged in to create markers on this map.</div>
         </l-popup>

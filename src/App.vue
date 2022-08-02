@@ -109,7 +109,7 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
         style="margin-top:var(--nav-element-spacing-vertical);">
         <section class=" grid">
           <div>
-            <h1>{{ Maps.map.title }}</h1>
+            <h1>{{ Maps.map.title ?? "Untitled map" }}</h1>
             <p>{{ Maps.map?.description }}</p>
           </div>
           <div>
@@ -191,7 +191,7 @@ GET https://cartes.io/api/maps/{{ Maps.map.uuid }}/markers</code></pre>
           <ul>
             <li v-for="map in Maps.map.related"
               :key="map.uuid">
-              <a :href="'?mapId=' + map.uuid">{{ map.title ?? "No title" }}</a>
+              <a :href="'?mapId=' + map.uuid">{{ map.title ?? "Untitled map" }}</a>
             </li>
           </ul>
         </section>
@@ -206,7 +206,7 @@ GET https://cartes.io/api/maps/{{ Maps.map.uuid }}/markers</code></pre>
     <div v-for="map in Maps.maps.value"
       :key="map.uuid">
       <a :href="'?mapId=' + map.uuid">
-        {{ map.title ?? "No title" }}
+        {{ map.title ?? "Untitled map" }}
       </a>
     </div>
   </div>
