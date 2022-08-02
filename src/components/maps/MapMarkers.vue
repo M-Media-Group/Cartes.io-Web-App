@@ -14,6 +14,7 @@ import {
     LFeatureGroup,
     LControl,
 } from "@vue-leaflet/vue-leaflet";
+import MarkerCluster from "./MarkerCluster.vue";
 
 const props = defineProps({
     mapId: {
@@ -43,12 +44,17 @@ const groupedMarkersByCategory = computed(() => {
 </script>
 
 <template>
-    <l-layer-group v-for="(category, index) in groupedMarkersByCategory"
+
+    <!-- Doesnt seem we can use layer groups together with marker clustering -->
+    <!-- <l-layer-group v-for="(category, index) in groupedMarkersByCategory"
         :key="index"
         ref="features"
         layer-type="overlay"
-        :name="category[0].category.name">
-        <l-marker v-for="marker in category"
+        :name="category[0].category.name"> -->
+
+    <marker-cluster :options="{ showCoverageOnHover: true, chunkedLoading: true }">
+
+        <l-marker v-for="marker in markers"
             :lat-lng="[marker.location.coordinates[1], marker.location.coordinates[0]]"
             :key="marker.id + 'marker'">
             <l-icon :icon-url="marker.category.icon"
@@ -92,5 +98,8 @@ const groupedMarkersByCategory = computed(() => {
             :disabled="submit_data.loading">Report as spam</a> -->
             </l-popup>
         </l-marker>
-    </l-layer-group>
+
+    </marker-cluster>
+
+    <!-- </l-layer-group> -->
 </template>

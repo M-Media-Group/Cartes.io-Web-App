@@ -6,7 +6,8 @@
     "dev": "vite --https --host",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "jest tests/unit"
+    "test": "jest tests/unit",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@ar-js-org/ar.js": "^3.4.0",
@@ -29,7 +30,8 @@
     "laravel-echo": "^1.13.0",
     "leaflet-geosearch": "^3.6.1",
     "leaflet.locatecontrol": "^0.76.1",
-    "leaflet.markercluster": "^1.5.3",
+    "leaflet.markercluster": "1.5.0",
+    "patch-package": "^6.4.7",
     "pusher-js": "^7.3.0",
     "ts-jest": "^26.5.6",
     "typescript": "^4.5.4",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useMap } from '@/composables/map.js';
+import { useMap } from '@/composables/map';
 const Maps = useMap();
 </script>
 <template>
