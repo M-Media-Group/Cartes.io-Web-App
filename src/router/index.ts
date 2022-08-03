@@ -37,6 +37,9 @@ const router = createRouter({
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
             return savedPosition;
+            // Thanks for the following else-if https://github.com/vuejs/vue-router/issues/2072#issuecomment-605502951
+        } else if (from && Object.keys(to.query).length) {
+            if (to.fullPath.split('?')[0] == from.fullPath.split('?')[0]) return;
         } else {
             return { top: 0 };
         }
