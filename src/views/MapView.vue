@@ -16,7 +16,7 @@ import { usePusher } from "@/composables/pusher.js";
 
 const route = useRoute();
 
-const { displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap, showExpired } = useMarker();
+const { markers, displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap, showExpired } = useMarker();
 
 const Maps = useMap();
 
@@ -102,14 +102,26 @@ const mapCreatedTimeAgo = computed(() => {
 
                         <!-- Markers -->
                         <details open
-                            v-if="displayableMarkers.length > 0">
+                            v-if="markers.length > 0">
                             <summary aria-haspopup="listbox"
                                 role="button"
                                 class="secondary">
                                 <div v-if="isLive"
                                     class="blink"></div> {{ isLive ? 'Live feed' : 'Feed' }}
                             </summary>
-                            <MapCards role="listbox"
+                            <div
+                                v-if="!showExpired && displayableMarkers.length === 0 && markers && markers.length > 0">
+                                <div class="headings">
+                                    <h3>There's no active markers to show.</h3>
+                                    <p>When new markers are added, they'll show here.</p>
+                                </div>
+                                <button @click="showExpired = true"
+                                    class="secondary">
+                                    Show expired markers
+                                </button>
+                            </div>
+                            <MapCards v-else
+                                role="listbox"
                                 :markers="displayableMarkers" />
                         </details>
 
