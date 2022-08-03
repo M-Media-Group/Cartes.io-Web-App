@@ -73,11 +73,13 @@ const canPost = "only_logged_in";
 
 const { center, zoom, contextMenuPosition, maxBounds, } = useMapPosition();
 
+const { canCreateMarkerForMapByMapId } = useMarker();
+
 const openAddMarkerPopup = (event: { latlng: any; }) => {
   if (addMarkerPopup.value && event.latlng) {
     contextMenuPosition.value = event.latlng;
     addMarkerPopup.value.leafletObject.openPopup(contextMenuPosition.value);
-    if (canCreateMarker() || (props.map && canCreateMarkerForMap(props.map))) {
+    if (canCreateMarkerForMapByMapId(props.mapId)) {
       addMarkerForm.value.focusMultiselect();
     }
   }
@@ -88,7 +90,6 @@ const handleNewMarkerEvent = (event: Marker) => {
   addMarkerPopup.value.leafletObject.closePopup();
 };
 
-const { canDeleteMarker, deleteMarker, canCreateMarker, canCreateMarkerForMap } = useMarker();
 
 const provider = new OpenStreetMapProvider();
 
@@ -183,14 +184,14 @@ const mapInstance = useMap();
 
       <l-layer-group ref="addMarkerPopup">
         <l-popup class="unset-select">
-          <AddMarkerForm v-if="canCreateMarker() || (props.map && canCreateMarkerForMap(props.map))"
+          <AddMarkerForm v-if="canCreateMarkerForMapByMapId(mapId)"
             ref="addMarkerForm"
             :mapId="mapId"
             :markers="markers"
             :markerLat="contextMenuPosition.lat"
             :markerLng="contextMenuPosition.lng"
             :allowLatLngElevationOverride="false"
-            :showLinkInput="mapInstance.map.value?.options?.links ?? 'disabled'"
+            :showLinkInput="map?.options?.links ?? 'disabled'"
             @addedMarker="handleNewMarkerEvent($event)" />
           <div v-else>You must be logged in to create markers on this map.</div>
         </l-popup>

@@ -67,11 +67,11 @@ export function useMarker() {
         if (mapId) {
             Map.addMarkersToMapInArray(mapId, [marker]);
         }
-        if (!markerExistsInArray(marker)) {
-            markers.value?.push(marker);
-        } else {
-            updateMarkerInMarkerArray(marker);
-        }
+        // if (!markerExistsInArray(marker)) {
+        //     markers.value?.push(marker);
+        // } else {
+        //     updateMarkerInMarkerArray(marker);
+        // }
     }
 
     const updateMarkerInMarkerArray = (marker: Marker) => {
@@ -89,6 +89,10 @@ export function useMarker() {
 
     const markerExistsInArray = (marker: Marker) => {
         return !!markers.value?.find(m => m.id === marker.id);
+    }
+
+    const markerExistsInArrayForMapId = (marker: Marker, mapId: string) => {
+        return Map.markerExistsInMapArray(mapId, marker.id);
     }
 
     const removeMarkerFromMarkerArray = (marker: Marker, mapId = null as null | string) => {
@@ -153,6 +157,10 @@ export function useMarker() {
         return Map.canCreateMarkers(map);
     }
 
+    const canCreateMarkerForMapByMapId = (mapId: string) => {
+        return Map.canCreateMarkersByMapId(mapId);
+    }
+
     const canCreateMarker = () => {
         if (!Map.map.value) {
             return false;
@@ -161,10 +169,8 @@ export function useMarker() {
     }
 
     const addMarker = async (mapId: string, formData: any) => {
-        if (Map.map?.value?.uuid == mapId) {
-            if (!canCreateMarker()) {
-                return alert("You need to be logged in to add a marker");
-            }
+        if (!canCreateMarkerForMapByMapId(mapId)) {
+            return alert("You need to be logged in to add a marker");
         }
 
         if (!validateMarkerForm(formData)) {
@@ -216,7 +222,7 @@ export function useMarker() {
                 if (e.marker.category.icon && !e.marker.category.icon.startsWith("https")) {
                     e.marker.category.icon = "/marker.svg";
                 }
-                if (markerExistsInArray(e.marker)) {
+                if (markerExistsInArrayForMapId(e.marker, mapId)) {
                     return;
                 }
                 addMarkerToMarkerArray(e.marker, mapId);
@@ -251,6 +257,7 @@ export function useMarker() {
         listenForDeletedMarkers,
         listenForMarkerChangesOnMap,
         canCreateMarkerForMap,
+        canCreateMarkerForMapByMapId,
         nonExpiredMarkers,
         displayableMarkers,
         isLoading,

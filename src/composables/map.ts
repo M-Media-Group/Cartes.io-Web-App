@@ -78,12 +78,20 @@ export function useMap() {
         return map;
     }
 
+    const getMapFromMapsArray = (mapId: string) => {
+        return maps.value.find((m) => m.uuid === mapId);
+    }
+
+    const getMapIndexFromMapsArray = (mapId: string) => {
+        return maps.value.findIndex((m) => m.uuid === mapId);
+    }
+
     const mapExistsInMapsArray = (mapId: string) => {
-        return maps.value.findIndex((m) => m.uuid === mapId) !== -1;
+        return getMapIndexFromMapsArray(mapId) !== -1;
     }
 
     const updateMapInMapArray = (mapId: string, data: any) => {
-        const index = maps.value.findIndex((m) => m.uuid === mapId);
+        const index = getMapIndexFromMapsArray(mapId);
         if (index !== -1) {
             // Update only the changed values
             maps.value[index] = {
@@ -96,18 +104,39 @@ export function useMap() {
     }
 
     const addMarkersToMapInArray = (mapId: string, markers: Marker[]) => {
-        const mapIndex = maps.value.findIndex((m) => m.uuid === mapId);
-        if (mapIndex !== -1) {
-            maps.value[mapIndex].markers = markers;
-
-            // @todo add or update each marker in the map rather than replacing the whole array
+        if (mapExistsInMapsArray(mapId)) {
+            const index = getMapIndexFromMapsArray(mapId);
+            for (const marker of markers) {
+                if (markerExistsInMapArray(mapId, marker.id)) {
+                    continue;
+                }
+                if (!maps.value[index].markers) {
+                    maps.value[index].markers = [];
+                    maps.value[index].markers?.push(marker);
+                } else {
+                    const mapMarkers = maps.value[index].markers;
+                    const markerIndex = maps.value[getMapIndexFromMapsArray(mapId)].markers?.findIndex((m) => m.id === marker.id);
+                    if (markerIndex !== undefined && mapMarkers && markerIndex !== -1) {
+                        mapMarkers[markerIndex] = marker;
+                    } else if (mapMarkers) {
+                        mapMarkers.push(marker);
+                    }
+                }
+            }
         }
-        return;
+    }
+
+    const markerExistsInMapArray = (mapId: string, markerId: number) => {
+        if (mapExistsInMapsArray(mapId)) {
+            const markerIndex = maps.value[getMapIndexFromMapsArray(mapId)].markers?.findIndex((m) => m.id === markerId);
+            return markerIndex !== undefined && markerIndex !== -1;
+        }
+        return false;
     }
 
     const removeMarkerFromMarkerArray = (mapId: string, markerId: number) => {
-        const mapIndex = maps.value.findIndex((m) => m.uuid === mapId);
-        if (mapIndex !== -1) {
+        if (mapExistsInMapsArray(mapId)) {
+            const mapIndex = getMapIndexFromMapsArray(mapId);
             maps.value[mapIndex].markers = maps.value[mapIndex].markers?.filter((m) => m.id !== markerId);
         }
         return;
@@ -171,6 +200,14 @@ export function useMap() {
             return false;
         }
         return map.users_can_create_markers === 'yes' || map.token || localStorage.getItem("map_" + map.uuid);
+    }
+
+    const canCreateMarkersByMapId = (mapId: string) => {
+        const map = maps.value.find((m) => m.uuid === mapId);
+        if (!map) {
+            return false;
+        }
+        return canCreateMarkers(map);
     }
 
     const updateMap = async (map: Map, formData: MapForm) => {
@@ -241,6 +278,8 @@ export function useMap() {
         updateMap,
         addMarkersToMapInArray,
         removeMarkerFromMarkerArray,
+        canCreateMarkersByMapId,
+        markerExistsInMapArray,
         isLoading,
         formErrors,
         hasErrors,

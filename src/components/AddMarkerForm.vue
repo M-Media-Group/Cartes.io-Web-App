@@ -37,7 +37,7 @@ const props = defineProps({
   },
 })
 
-const { addMarker, isLoading, formErrors, hasErrors, validateMarkerForm, minCategoryNameLength, canCreateMarker } = useMarker();
+const { addMarker, isLoading, formErrors, hasErrors, validateMarkerForm, minCategoryNameLength, canCreateMarkerForMapByMapId } = useMarker();
 
 const multiselect = ref<HTMLInputElement | null>(null);
 
@@ -54,7 +54,7 @@ const canSubmit = computed(() => {
   return !isLoading.value &&
     (submitData.category_name &&
       validateMarkerForm(submitData)) &&
-    canCreateMarker() &&
+    canCreateMarkerForMapByMapId(props.mapId) &&
     (props.showLinkInput === 'optional' || props.showLinkInput === 'disabled' || submitData.link)
 });
 
