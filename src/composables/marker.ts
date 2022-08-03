@@ -50,7 +50,7 @@ const minCategoryNameLength = 3;
 
 export function useMarker() {
 
-    const { emit } = getCurrentInstance() as NonNullable<ReturnType<typeof getCurrentInstance>>;
+    const emit = getCurrentInstance()?.emit;
 
     const isLoading = ref(false);
 
@@ -189,7 +189,9 @@ export function useMarker() {
             }
             addMarkerToMarkerArray(data, mapId);
             localStorage["post_" + data.id] = data.token;
-            emit("addedMarker", data);
+            if (emit) {
+                emit("addedMarker", data);
+            }
         }
 
         isLoading.value = false;
@@ -209,7 +211,9 @@ export function useMarker() {
             await cartes.maps(mapId).markers(marker.id, (marker.token || localStorage.getItem("post_" + marker.id))).delete();
             removeMarkerFromMarkerArray(marker, mapId);
             localStorage.removeItem("post_" + marker.id);
-            emit('deletedMarker', marker);
+            if (emit) {
+                emit('deletedMarker', marker);
+            }
         }
     };
 
@@ -226,7 +230,9 @@ export function useMarker() {
                     return;
                 }
                 addMarkerToMarkerArray(e.marker, mapId);
-                emit("addedMarker", e.marker);
+                if (emit) {
+                    emit("addedMarker", e.marker);
+                }
             }
         );
 
