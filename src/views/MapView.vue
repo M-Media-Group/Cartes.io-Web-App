@@ -19,12 +19,8 @@ const { displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap, sh
 
 const Maps = useMap();
 
-const searchParams = new URLSearchParams(window.location.search);
-
 // Get the map ID from the url ?mapId parameter
 const mapId = ref(route.params.mapId) as Ref<string>;
-
-const showMap = ref((userDevice.supportsAr && searchParams.get("showAr")) ?? true);
 
 const canCreateMarkers = ref();
 
@@ -35,15 +31,6 @@ watch(() => route.params.mapId, () => {
     listenForMarkerChangesOnMap(mapId.value);
     canCreateMarkers.value = Maps.canCreateMarkers(Maps.map);
 }, { immediate: true });
-
-const toggleMapVisibility = () => {
-    showMap.value = !showMap.value;
-    searchParams.set("showAr", showMap.value ? "true" : "false");
-}
-
-const AR = defineAsyncComponent(() =>
-    import("@/views/AugmentedReality.vue")
-)
 
 const share = async () => {
     // Current url
@@ -92,23 +79,15 @@ const mapCreatedTimeAgo = computed(() => {
 <template>
     <AppLayout>
 
-        <template #header
-            v-if="mapId && Maps.map">
-
-            <AR :mapId="Maps.map.uuid"
-                :markers="displayableMarkers"
-                @close="toggleMapVisibility()"
-                v-if="!showMap" />
-
-            <NewMapComponent v-else
-                :mapId="Maps.map.uuid"
+        <template #header>
+            <NewMapComponent :mapId="mapId"
                 :show-ar="true"
                 :markers="displayableMarkers"
                 style="height: 70vh"
-                @showAr="toggleMapVisibility()" />
+                @showAr="$router.push('/maps/' + mapId + '/ar')" />
         </template>
 
-        <template v-if="mapId && Maps.map && showMap">
+        <template v-if="Maps.map">
             <div style="margin-top:var(--nav-element-spacing-vertical);">
                 <section class="grid">
                     <div>
@@ -199,16 +178,6 @@ const mapCreatedTimeAgo = computed(() => {
                         </li>
                     </ul>
                 </section>
-            </div>
-        </template>
-
-        <template v-else>
-            <h1>Cartes.io</h1>
-            <div v-for="map in Maps.maps.value"
-                :key="map.uuid">
-                <a :href="'?mapId=' + map.uuid">
-                    {{ map.title ?? "Untitled map" }}
-                </a>
             </div>
         </template>
     </AppLayout>

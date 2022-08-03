@@ -1,74 +1,3 @@
-<template>
-  <div v-if="userDevice.supportsAr">
-    <button class="close"
-      @click="close()">Open map</button>
-    <a-scene vr-mode-ui="enabled: false"
-      arjs="trackingMethod: best; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; videoTexture: true; debugUIEnabled: false;"
-      loading-screen="dotsColor: blue; backgroundColor: black"
-      @click="showAddForm = false">
-      <a-assets>
-        <img v-for="category in computedMarkerCategories"
-          :key="'cat-' + category.id"
-          :id="'cat-' + category.id"
-          :src="category.icon"
-          crossorigin="anonymous" />
-      </a-assets>
-      <template v-for="marker in props.markers"
-        :key="marker.id">
-        <a-entity ref="markerRefs"
-          look-at="#camera1"
-          :scale="scale"
-          :data-marker-elevation="marker.elevation"
-          :position="'0 0 0'"
-          :gps-projected-entity-place="
-            'latitude: ' +
-            marker.location.coordinates[1] +
-            '; longitude: ' +
-            marker.location.coordinates[0]
-          ">
-          <a-text :value="marker.category.name"
-            :position="'0 0.7 0'">
-          </a-text>
-          <a-text v-if="props.showDistance"
-            marker-distance
-            :position="'0 -0.7 0'">
-          </a-text>
-          <!-- <a-entity position="0 1.6 -1" htmlembed :gps-projected-entity-place="
-        'latitude: ' +
-        marker.location.coordinates[0] +
-        '; longitude: ' +
-        marker.location.coordinates[1]
-      ">
-        <p>My HTML</p>
-      </a-entity> -->
-          <a-image :title="marker.category.name"
-            :src="'#cat-' + marker.category.id"></a-image>
-        </a-entity>
-      </template>
-
-      <a-camera id="camera1"
-        look-controls-enabled="false"
-        arjs-look-controls="smoothingFactor: 0.1"
-        gps-projected-camera="gpsMinDistance: 2"
-        rotation-reader>
-      </a-camera>
-    </a-scene>
-    <AddMarkerForm @click="showAddForm = true"
-      :class="{ 'partiallyHidden': !showAddForm }"
-      class="addMarkerForm"
-      ref="addMarkerForm"
-      :mapId="mapId"
-      :markers="markers"
-      :markerLat="userPosition.lat"
-      :markerLng="userPosition.lng"
-      :markerElevation="userPosition.elevation"
-      @addedMarker="handleNewMarkerEvent($event)" />
-  </div>
-  <div v-else>
-    <p>Your browser/device does not support Augmented Reality.</p>
-    <button @click="close()">Open map instead</button>
-  </div>
-</template>
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
@@ -231,7 +160,77 @@ onUnmounted(() => {
 });
 
 </script>
+<template>
+  <div v-if="userDevice.supportsAr">
+    <button class="close"
+      @click="close()">Open map</button>
+    <a-scene vr-mode-ui="enabled: false"
+      arjs="trackingMethod: best; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; videoTexture: true; debugUIEnabled: false;"
+      loading-screen="dotsColor: blue; backgroundColor: black"
+      @click="showAddForm = false">
+      <a-assets>
+        <img v-for="category in computedMarkerCategories"
+          :key="'cat-' + category.id"
+          :id="'cat-' + category.id"
+          :src="category.icon"
+          crossorigin="anonymous" />
+      </a-assets>
+      <template v-for="marker in props.markers"
+        :key="marker.id">
+        <a-entity ref="markerRefs"
+          look-at="#camera1"
+          :scale="scale"
+          :data-marker-elevation="marker.elevation"
+          :position="'0 0 0'"
+          :gps-projected-entity-place="
+            'latitude: ' +
+            marker.location.coordinates[1] +
+            '; longitude: ' +
+            marker.location.coordinates[0]
+          ">
+          <a-text :value="marker.category.name"
+            :position="'0 0.7 0'">
+          </a-text>
+          <a-text v-if="props.showDistance"
+            marker-distance
+            :position="'0 -0.7 0'">
+          </a-text>
+          <!-- <a-entity position="0 1.6 -1" htmlembed :gps-projected-entity-place="
+        'latitude: ' +
+        marker.location.coordinates[0] +
+        '; longitude: ' +
+        marker.location.coordinates[1]
+      ">
+        <p>My HTML</p>
+      </a-entity> -->
+          <a-image :title="marker.category.name"
+            :src="'#cat-' + marker.category.id"></a-image>
+        </a-entity>
+      </template>
 
+      <a-camera id="camera1"
+        look-controls-enabled="false"
+        arjs-look-controls="smoothingFactor: 0.1"
+        gps-projected-camera="gpsMinDistance: 2"
+        rotation-reader>
+      </a-camera>
+    </a-scene>
+    <AddMarkerForm @click="showAddForm = true"
+      :class="{ 'partiallyHidden': !showAddForm }"
+      class="addMarkerForm"
+      ref="addMarkerForm"
+      :mapId="mapId"
+      :markers="markers"
+      :markerLat="userPosition.lat"
+      :markerLng="userPosition.lng"
+      :markerElevation="userPosition.elevation"
+      @addedMarker="handleNewMarkerEvent($event)" />
+  </div>
+  <div v-else>
+    <p>Your browser/device does not support Augmented Reality.</p>
+    <button @click="close()">Open map instead</button>
+  </div>
+</template>
 <style>
 a-scene {
   /* aspect ratio */

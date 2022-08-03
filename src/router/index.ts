@@ -9,7 +9,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/",
         name: "home",
         component: () =>
-            import(/* webpackChunkName: "MapView" */ "@/views/HomeView.vue"),
+            import(/* webpackChunkName: "home" */ "@/views/HomeView.vue"),
     },
     {
         path: "/maps/:mapId",
@@ -27,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/maps/:mapId/ar",
         name: "ar",
         component: () =>
-            import(/* webpackChunkName: "EmbedView" */ "@/views/MapEmbedView.vue"),
+            import(/* webpackChunkName: "ar" */ "@/views/ARView.vue"),
     },
 ];
 
