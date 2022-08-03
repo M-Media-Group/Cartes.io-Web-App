@@ -13,7 +13,7 @@ defineProps({
 
 <template>
     <div>
-        <MapCard v-for="marker in markers"
+        <!-- <MapCard v-for="marker in markers"
             :key="marker.id"
             :description="marker.description"
             :created_at="marker.created_at"
@@ -21,6 +21,6 @@ defineProps({
             :id="marker.id"
             :category="marker.category"
             :link="marker.link"
-            :elevation="marker.elevation" />
+            :elevation="marker.elevation" /> -->
     </div>
 </template>
