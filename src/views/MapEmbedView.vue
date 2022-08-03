@@ -94,7 +94,7 @@ const mapCreatedTimeAgo = computed(() => {
 
     <div v-if="mapId && Maps.map">
         <NewMapComponent :mapId="Maps.map.uuid"
-            :show-ar="true"
+            :show-ar="false"
             :markers="displayableMarkers"
             style="height: 100vh"
             @showAr="toggleMapVisibility()" />

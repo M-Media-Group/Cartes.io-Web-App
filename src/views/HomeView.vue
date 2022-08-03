@@ -87,7 +87,11 @@ if (ids.length > 0) {
             </div>
         </template>
         <section>
-            <h2>Your maps</h2>
+            <div class="headings">
+                <h2>Your maps</h2>
+                <p>These are the maps that you've created on the site.</p>
+            </div>
+
             <article v-for="map in privateMaps"
                 :key="map.uuid">
                 <header>
@@ -98,22 +102,40 @@ if (ids.length > 0) {
                 </header>
                 <h3>{{ map.title ?? "Untitled map" }}</h3>
                 <p>{{ map.description }}</p>
+                <router-link :to="'/maps/' + map.uuid"
+                    custom
+                    v-slot="{ navigate }">
+                    <button @click="navigate">Open map</button>
+                </router-link>
                 <footer>
-                    <router-link role="button"
-                        :to="'/maps/' + map.uuid">
-                        Open map
-                    </router-link>
+
+                    <small>{{ map.markers_count }} live markers</small>
+                </footer>
+            </article>
+
+            <article v-if="privateMaps.length === 0">
+                <div>
+                    <h3>You have no maps yet. Create your first map or browse the public ones.</h3>
+                </div>
+                <footer>
+                    <button @click="Maps.addMap(null, true);">
+                        Create a new map
+                    </button>
                 </footer>
             </article>
         </section>
         <section>
-            <h2>All maps</h2>
+            <div class="headings">
+                <h2>Public maps</h2>
+                <p>These maps are made by the community and shared with everyone.</p>
+            </div>
             <div v-for="map in Maps.maps.value"
                 :key="map.uuid">
                 <router-link :to="'/maps/' + map.uuid">
                     {{ map.title ?? "Untitled map" }} - {{ map.markers_count }} markers
                 </router-link>
             </div>
+            <div>Showing the newest {{ Maps.maps.value.length }} / {{ Maps.totalMaps }} total public maps</div>
         </section>
     </AppLayout>
 </template>

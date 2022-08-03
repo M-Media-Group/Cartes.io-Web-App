@@ -7,6 +7,8 @@ import $bus, { eventTypes } from "@/eventBus/events";
 
 const maps = ref<Map[]>([]);
 
+const totalMaps = ref(0);
+
 // reactive map
 const map = reactive<Map>({
     uuid: "",
@@ -52,6 +54,7 @@ export function useMap() {
         }
         const data = await cartes.maps().get();
         maps.value = data.data;
+        totalMaps.value = data.total;
     }
 
     const getMap = async (mapId: string) => {
@@ -174,5 +177,6 @@ export function useMap() {
         minCategoryNameLength,
         map,
         maps,
+        totalMaps,
     };
 }
