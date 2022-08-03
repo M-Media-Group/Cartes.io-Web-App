@@ -3,7 +3,6 @@
 import { onBeforeMount, onBeforeUnmount, onMounted, ref, defineAsyncComponent, computed, watch, Ref } from "vue";
 import { useMarker } from "@/composables/marker";
 import { useMap } from "@/composables/map";
-import userDevice from "@/classes/userDevice";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -31,17 +30,6 @@ watch(() => route.params.mapId, () => {
 const AR = defineAsyncComponent(() =>
     import("@/views/AugmentedReality.vue")
 )
-
-
-const isLive = ref(false);
-
-window.Echo.connector.pusher.connection.bind("connected", () => {
-    isLive.value = true;
-});
-
-window.Echo.connector.pusher.connection.bind("disconnected", () => {
-    isLive.value = false;
-});
 
 </script>
 

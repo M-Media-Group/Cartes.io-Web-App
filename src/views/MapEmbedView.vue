@@ -8,6 +8,7 @@ import userDevice from "@/classes/userDevice";
 
 import { now } from "@/composables/time";
 import { useRoute } from "vue-router";
+import { usePusher } from "@/composables/pusher.js";
 
 const route = useRoute();
 
@@ -64,15 +65,7 @@ const share = async () => {
     }
 }
 
-const isLive = ref(false);
-
-window.Echo.connector.pusher.connection.bind("connected", () => {
-    isLive.value = true;
-});
-
-window.Echo.connector.pusher.connection.bind("disconnected", () => {
-    isLive.value = false;
-});
+const { isLive } = usePusher();
 
 const mapAgeInMinutes = computed(() => {
     if (Maps.map) {
