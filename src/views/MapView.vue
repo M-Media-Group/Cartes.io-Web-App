@@ -175,7 +175,7 @@ const mapCreatedTimeAgo = computed(() => {
         </template>
     </AppLayout>
 </template>
-<style>
+<style scoped>
 summary {
     position: relative;
 }
@@ -276,5 +276,9 @@ summary {
     left: 0;
     right: 0;
 
+}
+
+h1 {
+    margin-bottom: var(--spacing);
 }
 </style>
