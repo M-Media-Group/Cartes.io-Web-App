@@ -30,7 +30,6 @@ const sortedMarkers = computed(() => {
             :link="marker.link"
             :elevation="marker.elevation"
             :marker="marker" />
-        />
     </div>
     <div v-else>No markers yet</div>
 </template>
