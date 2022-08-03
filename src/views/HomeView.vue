@@ -12,12 +12,13 @@ Maps.getAllMaps().then(() => {
     // For each map, get all markers for it and wait in between each request
     Maps.maps.value.forEach(async map => {
         // if (map.markers_count && map.markers_count > 0) {
-        //     setTimeout(async () => {
-        //         const markers = await Markers.getAllMarkersForMap(map.uuid);
-        //         // Assign the markers to the map
+        // setTimeout(async () => {
+        //     const markers = await Markers.getAllMarkersForMap(map.uuid);
+        //     // Assign the markers to the map if the markers is an array
+        //     if (Array.isArray(markers)) {
         //         map.markers = markers;
-        //         console.log("Got markers", map.uuid, markers, map)
-        //     }, 2000);
+        //     }
+        // }, 2000);
         // }
     });
 });
@@ -49,9 +50,10 @@ if (ids.length > 0) {
                 if (map.markers_count && map.markers_count > 0) {
                     setTimeout(async () => {
                         const markers = await Markers.getAllMarkersForMap(map.uuid);
-                        // Assign the markers to the map
-                        map.markers = markers;
-                        console.log("Got markers", map.uuid, markers, map)
+                        // Assign the markers to the map if the markers is an array
+                        if (Array.isArray(markers)) {
+                            map.markers = markers;
+                        }
                     }, 2000);
                 }
             });

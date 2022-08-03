@@ -8,6 +8,31 @@ import cartes from "@m-media/npm-cartes-io";
 
 const markers = ref<Marker[]>([]);
 
+const showExpired = ref(false);
+const fromTime = ref(null);
+const toTime = ref(Date.now());
+
+const nonExpiredMarkers = computed(() => {
+    return markers.value.filter((m) => !m.expires_at || m.expires_at > new Date());
+})
+
+// const markersInTimeframe = computed(() => {
+//     return markers.value.filter((m) => {
+//         if (!m.expires_at) {
+//             return true;
+//         }
+//         return m.expires_at > fromTime.value && m.expires_at < toTime.value;
+//     }
+//     )
+// });
+
+const displayableMarkers = computed(() => {
+    if (showExpired.value) {
+        return markers.value;
+    }
+    return nonExpiredMarkers.value;
+})
+
 export function useMarker() {
 
     const Map = useMap();
@@ -74,6 +99,7 @@ export function useMarker() {
         });
 
         markers.value = data;
+        return data as Marker[];
     };
 
     const validateMarkerForm = (form: MarkerForm) => {
@@ -190,19 +216,6 @@ export function useMarker() {
         listenForDeletedMarkers(mapId);
         listenForNewMarkers(mapId);
     }
-
-    const showExpired = ref(false)
-
-    const nonExpiredMarkers = computed(() => {
-        return markers.value.filter((m) => !m.expires_at || m.expires_at > new Date());
-    })
-
-    const displayableMarkers = computed(() => {
-        if (showExpired.value) {
-            return markers.value;
-        }
-        return nonExpiredMarkers.value;
-    })
 
     return {
         canDeleteMarker,
