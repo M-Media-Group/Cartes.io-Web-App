@@ -6,13 +6,26 @@ import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
 import { useMap } from "./map";
 import cartes from "@m-media/npm-cartes-io";
 
-const markers = ref<Marker[]>([]);
+const Map = useMap();
+
+// const markers = ref<Marker[]>([]);
+
+const markers = computed(() => {
+    if (!Map.map.value) {
+        return [];
+    }
+    return Map.map.value.markers ?? [];
+});
+
 
 const showExpired = ref(false);
 const fromTime = ref(null);
 const toTime = ref(Date.now());
 
 const nonExpiredMarkers = computed(() => {
+    if (!markers.value) {
+        return [];
+    }
     return markers.value.filter((m) => !m.expires_at || m.expires_at > new Date());
 })
 
@@ -33,11 +46,9 @@ const displayableMarkers = computed(() => {
     return nonExpiredMarkers.value;
 })
 
+const minCategoryNameLength = 3;
+
 export function useMarker() {
-
-    const Map = useMap();
-
-    const minCategoryNameLength = 3;
 
     const { emit } = getCurrentInstance() as NonNullable<ReturnType<typeof getCurrentInstance>>;
 
@@ -52,17 +63,20 @@ export function useMarker() {
         link: "",
     });
 
-    const addMarkerToMarkerArray = (marker: Marker) => {
+    const addMarkerToMarkerArray = (marker: Marker, mapId = null as string | null) => {
+        if (mapId) {
+            Map.addMarkersToMapInArray(mapId, [marker]);
+        }
         if (!markerExistsInArray(marker)) {
-            markers.value.push(marker);
+            markers.value?.push(marker);
         } else {
             updateMarkerInMarkerArray(marker);
         }
     }
 
     const updateMarkerInMarkerArray = (marker: Marker) => {
-        const index = markers.value.findIndex((m) => m.id === marker.id);
-        if (index !== -1) {
+        const index = markers.value?.findIndex((m) => m.id === marker.id);
+        if (index !== -1 && markers.value && index) {
             // Get all the current marker values
             const currentMarker = markers.value[index];
             // Update only the changed values
@@ -74,11 +88,14 @@ export function useMarker() {
     }
 
     const markerExistsInArray = (marker: Marker) => {
-        return !!markers.value.find(m => m.id === marker.id);
+        return !!markers.value?.find(m => m.id === marker.id);
     }
 
-    const removeMarkerFromMarkerArray = (marker: Marker) => {
-        markers.value = markers.value.filter((m) => m.id !== marker.id);
+    const removeMarkerFromMarkerArray = (marker: Marker, mapId = null as null | string) => {
+        if (mapId) {
+            Map.removeMarkerFromMarkerArray(mapId, marker.id);
+        }
+        // markers.value = markers.value?.filter((m) => m.id !== marker.id);
     }
 
     const hasErrors = computed(() => {
@@ -98,7 +115,10 @@ export function useMarker() {
             }
         });
 
-        markers.value = data;
+        // markers.value = data;
+
+        Map.addMarkersToMapInArray(mapId, data);
+
         return data as Marker[];
     };
 
@@ -161,7 +181,7 @@ export function useMarker() {
             if (data.category.icon && !data.category.icon.startsWith("https")) {
                 data.category.icon = "/marker.svg";
             }
-            addMarkerToMarkerArray(data);
+            addMarkerToMarkerArray(data, mapId);
             localStorage["post_" + data.id] = data.token;
             emit("addedMarker", data);
         }
@@ -181,7 +201,7 @@ export function useMarker() {
         // Check that the marker exists and that it has a token field
         if (canDeleteMarker(marker)) {
             await cartes.maps(mapId).markers(marker.id, (marker.token || localStorage.getItem("post_" + marker.id))).delete();
-            removeMarkerFromMarkerArray(marker);
+            removeMarkerFromMarkerArray(marker, mapId);
             localStorage.removeItem("post_" + marker.id);
             emit('deletedMarker', marker);
         }
@@ -199,7 +219,7 @@ export function useMarker() {
                 if (markerExistsInArray(e.marker)) {
                     return;
                 }
-                addMarkerToMarkerArray(e.marker);
+                addMarkerToMarkerArray(e.marker, mapId);
                 emit("addedMarker", e.marker);
             }
         );
@@ -210,7 +230,7 @@ export function useMarker() {
         window.Echo.channel("maps." + mapId).listen(
             "MarkerDeleted",
             (e: { marker: Marker; }) => {
-                removeMarkerFromMarkerArray(e.marker);
+                removeMarkerFromMarkerArray(e.marker, mapId);
             }
         );
     }

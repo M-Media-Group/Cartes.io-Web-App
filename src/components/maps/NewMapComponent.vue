@@ -190,7 +190,7 @@ const mapInstance = useMap();
             :markerLat="contextMenuPosition.lat"
             :markerLng="contextMenuPosition.lng"
             :allowLatLngElevationOverride="false"
-            :showLinkInput="mapInstance.map?.options?.links ?? 'disabled'"
+            :showLinkInput="mapInstance.map.value?.options?.links ?? 'disabled'"
             @addedMarker="handleNewMarkerEvent($event)" />
           <div v-else>You must be logged in to create markers on this map.</div>
         </l-popup>

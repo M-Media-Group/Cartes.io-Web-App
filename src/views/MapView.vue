@@ -30,7 +30,9 @@ watch(() => route.params.mapId, () => {
     getAllMarkersForMap(mapId.value);
     Maps.getRelatedMaps(mapId.value);
     listenForMarkerChangesOnMap(mapId.value);
-    canCreateMarkers.value = Maps.canCreateMarkers(Maps.map);
+    if (Maps.map.value) {
+        canCreateMarkers.value = Maps.canCreateMarkers(Maps.map.value);
+    }
 }, { immediate: true });
 
 const share = async () => {
@@ -102,7 +104,7 @@ const mapCreatedTimeAgo = computed(() => {
 
                         <!-- Markers -->
                         <details open
-                            v-if="markers.length > 0">
+                            v-if="markers && markers.length > 0">
                             <summary aria-haspopup="listbox"
                                 role="button"
                                 class="secondary">
@@ -110,7 +112,7 @@ const mapCreatedTimeAgo = computed(() => {
                                     class="blink"></div> {{ isLive ? 'Live feed' : 'Feed' }}
                             </summary>
                             <div
-                                v-if="!showExpired && displayableMarkers.length === 0 && markers && markers.length > 0">
+                                v-if="!showExpired && (!displayableMarkers || displayableMarkers.length === 0) && markers && markers.length > 0">
                                 <div class="headings">
                                     <h3>There's no active markers to show.</h3>
                                     <p>When new markers are added, they'll show here.</p>
@@ -149,14 +151,14 @@ const mapCreatedTimeAgo = computed(() => {
                         </details>
 
                         <!-- Settings -->
-                        <details v-if="Maps.canUpdateMap(Maps.map)">
+                        <details v-if="Maps.map.value && Maps.canUpdateMap(Maps.map.value)">
                             <summary aria-haspopup="listbox"
                                 role="button"
                                 class="secondary">
                                 Map settings
                             </summary>
                             <EditMapForm role="listbox"
-                                :map="Maps.map" />
+                                :map="Maps.map.value" />
                         </details>
 
                         <p v-if="canCreateMarkers">Right click (or long-tap on mobile) on the map to create a
@@ -166,9 +168,9 @@ const mapCreatedTimeAgo = computed(() => {
                             labels or create your own.</p>
 
                         <!-- Developer -->
-                        <details>
+                        <details v-if="Maps.map.value">
                             <summary>Developer info</summary>
-                            <DeveloperInfo :map="Maps.map" />
+                            <DeveloperInfo :map="Maps.map.value" />
                         </details>
 
                     </div>

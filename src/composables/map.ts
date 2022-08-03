@@ -4,6 +4,7 @@ import { computed } from "@vue/reactivity";
 import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
 import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
+import { Marker } from "@/types/marker";
 
 const maps = ref<Map[]>([]);
 
@@ -78,7 +79,7 @@ export function useMap() {
     }
 
     const mapExistsInMapsArray = (mapId: string) => {
-        return maps.value.find((m) => m.uuid === mapId) !== undefined;
+        return maps.value.findIndex((m) => m.uuid === mapId) !== -1;
     }
 
     const updateMapInMapArray = (mapId: string, data: any) => {
@@ -94,7 +95,28 @@ export function useMap() {
         }
     }
 
+    const addMarkersToMapInArray = (mapId: string, markers: Marker[]) => {
+        const mapIndex = maps.value.findIndex((m) => m.uuid === mapId);
+        if (mapIndex !== -1) {
+            maps.value[mapIndex].markers = markers;
+
+            // @todo add or update each marker in the map rather than replacing the whole array
+        }
+        return;
+    }
+
+    const removeMarkerFromMarkerArray = (mapId: string, markerId: number) => {
+        const mapIndex = maps.value.findIndex((m) => m.uuid === mapId);
+        if (mapIndex !== -1) {
+            maps.value[mapIndex].markers = maps.value[mapIndex].markers?.filter((m) => m.id !== markerId);
+        }
+        return;
+    }
+
     const getRelatedMaps = async (mapId: string) => {
+        if (!mapId) {
+            return;
+        }
         if (!userDevice.online) {
             return alert("You must be online to get related maps.");
         }
@@ -217,6 +239,8 @@ export function useMap() {
         getAllMaps,
         canCreateMarkers,
         updateMap,
+        addMarkersToMapInArray,
+        removeMarkerFromMarkerArray,
         isLoading,
         formErrors,
         hasErrors,

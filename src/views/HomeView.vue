@@ -153,7 +153,9 @@ if (ids.length > 0) {
                             </footer>
                         </article>
                     </div>
-                    <div>Showing {{ Maps.maps.value.length }} out of {{ Maps.totalMaps }} total public maps.
+                    <div>Showing {{ Maps.maps.value.length }} out of {{ Maps.totalMaps.value }} public maps and
+                        many more
+                        private ones
                     </div>
                 </section>
             </div>
