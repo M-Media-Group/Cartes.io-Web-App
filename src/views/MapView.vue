@@ -79,6 +79,7 @@ const mapCreatedTimeAgo = computed(() => {
                 :show-ar="true"
                 :markers="displayableMarkers"
                 style="height: 70vh"
+                :autoCenterOnLoad="true"
                 @showAr="$router.push('/maps/' + mapId + '/ar')" />
         </template>
 
@@ -104,7 +105,8 @@ const mapCreatedTimeAgo = computed(() => {
 
                         <!-- Markers -->
                         <details open
-                            v-if="markers && markers.length > 0">
+                            v-if="markers && markers.length > 0"
+                            style="padding-bottom: 0;">
                             <summary aria-haspopup="listbox"
                                 role="button"
                                 class="secondary">
