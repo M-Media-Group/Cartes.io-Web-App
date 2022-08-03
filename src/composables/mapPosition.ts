@@ -1,10 +1,11 @@
 import { Marker } from "@/types/marker";
-import { provide, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
+import { useMarker } from "@/composables/marker";
 import { useUrlPositionParameters } from "./urlPositionParameters";
 
 const { setUrlPositionParameters, getUrlPositionParameters } = useUrlPositionParameters();
 
-
+const { markers } = useMarker();
 
 // @todo need to reconsider this whole approach with the current map position - we need a debounce here and when theres a lot of leaflet instnaces they all fight to update teh position, and so it causes some lag and issues
 
@@ -13,10 +14,46 @@ const { setUrlPositionParameters, getUrlPositionParameters } = useUrlPositionPar
 const zoom = ref(getUrlPositionParameters()['zoom'] || 2);
 const center = ref({ lat: getUrlPositionParameters()['lat'], lng: getUrlPositionParameters()['lng'] });
 const contextMenuPosition = ref({ lat: 0, lng: 0 });
+console.log(center.value);
 const maxBounds = [
     [-90, -180],
     [90, 180],
 ];
+
+const averageCenter = computed(() => {
+
+    if (!markers.value || markers.value.length === 0) {
+        return center.value;
+    }
+
+    const markerCoordinates = markers.value
+        .map((m) => {
+            return [m.location.coordinates[1] - 0.1, m.location.coordinates[0] - 0.1];
+        })
+
+    // Compute the average center
+    const coordinates = markerCoordinates.reduce((acc, curr) => {
+        return [acc[0] + curr[0], acc[1] + curr[1]];
+    }, [0, 0]);
+
+    return {
+        lat: coordinates[0] / markerCoordinates.length,
+        lng: coordinates[1] / markerCoordinates.length,
+    };
+
+    // Compute the min and max bounds
+    // const minMaxBounds = markerCoordinates.reduce((acc, curr) => {
+    //     return [
+    //         [Math.min(acc[0][0], curr[0]), Math.min(acc[0][1], curr[1])],
+    //         [Math.max(acc[1][0], curr[0]), Math.max(acc[1][1], curr[1])],
+    //     ];
+    // }, [[-180, -90], [180, 90]]);
+
+});
+
+if (center.value.lat === 0 && center.value.lng === 0) {
+    center.value = averageCenter.value;
+}
 
 watch(center, (newVal, oldVal) => {
     if (newVal.lat === oldVal.lat && newVal.lng === oldVal.lng) {
@@ -56,6 +93,7 @@ export function useMapPosition() {
         zoom,
         contextMenuPosition,
         maxBounds,
+        averageCenter
     }
 
 }
