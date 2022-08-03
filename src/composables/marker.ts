@@ -134,11 +134,14 @@ export function useMarker() {
     }
 
     const canCreateMarker = () => {
-        return canCreateMarkerForMap(Map.map);
+        if (!Map.map.value) {
+            return false;
+        }
+        return canCreateMarkerForMap(Map.map.value);
     }
 
     const addMarker = async (mapId: string, formData: any) => {
-        if (Map.map.uuid == mapId) {
+        if (Map.map?.value?.uuid == mapId) {
             if (!canCreateMarker()) {
                 return alert("You need to be logged in to add a marker");
             }
