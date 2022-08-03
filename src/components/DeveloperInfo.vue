@@ -27,7 +27,7 @@ GET https://cartes.io/api/maps/{{ map.uuid }}/markers</code></pre>
             </li>
             <li>Embed as iFrame
                 <!-- Code block showing API call -->
-                <pre><code>&lt;iframe src="https://cartes.io/embeds/maps/{{ map.uuid }}?type=map"
+                <pre><code>&lt;iframe src="https://app.cartes.io/embeds/maps/{{ map.uuid }}?type=map"
   width="100%"
   height="400"
   frameborder="0"&gt;&lt;/iframe&gt;</code></pre>

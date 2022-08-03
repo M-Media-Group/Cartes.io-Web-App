@@ -1,7 +1,8 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import App from '@/App.vue'
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
+import router from '@/router';
 
 // Event bus listeners
 import "./eventBus/listeners/index";
@@ -25,5 +26,7 @@ window.Echo = new Echo({
     cluster: 'eu',
     forceTLS: true
 });
+
+app.use(router);
 
 app.mount('#app')

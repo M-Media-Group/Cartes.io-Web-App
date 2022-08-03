@@ -92,7 +92,7 @@ export function useMap() {
         const data = await cartes.maps().create(formData);
         localStorage["map_" + data.uuid] = data.token;
         if (redirect) {
-            window.location.href = "?mapId=" + data.uuid;
+            window.location.href = "/maps/" + data.uuid;
             $bus.$emit(eventTypes.created_map, data);
         }
         emit("addedMap", data);
