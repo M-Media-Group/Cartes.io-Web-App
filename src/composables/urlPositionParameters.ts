@@ -1,5 +1,8 @@
 import { ref } from "vue";
 
+// We cant use useRouter here it seems because there are some events emitted that can only be done in components, so we use the raw router here
+import router from "@/router/index";
+
 const url = new URL(window.location.href);
 
 const distanceToGround = ref(0);
@@ -48,12 +51,8 @@ const debounce = (callback: () => void, time: number) => {
 };
 
 const myDebounce = debounce(() => {
-    url.searchParams.set("lat", currentPosition.value.lat.toString());
-    url.searchParams.set("lng", currentPosition.value.lng.toString());
-    if (currentPosition.value.zoom) {
-        url.searchParams.set("zoom", currentPosition.value.zoom.toString());
-    }
-    window.history.replaceState({}, "", url.href);
+    router?.replace({ query: currentPosition.value })
+    // window.history.replaceState({}, "", url.href);
 }, 300);
 
 const getUrlPositionParameters = () => {

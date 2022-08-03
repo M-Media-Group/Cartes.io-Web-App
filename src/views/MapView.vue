@@ -10,9 +10,10 @@ import EditMapForm from "@/components/maps/EditMapForm.vue";
 import DeveloperInfo from "@/components/DeveloperInfo.vue";
 import AppLayout from "@/templates/AppLayout.vue";
 import { useRoute } from "vue-router";
+import { useMapPosition } from "@/composables/mapPosition";
 
 import { now } from "@/composables/time";
-import { usePusher } from "@/composables/pusher.js";
+import { usePusher } from "@/composables/pusher";
 
 const route = useRoute();
 
@@ -25,9 +26,18 @@ const mapId = ref(route.params.mapId) as Ref<string>;
 
 const canCreateMarkers = ref();
 
+const { center, averageCenter, zoom } = useMapPosition();
+
 watch(() => route.params.mapId, () => {
     mapId.value = route.params.mapId as string;
-    getAllMarkersForMap(mapId.value);
+
+    getAllMarkersForMap(mapId.value).then(() => {
+        if (!route.query.lat || !route.query.lng) {
+            center.value = averageCenter.value;
+            zoom.value = 3;
+        }
+    });
+
     Maps.getRelatedMaps(mapId.value);
     listenForMarkerChangesOnMap(mapId.value);
     if (Maps.map.value) {

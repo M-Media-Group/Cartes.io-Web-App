@@ -7,14 +7,14 @@ const { setUrlPositionParameters, getUrlPositionParameters } = useUrlPositionPar
 
 const { markers } = useMarker();
 
-// @todo need to reconsider this whole approach with the current map position - we need a debounce here and when theres a lot of leaflet instnaces they all fight to update teh position, and so it causes some lag and issues
 
+// @todo need to reconsider this whole approach with the current map position - we need a debounce here and when theres a lot of leaflet instnaces they all fight to update the position, and so it causes some lag and issues
 
 
 const zoom = ref(getUrlPositionParameters()['zoom'] || 2);
 const center = ref({ lat: getUrlPositionParameters()['lat'], lng: getUrlPositionParameters()['lng'] });
 const contextMenuPosition = ref({ lat: 0, lng: 0 });
-console.log(center.value);
+
 const maxBounds = [
     [-90, -180],
     [90, 180],
@@ -23,7 +23,7 @@ const maxBounds = [
 const averageCenter = computed(() => {
 
     if (!markers.value || markers.value.length === 0) {
-        return center.value;
+        return { ...center.value, zoom: zoom.value };
     }
 
     const markerCoordinates = markers.value
@@ -36,10 +36,13 @@ const averageCenter = computed(() => {
         return [acc[0] + curr[0], acc[1] + curr[1]];
     }, [0, 0]);
 
-    return {
+    const newCoordinates = {
         lat: coordinates[0] / markerCoordinates.length,
         lng: coordinates[1] / markerCoordinates.length,
-    };
+        zoom: 3,
+    }
+
+    return newCoordinates;
 
     // Compute the min and max bounds
     // const minMaxBounds = markerCoordinates.reduce((acc, curr) => {
@@ -50,10 +53,6 @@ const averageCenter = computed(() => {
     // }, [[-180, -90], [180, 90]]);
 
 });
-
-if (center.value.lat === 0 && center.value.lng === 0) {
-    center.value = averageCenter.value;
-}
 
 watch(center, (newVal, oldVal) => {
     if (newVal.lat === oldVal.lat && newVal.lng === oldVal.lng) {
