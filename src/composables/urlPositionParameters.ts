@@ -1,36 +1,74 @@
 import { ref } from "vue";
 
-export function useUrlPositionParameters() {
+const url = new URL(window.location.href);
 
-    const url = new URL(window.location.href);
+const distanceToGround = ref(0);
 
-    const distanceToGround = ref(0);
+const userPosition = ref({
+    lat: 0,
+    lng: 0,
+    elevation: null as number | null,
+});
 
-    const userPosition = ref({
-        lat: 0,
-        lng: 0,
-        elevation: null as number | null,
-    });
+const currentPosition = ref({
+    lat: 0,
+    lng: 0,
+    zoom: null as number | null,
+});
 
-    const setUrlPositionParameters = (lat: number, lng: number, zoom = null as number | null) => {
-        url.searchParams.set("lat", lat.toString());
-        url.searchParams.set("lng", lng.toString());
-        if (zoom) {
-            url.searchParams.set("zoom", zoom.toString());
+// @todo need to reconsider this whole approach with the current map position - we need a debounce here and when theres a lot of leaflet instnaces they all fight to update teh position, and so it causes some lag and issues
+const setUrlPositionParameters = (lat: number, lng: number, zoom = null as number | null) => {
+    // If the currentPosition is the same as the new position, do nothing
+    if (currentPosition.value.lat === lat && currentPosition.value.lng === lng) {
+        return;
+    }
+
+    currentPosition.value.lat = lat;
+    currentPosition.value.lng = lng;
+
+    if (zoom) {
+        currentPosition.value.zoom = zoom;
+    }
+
+    myDebounce();
+
+}
+
+const debounce = (callback: () => void, time: number) => {
+    let interval: string | number | NodeJS.Timeout | null;
+    return (...args: []) => {
+        if (interval) {
+            clearTimeout(interval);
         }
-        window.history.replaceState({}, "", url.href);
-    }
+        interval = setTimeout(() => {
+            interval = null;
+            callback(...args);
+        }, time);
+    };
+};
 
-    const getUrlPositionParameters = () => {
-        const lat = url.searchParams.get("lat");
-        const lng = url.searchParams.get("lng");
-        const zoom = url.searchParams.get("zoom");
-        return {
-            lat: lat ? parseFloat(lat) : null,
-            lng: lng ? parseFloat(lng) : null,
-            zoom: zoom ? parseFloat(zoom) : null,
-        };
+const myDebounce = debounce(() => {
+    url.searchParams.set("lat", currentPosition.value.lat.toString());
+    url.searchParams.set("lng", currentPosition.value.lng.toString());
+    if (currentPosition.value.zoom) {
+        url.searchParams.set("zoom", currentPosition.value.zoom.toString());
     }
+    window.history.replaceState({}, "", url.href);
+}, 300);
+
+const getUrlPositionParameters = () => {
+    const lat = url.searchParams.get("lat");
+    const lng = url.searchParams.get("lng");
+    const zoom = url.searchParams.get("zoom");
+
+    return {
+        lat: lat ? parseFloat(lat) : 0,
+        lng: lng ? parseFloat(lng) : 0,
+        zoom: zoom ? parseFloat(zoom) : null,
+    };
+}
+
+export function useUrlPositionParameters() {
 
     return {
         distanceToGround,
