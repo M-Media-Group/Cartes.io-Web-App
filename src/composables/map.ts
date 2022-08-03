@@ -63,6 +63,7 @@ export function useMap() {
         }
         const data = await cartes.maps(mapId).get();
         Object.assign(map, data) // equivalent to reassign
+        return map;
     }
 
     const getRelatedMaps = async (mapId: string) => {
@@ -84,7 +85,7 @@ export function useMap() {
         return !hasErrors.value;
     };
 
-    const addMap = async (formData = null as MapForm | null, redirect = false) => {
+    const addMap = (formData = null as MapForm | null, redirect = false) => {
         if (formData && !validateMapForm(formData)) {
             return;
         };
@@ -92,14 +93,19 @@ export function useMap() {
             return alert("You must be online to add a map.");
         }
         isLoading.value = true;
-        const data = await cartes.maps().create(formData);
-        localStorage["map_" + data.uuid] = data.token;
-        if (redirect) {
-            window.location.href = "/maps/" + data.uuid;
-            $bus.$emit(eventTypes.created_map, data);
-        }
-        emit("addedMap", data);
-
+        cartes.maps().create(formData)
+            .then((data: Map) => {
+                localStorage["map_" + data.uuid] = data.token;
+                if (redirect) {
+                    window.location.href = "/maps/" + data.uuid;
+                    $bus.$emit(eventTypes.created_map, data);
+                }
+                emit("addedMap", data);
+            }).catch((error) => {
+                alert(error.message);
+            }).finally(() => {
+                isLoading.value = false;
+            });
     };
 
     const canDeleteMap = (map: Map) => {
@@ -143,18 +149,27 @@ export function useMap() {
         isLoading.value = false;
     };
 
-    const deleteMap = async (map: Map) => {
+    const deleteMap = (map: Map) => {
         if (!userDevice.online) {
             return alert("You must be online to delete a map.");
         }
         // Check that the map exists and that it has a token field
         if (canDeleteMap(map)) {
+            isLoading.value = true;
+
             // Delete the map
-            await cartes.maps(map.uuid, map.token ?? localStorage.getItem("map_" + map.uuid)).delete();
-            localStorage.removeItem("map_" + map.uuid);
-            $bus.$emit(eventTypes.deleted_map, map);
-            emit('deletedMap', map);
-            window.location.href = "/";
+            cartes.maps(map.uuid, map.token ?? localStorage.getItem("map_" + map.uuid)).delete().then(() => {
+                localStorage.removeItem("map_" + map.uuid);
+                $bus.$emit(eventTypes.deleted_map, map);
+                emit('deletedMap', map);
+                window.location.href = "/";
+            })
+                .catch((error) => {
+                    alert(error.message);
+                }).finally(() => {
+                    isLoading.value = false;
+                });
+
         } else {
             alert("This map could not be deleted.");
         }

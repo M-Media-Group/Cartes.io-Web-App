@@ -4,8 +4,8 @@ import AppLayout from "@/templates/AppLayout.vue";
 import NewMapComponent from '@/components/maps/NewMapComponent.vue';
 import axios from 'axios';
 import { Ref, ref } from 'vue';
-import { Map } from '@/types/map.js';
-import { useMarker } from '@/composables/marker.js';
+import { Map } from '@/types/map';
+import { useMarker } from '@/composables/marker';
 
 const Maps = useMap();
 Maps.getAllMaps().then(() => {

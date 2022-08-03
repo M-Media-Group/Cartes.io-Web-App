@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import { onBeforeMount, onBeforeUnmount, onMounted, ref, defineAsyncComponent, computed } from "vue";
+import { onBeforeMount, onBeforeUnmount, onMounted, ref, defineAsyncComponent, computed, watch, Ref } from "vue";
 import NewMapComponent from "@/components/maps/NewMapComponent.vue"
 import { useMarker } from "@/composables/marker";
 import { useMap } from "@/composables/map";
@@ -22,24 +22,19 @@ const Maps = useMap();
 const searchParams = new URLSearchParams(window.location.search);
 
 // Get the map ID from the url ?mapId parameter
-const mapId = route.params.mapId as string;
+const mapId = ref(route.params.mapId) as Ref<string>;
 
 const showMap = ref((userDevice.supportsAr && searchParams.get("showAr")) ?? true);
 
 const canCreateMarkers = ref();
 
-onMounted(() => {
-    if (mapId) {
-        getAllMarkersForMap(mapId);
-        Maps.getRelatedMaps(mapId);
-        listenForMarkerChangesOnMap(mapId);
-        Maps.getMap(mapId).then(() => {
-            canCreateMarkers.value = Maps.canCreateMarkers(Maps.map);
-        });
-    } else {
-        Maps.getAllMaps();
-    }
-});
+watch(() => route.params.mapId, () => {
+    mapId.value = route.params.mapId as string;
+    getAllMarkersForMap(mapId.value);
+    Maps.getRelatedMaps(mapId.value);
+    listenForMarkerChangesOnMap(mapId.value);
+    canCreateMarkers.value = Maps.canCreateMarkers(Maps.map);
+}, { immediate: true });
 
 const toggleMapVisibility = () => {
     showMap.value = !showMap.value;
