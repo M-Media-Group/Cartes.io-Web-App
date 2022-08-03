@@ -10,16 +10,16 @@ import { useMarker } from '@/composables/marker';
 const Maps = useMap();
 Maps.getAllMaps().then(() => {
     // For each map, get all markers for it and wait in between each request
-    Maps.maps.value.forEach(async map => {
-        // if (map.markers_count && map.markers_count > 0) {
-        // setTimeout(async () => {
-        //     const markers = await Markers.getAllMarkersForMap(map.uuid);
-        //     // Assign the markers to the map if the markers is an array
-        //     if (Array.isArray(markers)) {
-        //         map.markers = markers;
-        //     }
-        // }, 2000);
-        // }
+    Maps.maps.value.forEach(async (map, index) => {
+        if (map.markers_count && map.markers_count > 0 && index < 2) {
+            setTimeout(async () => {
+                const markers = await Markers.getAllMarkersForMap(map.uuid);
+                // Assign the markers to the map if the markers is an array
+                if (Array.isArray(markers)) {
+                    map.markers = markers;
+                }
+            }, 3000);
+        }
     });
 });
 
@@ -86,62 +86,91 @@ if (ids.length > 0) {
                 </div>
             </div>
         </template>
-        <section>
-            <div class="headings">
-                <h2>Your maps</h2>
-                <p>These are the maps that you've created on the site.</p>
-            </div>
+        <div class="grid column-4-1-grid">
+            <div>
+                <section>
+                    <div class="headings">
+                        <h2>Your maps</h2>
+                        <p>These are the maps that you've created on the site.</p>
+                    </div>
 
-            <article v-for="map in privateMaps"
-                :key="map.uuid">
-                <header class="full">
-                    <NewMapComponent :mapId="map.uuid"
-                        :map="map"
-                        :markers="map.markers ?? []"
-                        style="height: 400px" />
-                </header>
-                <h3>{{ map.title ?? "Untitled map" }}</h3>
-                <p>{{ map.description }}</p>
-                <router-link :to="'/maps/' + map.uuid"
-                    custom
-                    v-slot="{ navigate }">
-                    <button @click="navigate">Open map</button>
-                </router-link>
-                <footer>
+                    <article v-for="map in privateMaps"
+                        :key="map.uuid">
+                        <header class="full">
+                            <NewMapComponent :mapId="map.uuid"
+                                :map="map"
+                                :markers="map.markers ?? []"
+                                style="height: 400px" />
+                        </header>
+                        <h3>{{ map.title ?? "Untitled map" }}</h3>
+                        <p>{{ map.description }}</p>
+                        <router-link :to="'/maps/' + map.uuid"
+                            custom
+                            v-slot="{ navigate }">
+                            <button @click="navigate">Open map</button>
+                        </router-link>
+                        <footer>
 
-                    <small>{{ map.markers_count }} live markers</small>
-                </footer>
-            </article>
+                            <small>{{ map.markers_count }} live markers</small>
+                        </footer>
+                    </article>
 
-            <article v-if="privateMaps.length === 0">
-                <div class="headings">
-                    <h3>You have no maps yet.</h3>
-                    <p>Create your first map or browse the public ones.</p>
-                </div>
-                <button @click="Maps.addMap(null, true);">
-                    Create a new map
-                </button>
-            </article>
-        </section>
-        <section>
-            <div class="headings">
-                <h2>Public maps</h2>
-                <p>These maps are made by the community and shared with everyone.</p>
+                    <article v-if="privateMaps.length === 0">
+                        <div class="headings">
+                            <h3>You have no maps yet.</h3>
+                            <p>Create your first map or browse the public ones.</p>
+                        </div>
+                        <button @click="Maps.addMap(null, true);">
+                            Create a new map
+                        </button>
+                    </article>
+                </section>
+                <section>
+                    <div class="headings">
+                        <h2>Public maps</h2>
+                        <p>These maps are made by the community and shared with everyone.</p>
+                    </div>
+                    <div>
+                        <article v-for="(map, i) in Maps.maps.value"
+                            :key="map.uuid">
+                            <header class="full"
+                                v-if="i < 2 ? true : false">
+                                <NewMapComponent :mapId="map.uuid"
+                                    :map="map"
+                                    :markers="map.markers ?? []"
+                                    style="height: 400px" />
+                            </header>
+                            <h3>{{ map.title ?? "Untitled map" }}</h3>
+                            <p>{{ map.description }}</p>
+                            <router-link :to="'/maps/' + map.uuid"
+                                custom
+                                v-slot="{ navigate }">
+                                <button @click="navigate">Open map</button>
+                            </router-link>
+                            <footer>
+
+                                <small>{{ map.markers_count }} live markers</small>
+                            </footer>
+                        </article>
+                    </div>
+                    <div>Showing {{ Maps.maps.value.length }} out of {{ Maps.totalMaps }} total public maps.
+                    </div>
+                </section>
             </div>
-            <div v-for="map in Maps.maps.value"
-                :key="map.uuid">
-                <router-link :to="'/maps/' + map.uuid">
-                    {{ map.title ?? "Untitled map" }} - {{ map.markers_count }} markers
-                </router-link>
-            </div>
-            <div>Showing the newest {{ Maps.maps.value.length }} / {{ Maps.totalMaps }} total public maps</div>
-        </section>
+            <aside>
+                <h4>Cartes.io.</h4>
+                <p>This is an open source project. Feel free to contribute to the development on <a
+                        href="https://github.com/M-Media-Group/Cartes.io">GitHub</a></p>
+                <p><a href="https://cartes.io/register">Sign up</a> to Cartes.io to get more info, make
+                    maps private, and get updates as the project grows.</p>
+            </aside>
+        </div>
     </AppLayout>
 </template>
 
 <style scoped>
 .header {
-    min-height: 20rem;
+    min-height: 23rem;
     background-color: var(--background-color);
     /* background: linear-gradient(var(--card-border-color), var(--background-color)), url(/images/earth.jpg) no-repeat; */
     background-image: linear-gradient(0deg, var(--background-color) 0%, var(--card-border-color) 100%);
@@ -154,5 +183,24 @@ if (ids.length > 0) {
 
 article>header.full {
     padding: 0;
+}
+
+/* The first article child of a section */
+article {
+    margin-top: 0;
+}
+
+@media (min-width: 992px) {
+    .column-2-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .column-4-1-grid {
+        grid-template-columns: 4fr 1fr;
+    }
+}
+
+h3 {
+    margin-bottom: var(--spacing);
 }
 </style>

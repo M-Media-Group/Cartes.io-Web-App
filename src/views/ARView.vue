@@ -23,7 +23,9 @@ watch(() => route.params.mapId, () => {
     getAllMarkersForMap(mapId.value);
     Maps.getRelatedMaps(mapId.value);
     listenForMarkerChangesOnMap(mapId.value);
-    canCreateMarkers.value = Maps.canCreateMarkers(Maps.map);
+    if (Maps.map.value) {
+        canCreateMarkers.value = Maps.canCreateMarkers(Maps.map.value);
+    }
 }, { immediate: true });
 
 
@@ -35,9 +37,10 @@ const AR = defineAsyncComponent(() =>
 
 <template>
 
-    <AR :mapId="Maps.map.uuid"
+    <AR v-if="Maps.map.value"
+        :mapId="Maps.map.value.uuid"
         :markers="displayableMarkers"
-        @close="$router.push('/maps/' + Maps.map.uuid)" />
+        @close="$router.push('/maps/' + Maps.map.value?.uuid)" />
 
 </template>
 <style>

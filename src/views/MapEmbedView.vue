@@ -31,7 +31,10 @@ onMounted(() => {
         Maps.getRelatedMaps(mapId);
         listenForMarkerChangesOnMap(mapId);
         Maps.getMap(mapId).then(() => {
-            canCreateMarkers.value = Maps.canCreateMarkers(Maps.map);
+            if (!Maps.map.value) {
+                return;
+            }
+            canCreateMarkers.value = Maps.canCreateMarkers(Maps.map.value);
         });
     } else {
         Maps.getAllMaps();
@@ -69,7 +72,10 @@ const { isLive } = usePusher();
 
 const mapAgeInMinutes = computed(() => {
     if (Maps.map) {
-        const createdAt = new Date(Maps.map.created_at);
+        if (!Maps.map.value) {
+            return 0;
+        }
+        const createdAt = new Date(Maps.map.value.created_at);
         const diff = now.value - createdAt.getTime();
         return Math.round(diff / 60000);
     }
@@ -85,8 +91,8 @@ const mapCreatedTimeAgo = computed(() => {
 
 <template>
 
-    <div v-if="mapId && Maps.map">
-        <NewMapComponent :mapId="Maps.map.uuid"
+    <div v-if="mapId">
+        <NewMapComponent :mapId="mapId"
             :show-ar="false"
             :markers="displayableMarkers"
             style="height: 100vh"

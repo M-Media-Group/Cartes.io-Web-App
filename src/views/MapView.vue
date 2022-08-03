@@ -54,8 +54,8 @@ const share = async () => {
 const { isLive } = usePusher();
 
 const mapAgeInMinutes = computed(() => {
-    if (Maps.map) {
-        const createdAt = new Date(Maps.map.created_at);
+    if (Maps.map.value) {
+        const createdAt = new Date(Maps.map.value.created_at);
         const diff = now.value - createdAt.getTime();
         return Math.round(diff / 60000);
     }
@@ -93,8 +93,8 @@ const mapCreatedTimeAgo = computed(() => {
                             Anonymous
                         </div>
 
-                        <h1>{{ Maps.map.title ?? "Untitled map" }}</h1>
-                        <p style="white-space: pre-wrap;">{{ Maps.map?.description }}</p>
+                        <h1>{{ Maps.map.value?.title ?? "Untitled map" }}</h1>
+                        <p style="white-space: pre-wrap;">{{ Maps.map.value?.description }}</p>
                     </div>
                     <div>
 
@@ -174,10 +174,10 @@ const mapCreatedTimeAgo = computed(() => {
                     </div>
                 </section>
 
-                <section v-if="Maps.map.related && Maps.map.related.length > 0">
+                <section v-if="Maps.map.value?.related && Maps.map.value.related.length > 0">
                     <h2>Related maps</h2>
                     <ul>
-                        <li v-for="map in Maps.map.related"
+                        <li v-for="map in Maps.map.value.related"
                             :key="map.uuid">
                             <router-link :to="'/maps/' + map.uuid">{{ map.title ?? "Untitled map" }}</router-link>
                         </li>

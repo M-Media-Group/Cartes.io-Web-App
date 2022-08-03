@@ -9,8 +9,10 @@ const maps = ref<Map[]>([]);
 
 const totalMaps = ref(0);
 
+const selectedMapUuid = ref('');
+
 // reactive map
-const map = reactive<Map>({
+const oldMap = reactive<Map>({
     uuid: "",
     title: "",
     slug: "",
@@ -28,6 +30,11 @@ const map = reactive<Map>({
     markers: [],
     related: [],
 });
+
+const map = computed(() => {
+    return maps.value.find((m) => m.uuid === selectedMapUuid.value);
+});
+
 // reactive maps
 // const maps = reactive<Map[]>([]);
 
@@ -61,17 +68,38 @@ export function useMap() {
         if (!userDevice.online) {
             return alert("You must be online to get a map.");
         }
+        selectedMapUuid.value = mapId;
+        if (mapExistsInMapsArray(mapId)) {
+            return map;
+        }
         const data = await cartes.maps(mapId).get();
-        Object.assign(map, data) // equivalent to reassign
+        maps.value.push(data);
         return map;
+    }
+
+    const mapExistsInMapsArray = (mapId: string) => {
+        return maps.value.find((m) => m.uuid === mapId) !== undefined;
+    }
+
+    const updateMapInMapArray = (mapId: string, data: any) => {
+        const index = maps.value.findIndex((m) => m.uuid === mapId);
+        if (index !== -1) {
+            // Update only the changed values
+            maps.value[index] = {
+                ...maps.value[index],
+                ...data,
+            };
+        } else {
+            maps.value.push(data);
+        }
     }
 
     const getRelatedMaps = async (mapId: string) => {
         if (!userDevice.online) {
             return alert("You must be online to get related maps.");
         }
-        map.related = await cartes.maps(mapId).related().get();
-        return map.related;
+        updateMapInMapArray(mapId, { related: await cartes.maps(mapId).related().get() });
+        return map.value?.related;
     }
 
     const hasErrors = computed(() => {
@@ -117,6 +145,9 @@ export function useMap() {
     }
 
     const canCreateMarkers = (map: Map) => {
+        if (!map) {
+            return false;
+        }
         return map.users_can_create_markers === 'yes' || map.token || localStorage.getItem("map_" + map.uuid);
     }
 
