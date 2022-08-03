@@ -26,6 +26,7 @@ import userDevice from "@/classes/userDevice";
 import MapMarker from "./MapMarker.vue";
 import MapMarkers from "./MapMarkers.vue";
 import { useMap } from "@/composables/map";
+import { useMapPosition } from "@/composables/mapPosition";
 import { Map } from "@/types/map";
 
 const isOnline = computed(() => {
@@ -70,28 +71,7 @@ const addMarkerForm = ref<any>();
 
 const canPost = "only_logged_in";
 
-const { setUrlPositionParameters, getUrlPositionParameters } = useUrlPositionParameters();
-
-const zoom = ref(getUrlPositionParameters()['zoom'] || 2);
-const center = ref({ lat: getUrlPositionParameters()['lat'], lng: getUrlPositionParameters()['lng'] });
-const contextMenuPosition = ref({ lat: 0, lng: 0 });
-const maxBounds = [
-  [-90, -180],
-  [90, 180],
-];
-
-watch(center, (newVal) => {
-  if (newVal && newVal.lat && newVal.lng) {
-    // Update the URL params and zoom
-    setUrlPositionParameters(newVal.lat, newVal.lng, zoom.value);
-  }
-});
-
-watch(zoom, (newVal) => {
-  if (newVal && center.value.lat && center.value.lng) {
-    setUrlPositionParameters(center.value.lat, center.value.lng, newVal);
-  }
-});
+const { center, zoom, contextMenuPosition, maxBounds, } = useMapPosition();
 
 const openAddMarkerPopup = (event: { latlng: any; }) => {
   if (addMarkerPopup.value && event.latlng) {

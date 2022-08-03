@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { useMapPosition } from '@/composables/mapPosition';
 import { Category as CategoryType } from '@/types/category';
+import { Marker } from '@/types/marker';
 import { PropType } from 'vue';
 
 defineProps({
@@ -32,11 +34,31 @@ defineProps({
         type: Number,
         required: true,
     },
+    marker: {
+        type: Object as PropType<Marker>,
+        required: true,
+    },
 })
+
+const { center, zoom } = useMapPosition();
+
+const handleClick = (marker: Marker) => {
+    // Scroll to top of page when marker is clicked
+    window.scrollTo(0, 0);
+
+    //    Set the center
+    center.value = {
+        lat: marker.location.coordinates[1],
+        lng: marker.location.coordinates[0],
+    }
+
+    zoom.value = 16;
+}
 </script>
 
 <template>
-    <div class="card">
+    <div class="card"
+        @click="handleClick(marker)">
         <header>
             <h3>{{ category.name }}</h3>
         </header>

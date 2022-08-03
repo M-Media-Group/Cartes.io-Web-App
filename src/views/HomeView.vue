@@ -142,8 +142,6 @@ if (ids.length > 0) {
 <style scoped>
 .header {
     min-height: 20rem;
-    height: 50vh;
-    max-height: 500px;
     background-color: var(--background-color);
     /* background: linear-gradient(var(--card-border-color), var(--background-color)), url(/images/earth.jpg) no-repeat; */
     background-image: linear-gradient(0deg, var(--background-color) 0%, var(--card-border-color) 100%);

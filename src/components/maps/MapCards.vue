@@ -28,7 +28,9 @@ const sortedMarkers = computed(() => {
             :id="marker.id"
             :category="marker.category"
             :link="marker.link"
-            :elevation="marker.elevation" />
+            :elevation="marker.elevation"
+            :marker="marker" />
+        />
     </div>
     <div v-else>No markers yet</div>
 </template>
