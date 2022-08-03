@@ -15,7 +15,7 @@ const Maps = useMap();
         <ul>
             <li><a href="https://cartes.io/login">Login</a></li>
             <li>
-                <button @click="Maps.addMap(null, true)">Create new map</button>
+                <button @click="Maps.addMap(null, true)">New map</button>
             </li>
         </ul>
     </nav>

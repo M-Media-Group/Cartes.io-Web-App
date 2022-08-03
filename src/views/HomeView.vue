@@ -94,7 +94,7 @@ if (ids.length > 0) {
 
             <article v-for="map in privateMaps"
                 :key="map.uuid">
-                <header>
+                <header class="full">
                     <NewMapComponent :mapId="map.uuid"
                         :map="map"
                         :markers="map.markers ?? []"
@@ -114,14 +114,13 @@ if (ids.length > 0) {
             </article>
 
             <article v-if="privateMaps.length === 0">
-                <div>
-                    <h3>You have no maps yet. Create your first map or browse the public ones.</h3>
+                <div class="headings">
+                    <h3>You have no maps yet.</h3>
+                    <p>Create your first map or browse the public ones.</p>
                 </div>
-                <footer>
-                    <button @click="Maps.addMap(null, true);">
-                        Create a new map
-                    </button>
-                </footer>
+                <button @click="Maps.addMap(null, true);">
+                    Create a new map
+                </button>
             </article>
         </section>
         <section>
@@ -145,11 +144,17 @@ if (ids.length > 0) {
     min-height: 20rem;
     height: 50vh;
     max-height: 500px;
-    background: linear-gradient(rgba(28, 119, 195, 0.2), var(--background-color)), url(/images/earth.jpg) no-repeat;
+    background-color: var(--background-color);
+    /* background: linear-gradient(var(--card-border-color), var(--background-color)), url(/images/earth.jpg) no-repeat; */
+    background-image: linear-gradient(0deg, var(--background-color) 0%, var(--card-border-color) 100%);
     background-size: cover;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+article>header.full {
+    padding: 0;
 }
 </style>
