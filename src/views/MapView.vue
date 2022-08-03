@@ -22,7 +22,7 @@ const Maps = useMap();
 const searchParams = new URLSearchParams(window.location.search);
 
 // Get the map ID from the url ?mapId parameter
-const mapId = route.params.mapId;
+const mapId = route.params.mapId as string;
 
 const showMap = ref((userDevice.supportsAr && searchParams.get("showAr")) ?? true);
 
