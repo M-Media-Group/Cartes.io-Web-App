@@ -144,7 +144,7 @@ const mapCreatedTimeAgo = computed(() => {
                             <label>
                                 <input type="checkbox"
                                     v-model="showExpired" />
-                                Show all markers
+                                Also show expired markers
                             </label>
                         </details>
 
