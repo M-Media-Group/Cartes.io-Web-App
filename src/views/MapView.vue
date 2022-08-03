@@ -200,7 +200,7 @@ const mapCreatedTimeAgo = computed(() => {
                     <ul>
                         <li v-for="map in Maps.map.related"
                             :key="map.uuid">
-                            <a :href="'?mapId=' + map.uuid">{{ map.title ?? "Untitled map" }}</a>
+                            <router-link :to="'/maps/' + map.uuid">{{ map.title ?? "Untitled map" }}</router-link>
                         </li>
                     </ul>
                 </section>

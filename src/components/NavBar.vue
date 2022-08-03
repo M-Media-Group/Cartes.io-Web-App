@@ -6,7 +6,11 @@ const Maps = useMap();
 <template>
     <nav class="container-fluid">
         <ul>
-            <li><a href="/"><strong>Cartes.io</strong></a></li>
+            <li>
+                <router-link to='/'>
+                    <strong>Cartes.io</strong>
+                </router-link>
+            </li>
         </ul>
         <ul>
             <li><a href="https://cartes.io/login">Login</a></li>
