@@ -1,9 +1,62 @@
 <script setup lang="ts">
 import { useMap } from '@/composables/map';
 import AppLayout from "@/templates/AppLayout.vue";
+import NewMapComponent from '@/components/maps/NewMapComponent.vue';
+import axios from 'axios';
+import { Ref, ref } from 'vue';
+import { Map } from '@/types/map.js';
+import { useMarker } from '@/composables/marker.js';
 
 const Maps = useMap();
-Maps.getAllMaps();
+Maps.getAllMaps().then(() => {
+    // For each map, get all markers for it and wait in between each request
+    Maps.maps.value.forEach(async map => {
+        // if (map.markers_count && map.markers_count > 0) {
+        //     setTimeout(async () => {
+        //         const markers = await Markers.getAllMarkersForMap(map.uuid);
+        //         // Assign the markers to the map
+        //         map.markers = markers;
+        //         console.log("Got markers", map.uuid, markers, map)
+        //     }, 2000);
+        // }
+    });
+});
+
+const Markers = useMarker();
+
+const privateMaps = ref([]) as Ref<Map[]>;
+
+var ids = [] as string[];
+Object.keys(localStorage).forEach(function (key) {
+    if (key.includes("map_")) {
+        ids.push(key.replace("map_", ""));
+    }
+});
+
+if (ids.length > 0) {
+    axios
+        .get("/api/maps", {
+            params: {
+                ids: ids,
+                orderBy: "updated_at",
+            },
+        })
+        .then((response: { data: { data: Map[]; }; }) => {
+            privateMaps.value = response.data.data;
+            privateMaps.value.forEach(async map => {
+                // If the markers_count is 0, then the map has no markers, so we can skip it
+                // Wait a little to not hit the rate limit
+                if (map.markers_count && map.markers_count > 0) {
+                    setTimeout(async () => {
+                        const markers = await Markers.getAllMarkersForMap(map.uuid);
+                        // Assign the markers to the map
+                        map.markers = markers;
+                        console.log("Got markers", map.uuid, markers, map)
+                    }, 2000);
+                }
+            });
+        });
+}
 
 </script>
 <template>
@@ -33,19 +86,30 @@ Maps.getAllMaps();
         </template>
         <section>
             <h2>Your maps</h2>
-            <div v-for="map in Maps.maps.value"
+            <article v-for="map in privateMaps"
                 :key="map.uuid">
-                <router-link :to="'/maps/' + map.uuid">
-                    {{ map.title ?? "Untitled map" }}
-                </router-link>
-            </div>
+                <header>
+                    <NewMapComponent :mapId="map.uuid"
+                        :map="map"
+                        :markers="map.markers ?? []"
+                        style="height: 400px" />
+                </header>
+                <h3>{{ map.title ?? "Untitled map" }}</h3>
+                <p>{{ map.description }}</p>
+                <footer>
+                    <router-link role="button"
+                        :to="'/maps/' + map.uuid">
+                        Open map
+                    </router-link>
+                </footer>
+            </article>
         </section>
         <section>
             <h2>All maps</h2>
             <div v-for="map in Maps.maps.value"
                 :key="map.uuid">
                 <router-link :to="'/maps/' + map.uuid">
-                    {{ map.title ?? "Untitled map" }}
+                    {{ map.title ?? "Untitled map" }} - {{ map.markers_count }} markers
                 </router-link>
             </div>
         </section>

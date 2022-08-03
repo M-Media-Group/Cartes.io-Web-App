@@ -26,6 +26,7 @@ import userDevice from "@/classes/userDevice";
 import MapMarker from "./MapMarker.vue";
 import MapMarkers from "./MapMarkers.vue";
 import { useMap } from "@/composables/map";
+import { Map } from "@/types/map";
 
 const isOnline = computed(() => {
   return userDevice.online;
@@ -41,6 +42,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  map: {
+    type: Object as PropType<Map>,
+    required: false,
+  },
   markers: {
     type: Array as PropType<Marker[]>,
     required: true,
@@ -55,7 +60,7 @@ const emit = defineEmits([
 
 const ready = ref(false);
 
-const map = ref();
+const mapElement = ref();
 
 const leafletObject = ref();
 
@@ -92,7 +97,7 @@ const openAddMarkerPopup = (event: { latlng: any; }) => {
   if (addMarkerPopup.value && event.latlng) {
     contextMenuPosition.value = event.latlng;
     addMarkerPopup.value.leafletObject.openPopup(contextMenuPosition.value);
-    if (canCreateMarker()) {
+    if (canCreateMarker() || (props.map && canCreateMarkerForMap(props.map))) {
       addMarkerForm.value.focusMultiselect();
     }
   }
@@ -103,7 +108,7 @@ const handleNewMarkerEvent = (event: Marker) => {
   addMarkerPopup.value.leafletObject.closePopup();
 };
 
-const { canDeleteMarker, deleteMarker, canCreateMarker } = useMarker();
+const { canDeleteMarker, deleteMarker, canCreateMarker, canCreateMarkerForMap } = useMarker();
 
 const provider = new OpenStreetMapProvider();
 
@@ -151,7 +156,7 @@ const goToLocation = (event: { location: any; }) => {
 const setReady = async () => {
   await nextTick();
   ready.value = true;
-  leafletObject.value = map.value.leafletObject;
+  leafletObject.value = mapElement.value.leafletObject;
 };
 
 const mapInstance = useMap();
@@ -163,7 +168,7 @@ const mapInstance = useMap();
       :worldCopyJump="true"
       style="width: 100%; height: 100%"
       class="disable-select"
-      ref="map"
+      ref="mapElement"
       v-model:max-bounds="maxBounds"
       :maxZoom="18"
       v-model:zoom="zoom"
@@ -198,7 +203,7 @@ const mapInstance = useMap();
 
       <l-layer-group ref="addMarkerPopup">
         <l-popup class="unset-select">
-          <AddMarkerForm v-if="canCreateMarker()"
+          <AddMarkerForm v-if="canCreateMarker() || (props.map && canCreateMarkerForMap(props.map))"
             ref="addMarkerForm"
             :mapId="mapId"
             :markers="markers"

@@ -150,8 +150,8 @@ export function useMap() {
             await cartes.maps(map.uuid, map.token ?? localStorage.getItem("map_" + map.uuid)).delete();
             localStorage.removeItem("map_" + map.uuid);
             $bus.$emit(eventTypes.deleted_map, map);
-            window.location.href = "/";
             emit('deletedMap', map);
+            window.location.href = "/";
         } else {
             alert("This map could not be deleted.");
         }

@@ -13,8 +13,6 @@ const props = defineProps({
 
 const Maps = useMap();
 
-console.log(props.map.privacy);
-
 const settings = reactive({
     title: {
         title: "Title",
@@ -211,8 +209,8 @@ const updateMapSettings = (mapId: string, settings: any) => {
             </div>
             <button type="submit">Save</button>
         </form>
-        <button v-if="Maps.canDeleteMap(Maps.map)"
-            @click="Maps.deleteMap(Maps.map)"
+        <button v-if="Maps.canDeleteMap(map)"
+            @click="Maps.deleteMap(map)"
             class="contrast">Delete map</button>
     </div>
 </template>

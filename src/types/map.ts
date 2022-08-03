@@ -20,6 +20,7 @@ export interface Map {
     categories?: Category[];
     markers?: Marker[];
     related?: Map[];
+    markers_count?: number;
 }
 
 export interface Options {
