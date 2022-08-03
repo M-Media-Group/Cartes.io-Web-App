@@ -11,8 +11,6 @@ const { displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap, sh
 
 const Maps = useMap();
 
-const searchParams = new URLSearchParams(window.location.search);
-
 // Get the map ID from the url ?mapId parameter
 const mapId = ref(route.params.mapId) as Ref<string>;
 
