@@ -7,6 +7,8 @@ import { Ref, ref } from 'vue';
 import { Map } from '@/types/map';
 import { useMarker } from '@/composables/marker';
 
+const url = import.meta.env.VITE_API_URL;
+
 const Maps = useMap();
 Maps.getAllMaps().then(() => {
     // For each map, get all markers for it and wait in between each request
@@ -80,7 +82,7 @@ if (ids.length > 0) {
                         <div>
                             <a role="button"
                                 class="secondary"
-                                href="https://cartes.io/register">Sign up, if you want</a>
+                                :href="url + '/register'">Sign up, if you want</a>
                         </div>
                     </div>
                 </div>
@@ -163,7 +165,7 @@ if (ids.length > 0) {
                 <h4>Cartes.io.</h4>
                 <p>This is an open source project. Feel free to contribute to the development on <a
                         href="https://github.com/M-Media-Group/Cartes.io">GitHub</a></p>
-                <p><a href="https://cartes.io/register">Sign up</a> to Cartes.io to get more info, make
+                <p><a :href="url + '/register'">Sign up</a> to Cartes.io to get more info, make
                     maps private, and get updates as the project grows.</p>
             </aside>
         </div>

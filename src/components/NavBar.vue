@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useMap } from '@/composables/map';
 const Maps = useMap();
+const url = import.meta.env.VITE_API_URL + "/login";
 </script>
 
 <template>
@@ -13,7 +14,7 @@ const Maps = useMap();
             </li>
         </ul>
         <ul>
-            <li><a href="https://cartes.io/login">Login</a></li>
+            <li><a :href="url">Login</a></li>
             <li>
                 <button @click="Maps.addMap(null, true)">New map</button>
             </li>

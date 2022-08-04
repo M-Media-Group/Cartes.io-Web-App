@@ -8,6 +8,9 @@ defineProps({
         required: true,
     },
 })
+
+const url = import.meta.env.VITE_API_URL;
+
 </script>
 
 <template>
@@ -22,8 +25,8 @@ defineProps({
         <ul>
             <li>Use the API to get the map and markers
                 <!-- Code block showing API call -->
-                <pre><code>GET https://cartes.io/api/maps/{{ map.uuid }}
-GET https://cartes.io/api/maps/{{ map.uuid }}/markers</code></pre>
+                <pre><code>GET {{ url }}/api/maps/{{ map.uuid }}
+GET {{ url }}/api/maps/{{ map.uuid }}/markers</code></pre>
             </li>
             <li>Embed as iFrame
                 <!-- Code block showing API call -->

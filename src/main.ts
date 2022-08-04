@@ -13,7 +13,7 @@ const app = createApp(App)
 
 app.config.globalProperties.window = window
 
-axios.defaults.baseURL = 'https://cartes.io';
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 axios.defaults.withCredentials = true;
 
 declare global {

@@ -111,7 +111,7 @@ const getCategories = async (query = null as string | null) => {
     return [];
   }
   isLoading.value = true;
-  let url = "https://cartes.io/api/categories"
+  let url = import.meta.env.VITE_API_URL + "/api/categories"
   if (query && query.length >= minCategoryNameLength) {
     url += "?query=" + query;
   }
