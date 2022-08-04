@@ -4,6 +4,7 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import router from '@/router';
 import axios from 'axios';
+import VueGtag from "vue-gtag";
 
 // Event bus listeners
 import "./eventBus/listeners/index";
@@ -43,5 +44,9 @@ window.Echo.connector.pusher.connection.bind("disconnected", () => {
 app.provide('isConnectedToPusher', isConnectedToPusher)
 
 app.use(router);
+
+app.use(VueGtag, {
+    config: { id: import.meta.env.VITE_GA_MEASUREMENT_ID }
+})
 
 app.mount('#app')

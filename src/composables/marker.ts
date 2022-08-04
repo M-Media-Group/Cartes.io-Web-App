@@ -5,6 +5,7 @@ import { computed } from "@vue/reactivity";
 import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
 import { useMap } from "./map";
 import cartes from "@m-media/npm-cartes-io";
+import $bus, { eventTypes } from "@/eventBus/events";
 
 const Map = useMap();
 
@@ -189,6 +190,7 @@ export function useMarker() {
             }
             addMarkerToMarkerArray(data, mapId);
             localStorage["post_" + data.id] = data.token;
+            $bus.$emit(eventTypes.created_marker, data);
             if (emit) {
                 emit("addedMarker", data);
             }
@@ -211,6 +213,7 @@ export function useMarker() {
             await cartes.maps(mapId).markers(marker.id, (marker.token || localStorage.getItem("post_" + marker.id))).delete();
             removeMarkerFromMarkerArray(marker, mapId);
             localStorage.removeItem("post_" + marker.id);
+            $bus.$emit(eventTypes.deleted_marker, marker);
             if (emit) {
                 emit('deletedMarker', marker);
             }
