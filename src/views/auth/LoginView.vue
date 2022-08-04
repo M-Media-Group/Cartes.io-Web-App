@@ -16,11 +16,11 @@ const { email, password, login, isLoading } = useUser();
                     </div>
                     <form @submit.prevent="login()"
                         :disabled="isLoading">
-                        <input type="text"
-                            name="login"
-                            placeholder="Login"
-                            aria-label="Login"
-                            autocomplete="nickname"
+                        <input type="email"
+                            name="email"
+                            placeholder="Email"
+                            aria-label="Email"
+                            autocomplete="email"
                             required
                             v-model="email">
                         <input type="password"
