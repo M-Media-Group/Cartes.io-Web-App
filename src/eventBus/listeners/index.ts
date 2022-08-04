@@ -1,6 +1,6 @@
 import { Listeners } from "../events";
 
-// import analytics from "./analytics";
+import analytics from "./analytics";
 import notifications from "./notifications";
 
-export default new Listeners(notifications);
+export default new Listeners(analytics, notifications);
