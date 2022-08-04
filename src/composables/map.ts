@@ -108,6 +108,7 @@ export function useMap() {
             const index = getMapIndexFromMapsArray(mapId);
             for (const marker of markers) {
                 if (markerExistsInMapArray(mapId, marker.id)) {
+                    updateMarkerInMarkerArray(mapId, marker.id, marker);
                     continue;
                 }
                 if (!maps.value[index].markers) {
@@ -115,7 +116,7 @@ export function useMap() {
                     maps.value[index].markers?.push(marker);
                 } else {
                     const mapMarkers = maps.value[index].markers;
-                    const markerIndex = maps.value[getMapIndexFromMapsArray(mapId)].markers?.findIndex((m) => m.id === marker.id);
+                    const markerIndex = getMarkerIndexFromMarkerArray(mapId, marker.id);
                     if (markerIndex !== undefined && mapMarkers && markerIndex !== -1) {
                         mapMarkers[markerIndex] = marker;
                     } else if (mapMarkers) {
@@ -126,9 +127,31 @@ export function useMap() {
         }
     }
 
+    const updateMarkerInMarkerArray = (mapId: string, markerId: number, data: any) => {
+        if (markerExistsInMapArray(mapId, markerId)) {
+            const index = getMapIndexFromMapsArray(mapId);
+            const mapMarkers = maps.value[index].markers;
+            const markerIndex = getMarkerIndexFromMarkerArray(mapId, markerId);
+            if (markerIndex !== undefined && mapMarkers && markerIndex !== -1) {
+                mapMarkers[markerIndex] = {
+                    ...mapMarkers[markerIndex],
+                    ...data,
+                };
+            }
+        }
+    }
+
+    const getMarkerIndexFromMarkerArray = (mapId: string, markerId: number) => {
+        if (mapExistsInMapsArray(mapId)) {
+            const index = getMapIndexFromMapsArray(mapId);
+            return maps.value[index].markers?.findIndex((m) => m.id === markerId);
+        }
+        return -1;
+    }
+
     const markerExistsInMapArray = (mapId: string, markerId: number) => {
         if (mapExistsInMapsArray(mapId)) {
-            const markerIndex = maps.value[getMapIndexFromMapsArray(mapId)].markers?.findIndex((m) => m.id === markerId);
+            const markerIndex = getMarkerIndexFromMarkerArray(mapId, markerId);
             return markerIndex !== undefined && markerIndex !== -1;
         }
         return false;
