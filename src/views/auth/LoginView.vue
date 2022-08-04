@@ -11,9 +11,9 @@ const { email, password, login } = useUser();
             <article class="grid">
                 <div>
                     <div class="headings">
-                        <h1>Sign in</h1>
+                        <h1>Login</h1>
                         {{ email }}
-                        <h2>A minimalist layout for Login pages</h2>
+                        <h2>Login to Cartes.io</h2>
                     </div>
                     <form @submit.prevent="login()">
                         <input type="text"
@@ -43,8 +43,26 @@ const { email, password, login } = useUser();
                             class="contrast">Login</button>
                     </form>
                 </div>
-                <div></div>
+                <img src="/images/earth.jpg" />
             </article>
         </div>
     </AppLayout>
 </template>
+<style scoped>
+img {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    img {
+        display: block;
+        margin-top: calc(var(--block-spacing-vertical) * -1);
+        margin-bottom: calc(var(--block-spacing-vertical) * -1);
+        margin-left: calc(var(--block-spacing-vertical) * 1);
+        /* margin: calc(var(--block-spacing-vertical) * -1) calc(var(--block-spacing-horizontal)); */
+        height: calc(var(--block-spacing-vertical) * 2 + 100%);
+        width: 100%;
+        object-fit: cover;
+    }
+}
+</style>
