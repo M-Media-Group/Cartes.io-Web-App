@@ -12,6 +12,7 @@ const authenticateUser = (authenticableUser: User) => {
 
 const isLoading = ref(false);
 
+const username = ref("");
 const email = ref("");
 const password = ref("");
 
@@ -37,6 +38,33 @@ const login = async () => {
         isLoading.value = false;
 
     });
+}
+
+const register = async () => {
+    isLoading.value = true;
+
+    // Remove laravel_token and laravel_session cookies
+    document.cookie = "laravel_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "laravel_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    await getCsrfToken();
+
+    axios.post("/register", {
+        email: email.value,
+        password: password.value,
+        username: username.value,
+        password_confirmation: password.value,
+    }).then((response) => {
+        $bus.$emit(eventTypes.registered);
+        router.push("/");
+        getUser();
+    }
+    ).catch((error) => {
+        console.log("Register error", error);
+        alert(error.response.data.message);
+        isLoading.value = false;
+    });
+
 }
 
 const logout = () => {
@@ -105,8 +133,10 @@ export function useUser() {
         getUser,
         getPersonalAccessTokens,
         logout,
+        register,
         isLoading,
         user,
+        username,
         email,
         password,
     };

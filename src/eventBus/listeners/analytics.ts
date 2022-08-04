@@ -42,5 +42,8 @@ export default {
   },
   logged_in: () => {
     event('login');
+  },
+  registered: () => {
+    event('sign_up');
   }
 } as Record<eventTypes, any>;

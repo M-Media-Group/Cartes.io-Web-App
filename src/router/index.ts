@@ -58,6 +58,12 @@ const routes: Array<RouteRecordRaw> = [
             import(/* webpackChunkName: "ar" */ "@/views/auth/LoginView.vue"),
     },
     {
+        path: "/register",
+        name: "Register",
+        component: () =>
+            import(/* webpackChunkName: "ar" */ "@/views/auth/RegisterView.vue"),
+    },
+    {
         path: "/me",
         name: "MyAccount",
         component: () =>
