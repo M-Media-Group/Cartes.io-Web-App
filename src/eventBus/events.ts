@@ -4,6 +4,7 @@ export enum eventTypes {
   created_map = "created_map",
   updated_map = "updated_map",
   deleted_map = "deleted_map",
+  shared_map = "shared_map",
   created_marker = "created_marker",
   updated_marker = "updated_marker",
   deleted_marker = "deleted_marker",

@@ -33,5 +33,12 @@ export default {
   },
   viewed_page: (to: any) => {
     pageview(to);
+  },
+  shared_map: (e: { map: Map, action: string }) => {
+    alert('shared_map');
+    event('shared_map', {
+      map_id: e.map.uuid,
+      action: e.action,
+    });
   }
 } as Record<eventTypes, any>;

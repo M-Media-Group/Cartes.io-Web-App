@@ -15,6 +15,8 @@ import { useMapPosition } from "@/composables/mapPosition";
 import { now } from "@/composables/time";
 import { usePusher } from "@/composables/pusher";
 
+import $bus, { eventTypes } from "@/eventBus/events";
+
 const route = useRoute();
 
 const { markers, displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap, showExpired } = useMarker();
@@ -55,10 +57,15 @@ const share = async () => {
             title: "Cartes.io map",
             text: `Check out this map I made! ${url}`,
             url: url,
+        }).then(e => {
+            $bus.$emit(eventTypes.shared_map, { map: Maps.map.value, action: "navigator.share" });
+        }).catch((e) => {
+            // Just need an empty catch to avoid the error
         });
     } else {
         // Copy to clipboard
         await navigator.clipboard.writeText(url);
+        $bus.$emit(eventTypes.shared_map, { map: Maps.map.value, action: "navigator.clipboard" });
         alert("Map link copied to clipboard!");
     }
 }
