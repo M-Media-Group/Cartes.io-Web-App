@@ -39,6 +39,17 @@ const login = async () => {
     });
 }
 
+const logout = () => {
+    // Delete all cookies
+    axios.post("/logout").then(() => {
+        $bus.$emit(eventTypes.logged_out, user.value);
+        user.value = null;
+        router.push("/login");
+    }).catch((error) => {
+        console.log("Logout error", error);
+    });
+}
+
 const getCsrfToken = () => {
 
     // Remove XSRF-TOKEN cookie and header
@@ -93,6 +104,7 @@ export function useUser() {
         login,
         getUser,
         getPersonalAccessTokens,
+        logout,
         isLoading,
         user,
         email,

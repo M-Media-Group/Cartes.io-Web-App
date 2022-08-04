@@ -2,7 +2,7 @@
 import AppLayout from "@/templates/AppLayout.vue";
 import { useUser } from "@/composables/user";
 
-const { email, password, login } = useUser();
+const { email, password, login, isLoading } = useUser();
 
 </script>
 <template>
@@ -12,10 +12,10 @@ const { email, password, login } = useUser();
                 <div>
                     <div class="headings">
                         <h1>Login</h1>
-                        {{ email }}
                         <h2>Login to Cartes.io</h2>
                     </div>
-                    <form @submit.prevent="login()">
+                    <form @submit.prevent="login()"
+                        :disabled="isLoading">
                         <input type="text"
                             name="login"
                             placeholder="Login"
@@ -40,6 +40,7 @@ const { email, password, login } = useUser();
                             </label>
                         </fieldset>
                         <button type="submit"
+                            :disabled="isLoading"
                             class="contrast">Login</button>
                     </form>
                 </div>

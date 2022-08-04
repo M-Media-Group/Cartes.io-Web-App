@@ -4,7 +4,7 @@ import { PersonalAccessToken } from "@/types/user";
 import { useUser } from '@/composables/user';
 import { ref } from "vue";
 
-const { user, isLoading, getPersonalAccessTokens } = useUser();
+const { user, isLoading, getPersonalAccessTokens, logout } = useUser();
 
 const accessTokens = ref<PersonalAccessToken[]>([]);
 getPersonalAccessTokens().then(tokens => accessTokens.value = tokens);
@@ -55,6 +55,20 @@ getPersonalAccessTokens().then(tokens => accessTokens.value = tokens);
                             <span>created {{ token.created_at }}</span>
                         </li>
                     </ul>
+                </article>
+            </section>
+            <section>
+                <div class="headings">
+                    <h2>Log out</h2>
+                    <p></p>
+                </div>
+
+                <article :aria-busy="isLoading">
+                    <a v-if="user"
+                        @click.prevent="logout()"
+                        role="button"
+                        href="#"
+                        class="contrast">Log out</a>
                 </article>
             </section>
         </div>
