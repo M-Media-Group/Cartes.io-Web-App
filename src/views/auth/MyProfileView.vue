@@ -47,12 +47,12 @@ getPersonalAccessTokens().then(tokens => accessTokens.value = tokens);
                 </div>
 
                 <article>
-                    <header>All access tokens</header>
+                    <!-- <header>All access tokens</header> -->
                     <!-- List of user attributes -->
                     <ul>
                         <li v-for="token in accessTokens">
-                            <strong>{{ token.name ?? "Untitled token" }}</strong>
-                            <span>Created {{ token.created_at }}</span>
+                            <strong>{{ token.name ?? "Untitled token" }}: </strong>
+                            <span>created {{ token.created_at }}</span>
                         </li>
                     </ul>
                 </article>

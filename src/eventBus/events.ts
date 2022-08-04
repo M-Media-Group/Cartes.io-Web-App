@@ -12,6 +12,7 @@ export enum eventTypes {
   went_offline = "went_offline",
   came_online = "came_online",
   viewed_page = "viewed_page",
+  logged_in = "logged_in",
 }
 
 type EventsObject = { [P in eventTypes]?: any };

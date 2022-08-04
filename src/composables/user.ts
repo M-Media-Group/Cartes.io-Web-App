@@ -2,6 +2,7 @@ import { Ref, ref } from "vue";
 import axios from "axios";
 import { PersonalAccessToken, User } from "@/types/user";
 import router from "@/router";
+import $bus, { eventTypes } from "@/eventBus/events";
 
 const user = ref(null) as Ref<User | null>;
 
@@ -27,6 +28,7 @@ const login = async () => {
         email: email.value,
         password: password.value,
     }).then((response) => {
+        $bus.$emit(eventTypes.logged_in);
         router.push("/");
         getUser();
     }).catch((error) => {
