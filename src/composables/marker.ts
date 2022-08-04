@@ -108,6 +108,10 @@ export function useMarker() {
     });
 
     const getAllMarkersForMap = async (mapId: string) => {
+        if (!mapId) {
+            return;
+        }
+
         if (!userDevice.online) {
             return alert("You need to be online to add a marker");
         }
