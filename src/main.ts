@@ -46,6 +46,8 @@ app.provide('isConnectedToPusher', isConnectedToPusher)
 app.use(router);
 
 app.use(VueGtag, {
+    enabled: import.meta.env.PROD,
+    bootstrap: import.meta.env.PROD,
     appName: 'Cartes.io',
     config: { id: import.meta.env.VITE_GA_MEASUREMENT_ID },
     pageTrackerEnabled: false,
