@@ -8,6 +8,7 @@ import {
     LPopup,
 } from "@vue-leaflet/vue-leaflet";
 import MarkerCluster from "./MarkerCluster.vue";
+import $bus, { eventTypes } from "@/eventBus/events";
 
 const props = defineProps({
     mapId: {
@@ -34,6 +35,10 @@ const groupedMarkersByCategory = computed(() => {
     return groupedMarkers;
 });
 
+const handleMarkerClick = (marker: Marker) => {
+    $bus.$emit(eventTypes.opened_marker_popup, marker);
+}
+
 </script>
 
 <template>
@@ -49,7 +54,8 @@ const groupedMarkersByCategory = computed(() => {
 
         <l-marker v-for="marker in markers"
             :lat-lng="[marker.location.coordinates[1], marker.location.coordinates[0]]"
-            :key="'map-' + mapId + '|' + marker.id + '-marker'">
+            :key="'map-' + mapId + '|' + marker.id + '-marker'"
+            @click="handleMarkerClick(marker)">
             <l-icon :icon-url="marker.category?.icon ?? '/images/marker-01.svg'"
                 :icon-size="[30, 30]"
                 :icon-anchor="[15, 25]" />

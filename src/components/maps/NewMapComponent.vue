@@ -77,7 +77,6 @@ const openAddMarkerPopup = (event: { latlng: any; }) => {
   if (addMarkerPopup.value && event.latlng) {
     contextMenuPosition.value = event.latlng;
     addMarkerPopup.value.leafletObject.openPopup(contextMenuPosition.value);
-    $bus.$emit(eventTypes.viewed_marker_details, event);
     if (canCreateMarkerForMapByMapId(props.mapId)) {
       addMarkerForm.value.focusMultiselect();
     }

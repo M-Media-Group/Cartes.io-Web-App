@@ -25,6 +25,12 @@ export default {
       category_id: e.category.id,
     });
   },
+  opened_marker_popup: (e: Marker) => {
+    event('opened_marker_popup', {
+      marker_id: e.id,
+      category_id: e.category.id,
+    });
+  },
   viewed_page: (to: any) => {
     pageview(to);
   }
