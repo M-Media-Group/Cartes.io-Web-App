@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Ref, ref } from 'vue';
 import { Map } from '@/types/map';
 import { useMarker } from '@/composables/marker';
+import { useUser } from '@/composables/user.js';
 
 const url = import.meta.env.VITE_API_URL;
 
@@ -62,6 +63,8 @@ if (ids.length > 0) {
         });
 }
 
+const { user } = useUser();
+
 </script>
 <template>
     <AppLayout>
@@ -80,9 +83,16 @@ if (ids.length > 0) {
                         </button>
 
                         <div>
-                            <a role="button"
+                            <a v-if="!user"
+                                role="button"
                                 class="secondary"
-                                :href="url + '/register'">Sign up, if you want</a>
+                                :href="url + '/register'">Sign up, if you want
+                            </a>
+                            <router-link class="secondary"
+                                role="button"
+                                v-else
+                                to="/me">My account
+                            </router-link>
                         </div>
                     </div>
                 </div>
