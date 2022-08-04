@@ -83,11 +83,11 @@ const { user } = useUser();
                         </button>
 
                         <div>
-                            <a v-if="!user"
+                            <router-link class="secondary"
                                 role="button"
-                                class="secondary"
-                                :href="url + '/register'">Sign up, if you want
-                            </a>
+                                v-if="!user"
+                                to="/register">Sign up, if you want
+                            </router-link>
                             <router-link class="secondary"
                                 role="button"
                                 v-else
