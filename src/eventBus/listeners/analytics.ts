@@ -35,7 +35,6 @@ export default {
     pageview(to);
   },
   shared_map: (e: { map: Map, action: string }) => {
-    alert('shared_map');
     event('shared_map', {
       map_id: e.map.uuid,
       action: e.action,
