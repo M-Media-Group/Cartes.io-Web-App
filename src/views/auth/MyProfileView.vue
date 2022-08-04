@@ -6,7 +6,8 @@ import { ref } from "vue";
 
 const { user, isLoading, getPersonalAccessTokens } = useUser();
 
-const accessTokens = getPersonalAccessTokens() as PersonalAccessToken[];
+const accessTokens = ref<PersonalAccessToken[]>([]);
+getPersonalAccessTokens().then(tokens => accessTokens.value = tokens);
 
 </script>
 <template>

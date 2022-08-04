@@ -74,13 +74,16 @@ const getUser = async () => {
 }
 
 const getPersonalAccessTokens = () => {
-    axios.get('/oauth/personal-access-tokens').then((response) => {
+    return axios.get('/oauth/personal-access-tokens').then((response) => {
+        if (!user.value) {
+            return [] as PersonalAccessToken[];
+        }
+        user.value.personal_access_tokens = response.data;
         return response.data as PersonalAccessToken[];
     }).catch((error) => {
         console.log("Personal access tokens error", error);
-        return [];
+        return [] as PersonalAccessToken[];
     });
-    return [];
 }
 
 export function useUser() {

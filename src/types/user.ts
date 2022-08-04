@@ -9,6 +9,7 @@ export interface User {
     seen_at: Date;
     created_at: Date;
     updated_at: Date;
+    personal_access_tokens?: PersonalAccessToken[];
 }
 
 export interface PersonalAccessToken {
