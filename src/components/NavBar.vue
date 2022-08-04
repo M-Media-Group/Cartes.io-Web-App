@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { useMap } from '@/composables/map';
+
+import { useUser } from '@/composables/user';
+
 const Maps = useMap();
-const url = import.meta.env.VITE_API_URL + "/login";
+
+const { user, isLoading } = useUser();
 </script>
 
 <template>
@@ -14,7 +18,16 @@ const url = import.meta.env.VITE_API_URL + "/login";
             </li>
         </ul>
         <ul>
-            <li><a :href="url">Login</a></li>
+            <li>
+                <router-link v-if="user?.id"
+                    to='/'>{{ user.username }}
+                </router-link>
+                <router-link v-else
+                    :aria-busy="isLoading"
+                    :disabled="isLoading"
+                    to='/login'>{{ isLoading ? '' : 'Login' }}
+                </router-link>
+            </li>
             <li>
                 <button @click="Maps.addMap(null, true)">New map</button>
             </li>

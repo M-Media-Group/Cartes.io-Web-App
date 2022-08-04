@@ -1,6 +1,7 @@
 import { Ref, ref } from "vue";
 import axios from "axios";
 import { User } from "@/types/user";
+import router from "@/router";
 
 const user = ref(null) as Ref<User | null>;
 
@@ -25,47 +26,48 @@ const login = async () => {
     axios.post("/login", {
         email: email.value,
         password: password.value,
-    }, { withCredentials: true }).then((response) => {
+    }).then((response) => {
+        router.push("/");
         getUser();
     }).catch((error) => {
         console.log("Login error", error);
         alert(error.response.data.message);
-    }).finally(() => {
         isLoading.value = false;
+
     });
 }
 
 const getCsrfToken = () => {
-    isLoading.value = true;
 
     // Remove XSRF-TOKEN cookie and header
     axios.defaults.headers.common["X-CSRF-TOKEN"] = "";
     document.cookie = "XSRF-TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-    return axios.get("/csrf-token", { withCredentials: true }).then((response) => {
+    return axios.get("/csrf-token").then((response) => {
         // Set the incoming cookies to the cookie jar
-        console.log(response.headers);
         axios.defaults.headers.common["X-XSRF-TOKEN"] = response.data;
         return response.data;
     }).catch((error) => {
         console.log("CSRF token error", error);
         alert(error.response.data.message);
-    }).finally(() => {
-        isLoading.value = false;
     });
 }
 
 const getUser = async () => {
 
-    // We need to get another token - this one will come with a laravel_token which we will use to auth all our API calls later on
-    await getCsrfToken();
+    isLoading.value = true;
+
+    // Check if axios has a laravel_token cookie
+    const laravel_token = document.cookie.match(/laravel_token=([^;]+)/);
+    if (!laravel_token) {
+        // We need to get another token - this one will come with a laravel_token which we will use to auth all our API calls later on
+        await getCsrfToken();
+    }
 
     axios.get("/api/user", { withCredentials: true }).then((response) => {
-        console.log("User: ", response.data, response);
         authenticateUser(response.data);
     }).catch((error) => {
         console.log("User error", error);
-        alert(error.response.data.message);
     }).finally(() => {
         isLoading.value = false;
     });
@@ -74,6 +76,8 @@ const getUser = async () => {
 export function useUser() {
     return {
         login,
+        getUser,
+        isLoading,
         user,
         email,
         password,
