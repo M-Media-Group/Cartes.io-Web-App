@@ -46,7 +46,8 @@ app.provide('isConnectedToPusher', isConnectedToPusher)
 app.use(router);
 
 app.use(VueGtag, {
+    appName: 'Cartes.io',
     config: { id: import.meta.env.VITE_GA_MEASUREMENT_ID }
-})
+}, router);
 
 app.mount('#app')
