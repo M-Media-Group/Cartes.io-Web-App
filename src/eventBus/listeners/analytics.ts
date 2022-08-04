@@ -1,11 +1,16 @@
 import { Map } from '@/types/map';
 import { Marker } from '@/types/marker';
-import { event } from 'vue-gtag'
+import { event, pageview } from 'vue-gtag'
 import { eventTypes } from '../events';
 
 export default {
   created_map: (e: Map) => {
     event('created_map');
+  },
+  updated_map: (e: Map) => {
+    event('updated_map', {
+      map_id: e.uuid,
+    });
   },
   deleted_map: (e: Map) => {
     event('deleted_map');
@@ -19,5 +24,8 @@ export default {
     event('deleted_marker', {
       category_id: e.category.id,
     });
+  },
+  viewed_page: (to: any) => {
+    pageview(to);
   }
 } as Record<eventTypes, any>;

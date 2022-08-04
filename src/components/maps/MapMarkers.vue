@@ -3,16 +3,9 @@ import { useMarker } from '@/composables/marker';
 import { Marker } from '@/types/marker';
 import { computed, PropType } from 'vue';
 import {
-    LMap,
     LIcon,
-    LTileLayer,
     LMarker,
-    LControlLayers,
-    LTooltip,
     LPopup,
-    LLayerGroup,
-    LFeatureGroup,
-    LControl,
 } from "@vue-leaflet/vue-leaflet";
 import MarkerCluster from "./MarkerCluster.vue";
 
@@ -56,8 +49,8 @@ const groupedMarkersByCategory = computed(() => {
 
         <l-marker v-for="marker in markers"
             :lat-lng="[marker.location.coordinates[1], marker.location.coordinates[0]]"
-            :key="marker.id + 'marker'">
-            <l-icon :icon-url="marker.category.icon"
+            :key="'map-' + mapId + '|' + marker.id + '-marker'">
+            <l-icon :icon-url="marker.category?.icon ?? '/images/marker-01.svg'"
                 :icon-size="[30, 30]"
                 :icon-anchor="[15, 25]" />
             <l-popup>

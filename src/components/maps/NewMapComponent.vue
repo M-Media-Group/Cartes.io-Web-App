@@ -3,11 +3,8 @@
 import { Marker } from "@/types/marker";
 import {
   LMap,
-  LIcon,
   LTileLayer,
-  LMarker,
   LControlLayers,
-  LTooltip,
   LPopup,
   LLayerGroup,
   LControl,
@@ -28,6 +25,7 @@ import MapMarkers from "./MapMarkers.vue";
 import { useMap } from "@/composables/map";
 import { useMapPosition } from "@/composables/mapPosition";
 import { Map } from "@/types/map";
+import $bus, { eventTypes } from "@/eventBus/events";
 
 const isOnline = computed(() => {
   return userDevice.online;
@@ -79,6 +77,7 @@ const openAddMarkerPopup = (event: { latlng: any; }) => {
   if (addMarkerPopup.value && event.latlng) {
     contextMenuPosition.value = event.latlng;
     addMarkerPopup.value.leafletObject.openPopup(contextMenuPosition.value);
+    $bus.$emit(eventTypes.viewed_marker_details, event);
     if (canCreateMarkerForMapByMapId(props.mapId)) {
       addMarkerForm.value.focusMultiselect();
     }

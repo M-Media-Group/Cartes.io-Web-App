@@ -114,6 +114,10 @@ export function useMarker() {
 
         const data = await cartes.maps(mapId).markers().addParam('show_expired', 'true').get();
 
+        if (!data) {
+            return [];
+        }
+
         data.forEach((marker: Marker) => {
             if (marker.category.icon && !marker.category.icon.startsWith("https")) {
                 marker.category.icon = "/marker.svg";

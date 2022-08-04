@@ -51,7 +51,10 @@ const debounce = (callback: () => void, time: number) => {
 };
 
 const myDebounce = debounce(() => {
-    router?.replace({ query: currentPosition.value })
+    if (!currentPosition.value.lat || !currentPosition.value.lng) {
+        return;
+    }
+    router.replace({ query: currentPosition.value })
     // window.history.replaceState({}, "", url.href);
 }, 300);
 

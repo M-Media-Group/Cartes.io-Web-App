@@ -7,8 +7,10 @@ export enum eventTypes {
   created_marker = "created_marker",
   updated_marker = "updated_marker",
   deleted_marker = "deleted_marker",
+  viewed_marker_details = "viewed_marker_details",
   went_offline = "went_offline",
   came_online = "came_online",
+  viewed_page = "viewed_page",
 }
 
 type EventsObject = { [P in eventTypes]?: any };
