@@ -5,6 +5,7 @@ import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
 import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { Marker } from "@/types/marker";
+import router from "@/router";
 
 const maps = ref<Map[]>([]);
 
@@ -199,7 +200,7 @@ export function useMap() {
             .then((data: Map) => {
                 localStorage["map_" + data.uuid] = data.token;
                 if (redirect) {
-                    window.location.href = "/maps/" + data.uuid;
+                    router.push("/maps/" + data.uuid);
                     $bus.$emit(eventTypes.created_map, data);
                 }
                 emit("addedMap", data);
