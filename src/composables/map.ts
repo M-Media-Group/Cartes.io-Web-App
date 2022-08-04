@@ -71,11 +71,11 @@ export function useMap() {
         }
         selectedMapUuid.value = mapId;
         if (mapExistsInMapsArray(mapId)) {
-            return map;
+            return map.value;
         }
         const data = await cartes.maps(mapId).get();
         maps.value.push(data);
-        return map;
+        return map.value;
     }
 
     const getMapFromMapsArray = (mapId: string) => {

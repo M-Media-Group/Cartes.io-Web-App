@@ -53,6 +53,7 @@ router.beforeEach(async (to, from) => {
             // pass the map to the view
             if (map) {
                 to.params.map = map as any;
+                document.title = map.title + " - Cartes.io" ?? "Untitled map - Cartes.io";
             }
         }).catch((e) => {
             alert(e.message);
