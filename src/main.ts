@@ -47,7 +47,8 @@ app.use(router);
 
 app.use(VueGtag, {
     appName: 'Cartes.io',
-    config: { id: import.meta.env.VITE_GA_MEASUREMENT_ID }
+    config: { id: import.meta.env.VITE_GA_MEASUREMENT_ID },
+    pageTrackerEnabled: false,
 }, router);
 
 app.mount('#app')

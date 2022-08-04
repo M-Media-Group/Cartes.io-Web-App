@@ -51,7 +51,7 @@ const debounce = (callback: () => void, time: number) => {
 };
 
 const myDebounce = debounce(() => {
-    if (!currentPosition.value.lat || !currentPosition.value.lng) {
+    if (!currentPosition.value.lat || !currentPosition.value.lng || !router.currentRoute.value.params.mapId) {
         return;
     }
     router.replace({ query: currentPosition.value })

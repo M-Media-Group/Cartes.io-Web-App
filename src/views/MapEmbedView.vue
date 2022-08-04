@@ -27,11 +27,11 @@ onMounted(() => {
         getAllMarkersForMap(mapId);
         Maps.getRelatedMaps(mapId);
         listenForMarkerChangesOnMap(mapId);
-        Maps.getMap(mapId).then(() => {
-            if (!Maps.map.value) {
+        Maps.getMap(mapId).then((map) => {
+            if (!map) {
                 return;
             }
-            canCreateMarkers.value = Maps.canCreateMarkers(Maps.map.value);
+            canCreateMarkers.value = Maps.canCreateMarkers(map);
         });
     } else {
         Maps.getAllMaps();
