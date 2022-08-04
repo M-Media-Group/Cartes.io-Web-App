@@ -10,3 +10,29 @@ export interface User {
     created_at: Date;
     updated_at: Date;
 }
+
+export interface PersonalAccessToken {
+    id: string;
+    user_id: number;
+    client_id: number;
+    name: string | null;
+    scopes: any[];
+    revoked: boolean;
+    created_at: Date;
+    updated_at: Date;
+    expires_at: Date;
+    client?: Client;
+}
+
+export interface Client {
+    id: number;
+    user_id: null;
+    name: string;
+    provider: null;
+    redirect: string;
+    personal_access_client: boolean;
+    password_client: boolean;
+    revoked: boolean;
+    created_at: Date;
+    updated_at: Date;
+}

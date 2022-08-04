@@ -1,6 +1,6 @@
 import { Ref, ref } from "vue";
 import axios from "axios";
-import { User } from "@/types/user";
+import { PersonalAccessToken, User } from "@/types/user";
 import router from "@/router";
 
 const user = ref(null) as Ref<User | null>;
@@ -73,10 +73,21 @@ const getUser = async () => {
     });
 }
 
+const getPersonalAccessTokens = () => {
+    axios.get('/oauth/personal-access-tokens').then((response) => {
+        return response.data as PersonalAccessToken[];
+    }).catch((error) => {
+        console.log("Personal access tokens error", error);
+        return [];
+    });
+    return [];
+}
+
 export function useUser() {
     return {
         login,
         getUser,
+        getPersonalAccessTokens,
         isLoading,
         user,
         email,
