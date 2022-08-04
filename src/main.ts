@@ -14,6 +14,7 @@ const app = createApp(App)
 app.config.globalProperties.window = window
 
 axios.defaults.baseURL = 'https://cartes.io';
+axios.defaults.withCredentials = true;
 
 declare global {
     interface Window {

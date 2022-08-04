@@ -2,6 +2,7 @@ import { useMap } from "@/composables/map";
 import { Map } from "@/types/map";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import $bus, { eventTypes } from "@/eventBus/events";
+import { setMetaAttributes, setFollow, setTitle, setDescription } from "./metaTagsHandler";
 
 const Maps = useMap();
 
@@ -18,6 +19,19 @@ const routes: Array<RouteRecordRaw> = [
         name: "Home",
         component: () =>
             import(/* webpackChunkName: "home" */ "@/views/HomeView.vue"),
+        meta: {
+            // title: 'About Page - Example App',
+            // metaTags: [
+            //     {
+            //         name: 'description',
+            //         content: 'The about page of our example app.'
+            //     },
+            //     {
+            //         property: 'og:description',
+            //         content: 'The about page of our example app.'
+            //     }
+            // ]
+        },
     },
     {
         path: "/maps/:mapId",
@@ -54,11 +68,11 @@ const router = createRouter({
     },
 });
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to, from, next) => {
     if (pathStayedTheSame(to, from)) {
-        return;
+        return next();
     }
-    document.title = (to.name as string) ?? "Cartes.io";
+    setMetaAttributes(to, from, next);
     // We are using beforeEach instead of beforeEnter on the individual route because beforeEach is also called when the view/component updates (when going from one mapId to another)
     if (to.params.mapId) {
         await Maps.getMap(to.params.mapId as string).then((map) => {
@@ -67,7 +81,11 @@ router.beforeEach(async (to, from) => {
                 to.params.map = map as any;
                 const newName = (map.title ?? "Untitled map") + " - Cartes.io";
                 // to.name = newName;
-                document.title = newName;
+                setTitle(newName);
+                setDescription(map.description);
+                if (map.privacy === "private" || map.privacy === "unlisted") {
+                    setFollow(false);
+                }
             }
         }).catch((e) => {
             alert(e.message);
@@ -75,6 +93,7 @@ router.beforeEach(async (to, from) => {
             return false
         });
     }
+    next();
 })
 
 router.afterEach((to, from, failure) => {
