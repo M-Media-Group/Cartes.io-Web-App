@@ -25,6 +25,7 @@ const termsAndConditionsAccepted = ref(false);
                             aria-label="Username"
                             autocomplete="nickname"
                             required
+                            autofocus
                             v-model="username">
                         <input type="email"
                             name="email"
@@ -35,8 +36,8 @@ const termsAndConditionsAccepted = ref(false);
                             v-model="email">
                         <input type="password"
                             name="password"
-                            placeholder="Password"
-                            aria-label="Password"
+                            placeholder="New password"
+                            aria-label="New password"
                             autocomplete="current-password"
                             required
                             v-model="password">

@@ -22,6 +22,7 @@ const { email, password, login, isLoading } = useUser();
                             aria-label="Email"
                             autocomplete="email"
                             required
+                            autofocus
                             v-model="email">
                         <input type="password"
                             name="password"
