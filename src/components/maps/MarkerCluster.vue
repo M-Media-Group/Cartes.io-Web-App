@@ -11,20 +11,16 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import {
     inject,
-    InjectionKey,
     nextTick,
     onBeforeUnmount,
     onMounted,
     provide,
-    Ref,
     ref,
     useAttrs,
     useSlots,
-    VueElement,
 } from "vue";
 import { propsBinder, remapEvents } from "@vue-leaflet/vue-leaflet/src/utils";
 import {
-    render,
     setup as layerSetup,
 } from "@vue-leaflet/vue-leaflet/src/functions/layer";
 
@@ -67,7 +63,7 @@ const context = { props, attrs, slots };
 const { methods } = layerSetup(props, leafletRef, context);
 
 onMounted(async () => {
-    const { DomEvent, marker } = await import("leaflet/dist/leaflet-src.esm");
+    const { DomEvent } = await import("leaflet/dist/leaflet-src.esm");
 
     const { MarkerClusterGroup } = await import(
         "leaflet.markercluster/dist/leaflet.markercluster-src.js"

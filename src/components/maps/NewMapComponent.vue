@@ -16,20 +16,13 @@ import AddMarkerForm from "@/components/AddMarkerForm.vue";
 
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
-import { computed, nextTick, PropType, provide, ref, watch } from "vue";
+import { nextTick, PropType, ref, watch } from "vue";
 import { useMarker } from "@/composables/marker";
-import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
 import userDevice from "@/classes/userDevice";
-import MapMarker from "./MapMarker.vue";
 import MapMarkers from "./MapMarkers.vue";
-import { useMap } from "@/composables/map";
 import { useMapPosition } from "@/composables/mapPosition";
 import { Map } from "@/types/map";
-import $bus, { eventTypes } from "@/eventBus/events";
 
-const isOnline = computed(() => {
-  return userDevice.online;
-});
 
 const props = defineProps({
   showAr: {
@@ -66,8 +59,6 @@ const leafletObject = ref();
 const addMarkerPopup = ref();
 
 const addMarkerForm = ref<any>();
-
-const canPost = "only_logged_in";
 
 const { center, zoom, contextMenuPosition, maxBounds, } = useMapPosition();
 
@@ -121,7 +112,7 @@ const searchControl = new (GeoSearchControl as any)(geosearchControlOptions);
 // provide('searchResults', searchResults);
 
 //Bounds set slightly higher than actual world max to create a "padding" on the map
-watch(ready, (newValue) => {
+watch(ready, () => {
   leafletObject.value.addControl(searchControl);
   leafletObject.value.on('geosearch/showlocation', goToLocation);
 });

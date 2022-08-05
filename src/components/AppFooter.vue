@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const url = import.meta.env.VITE_API_URL;
+// const url = import.meta.env.VITE_API_URL;
 </script>
 <template>
     <div>This is a beta version of Cartes.io v2

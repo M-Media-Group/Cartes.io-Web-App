@@ -58,7 +58,7 @@ const canSubmit = computed(() => {
     (props.showLinkInput === 'optional' || props.showLinkInput === 'disabled' || submitData.link)
 });
 
-watch(submitData, (newValue, oldValue) => {
+watch(submitData, () => {
 
   // Clear all the formErrors
   Object.keys(formErrors).forEach((key) => {

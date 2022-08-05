@@ -1,13 +1,13 @@
 
 <script setup lang="ts">
-import { onBeforeMount, onBeforeUnmount, onMounted, ref, defineAsyncComponent, computed, watch, Ref } from "vue";
+import { ref, defineAsyncComponent, watch, Ref } from "vue";
 import { useMarker } from "@/composables/marker";
 import { useMap } from "@/composables/map";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
 
-const { displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap, showExpired } = useMarker();
+const { displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap } = useMarker();
 
 const Maps = useMap();
 

@@ -9,7 +9,7 @@ import { useRoute } from "vue-router";
 
 const route = useRoute();
 
-const { displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap, showExpired } = useMarker();
+const { displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap } = useMarker();
 
 const Maps = useMap();
 

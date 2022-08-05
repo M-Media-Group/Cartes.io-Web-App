@@ -1,10 +1,9 @@
 
 <script setup lang="ts">
-import { onBeforeMount, onBeforeUnmount, onMounted, ref, defineAsyncComponent, computed, watch, Ref } from "vue";
+import { ref, computed, watch, Ref } from "vue";
 import NewMapComponent from "@/components/maps/NewMapComponent.vue"
 import { useMarker } from "@/composables/marker";
 import { useMap } from "@/composables/map";
-import userDevice from "@/classes/userDevice";
 import MapCards from "@/components/maps/MapCards.vue";
 import EditMapForm from "@/components/maps/EditMapForm.vue";
 import DeveloperInfo from "@/components/DeveloperInfo.vue";
@@ -51,15 +50,15 @@ const share = async () => {
     // Current url
     const url = window.location.href;
     // Trigger the Share Web API, or copy to clipboard if not supported
-    const sharer = navigator.share;
+    navigator.share;
     if (navigator.share) {
         await navigator.share({
             title: "Cartes.io map",
             text: `Check out this map I made! ${url}`,
             url: url,
-        }).then(e => {
+        }).then(() => {
             $bus.$emit(eventTypes.shared_map, { map: Maps.map.value, action: "navigator.share" });
-        }).catch((e) => {
+        }).catch(() => {
             // Just need an empty catch to avoid the error
         });
     } else {

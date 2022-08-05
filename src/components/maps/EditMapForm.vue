@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useMap } from '@/composables/map';
 import { Map } from '@/types/map';
-import { Marker } from '@/types/marker';
-import { PropType, reactive, watch } from 'vue';
+import { PropType, reactive } from 'vue';
 import { useUser } from '@/composables/user';
 
 const { user } = useUser();
@@ -148,7 +147,7 @@ const settings = reactive({
     },
 })
 
-const updateMapSettings = (mapId: string, settings: any) => {
+const updateMapSettings = (map: Map, settings: any) => {
 
     // Simplify each nested data object to just key: value
     const settingsToUpdateSimplified = Object.keys(settings).reduce((acc: any, key) => {
@@ -176,13 +175,13 @@ const updateMapSettings = (mapId: string, settings: any) => {
     }, {});
 
 
-    Maps.updateMap(props.map, settingsToUpdate);
+    Maps.updateMap(map, settingsToUpdate);
 }
 </script>
 
 <template>
     <div>
-        <form @submit.prevent="updateMapSettings(map.uuid, settings)">
+        <form @submit.prevent="updateMapSettings(map, settings)">
             <div v-for="(setting, key) in settings"
                 :key="key">
                 <label>{{ setting.title }}

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMarker } from '@/composables/marker';
 import { Marker } from '@/types/marker';
-import { computed, inject, PropType } from 'vue';
+import { PropType } from 'vue';
 import {
     LIcon,
     LMarker,
@@ -10,7 +10,7 @@ import {
 import MarkerCluster from "./MarkerCluster.vue";
 import $bus, { eventTypes } from "@/eventBus/events";
 
-const props = defineProps({
+defineProps({
     mapId: {
         type: String,
         required: true,
@@ -21,19 +21,19 @@ const props = defineProps({
     },
 })
 
-const { canDeleteMarker, deleteMarker, canCreateMarker } = useMarker();
+const { canDeleteMarker, deleteMarker } = useMarker();
 
-const groupedMarkersByCategory = computed(() => {
-    const markers = props.markers;
-    const groupedMarkers = {} as Record<number, Marker[]>;
-    markers.forEach(marker => {
-        if (!groupedMarkers[marker.category_id]) {
-            groupedMarkers[marker.category_id] = [];
-        }
-        groupedMarkers[marker.category_id].push(marker);
-    });
-    return groupedMarkers;
-});
+// const groupedMarkersByCategory = computed(() => {
+//     const markers = props.markers;
+//     const groupedMarkers = {} as Record<number, Marker[]>;
+//     markers.forEach(marker => {
+//         if (!groupedMarkers[marker.category_id]) {
+//             groupedMarkers[marker.category_id] = [];
+//         }
+//         groupedMarkers[marker.category_id].push(marker);
+//     });
+//     return groupedMarkers;
+// });
 
 const handleMarkerClick = (marker: Marker) => {
     $bus.$emit(eventTypes.opened_marker_popup, marker);

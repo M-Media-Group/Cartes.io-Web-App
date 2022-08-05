@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Marker } from '@/types/marker';
 import { PropType } from 'vue';
-import MapCard from './MapCard.vue';
 
 defineProps({
     markers: {

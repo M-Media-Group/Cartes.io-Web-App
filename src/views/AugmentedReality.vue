@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import { ref, nextTick, watch, computed, PropType, onUnmounted, onBeforeMount } from "vue";
+import { ref, computed, PropType, onUnmounted, onBeforeMount } from "vue";
 import AddMarkerForm from "@/components/AddMarkerForm.vue";
 
 import 'aframe'
@@ -95,7 +95,7 @@ const registerMarkerDistanceComponent = () => {
     tick: function () {
       this.markerDistance()
     },
-    markerDistance: function (event: any) {
+    markerDistance: function () {
       // @ts-ignore
       this.marker1.object3D.getWorldPosition(this.marker1Pos);
 
