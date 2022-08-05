@@ -16,7 +16,7 @@ import AddMarkerForm from "@/components/AddMarkerForm.vue";
 
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
-import { computed, nextTick, PropType, ref, watch } from "vue";
+import { computed, nextTick, PropType, provide, ref, watch } from "vue";
 import { useMarker } from "@/composables/marker";
 import { useUrlPositionParameters } from "@/composables/urlPositionParameters";
 import userDevice from "@/classes/userDevice";
@@ -101,7 +101,7 @@ const geosearchControlOptions = {
 
 const searchControl = new (GeoSearchControl as any)(geosearchControlOptions);
 
-const searchResults = ref();
+// const searchResults = ref();
 
 // const searchLocation = async (string: string, goTo = true) => {
 //   if (string) {
@@ -116,6 +116,9 @@ const searchResults = ref();
 //     return results;
 //   }
 // };
+
+// provide('searchLocation', searchLocation);
+// provide('searchResults', searchResults);
 
 //Bounds set slightly higher than actual world max to create a "padding" on the map
 watch(ready, (newValue) => {
@@ -229,6 +232,7 @@ const mapInstance = useMap();
   /* Internet Explorer/Edge */
 }
 
+.disable-select .leaflet-popup,
 .unset-select {
   user-select: auto;
   /* supported by Chrome and Opera */
@@ -280,7 +284,7 @@ const mapInstance = useMap();
 }
 
 .leaflet-container a {
-  color: inherit;
+  color: var(--color);
 }
 
 .leaflet-control-geosearch a.leaflet-bar-part:after,

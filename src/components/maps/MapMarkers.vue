@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMarker } from '@/composables/marker';
 import { Marker } from '@/types/marker';
-import { computed, PropType } from 'vue';
+import { computed, inject, PropType } from 'vue';
 import {
     LIcon,
     LMarker,
@@ -39,6 +39,8 @@ const handleMarkerClick = (marker: Marker) => {
     $bus.$emit(eventTypes.opened_marker_popup, marker);
 }
 
+// const searchLocation = inject('searchLocation') as (query: string, goTo: boolean) => string;
+// const searchResults = inject('searchResults');
 </script>
 
 <template>
@@ -70,24 +72,30 @@ const handleMarkerClick = (marker: Marker) => {
                                 marker.link.split("/")[2]
                         }}</a>
                 </small>
+
+                <!-- <small v-if="isMarkerExpired(marker.expires_at)" >Expired:
+            <span  :datetime="marker.expires_at">{{
+                marker.expires_at
+            }}</span>.</small> -->
+
+                <details>
+                    <summary>Location</summary>
+                    <!-- <p v-if="searchResults && searchResults[0] && searchResults[0].label">{{ searchResults[0].label }}
+                    </p>
+                    <p v-else:aria-busy="true">Searching</p> -->
+                    <small v-if="marker.elevation">Elevation:
+                        {{ marker.elevation }} meters
+                    </small>
+                    <small>Coordinates: {{ marker.location.coordinates[1] }} {{ marker.location.coordinates[0]
+                    }}</small>
+                </details>
+
                 <small>Last update:
                     <span :datetime="marker.updated_at">{{
                             marker.updated_at
                     }}</span>.
                 </small>
-                <small v-if="marker.elevation">Elevation:
-                    {{ marker.elevation }} meters
-                </small>
-                <!-- <small v-if="isMarkerExpired(marker.expires_at)" >Expired:
-            <span  :datetime="marker.expires_at">{{
-                marker.expires_at
-            }}</span>.</small> -->
-                <!-- <details >
-            <summary
-              @click='searchLocation(marker.location.coordinates[0] + " " + marker.location.coordinates[1], false)'>
-              Click to see address</summary>
-            <p>{{ searchResults }}</p>
-          </details> -->
+
                 <a href="#"
                     role="button"
                     v-if="canDeleteMarker(marker)"
@@ -102,3 +110,12 @@ const handleMarkerClick = (marker: Marker) => {
 
     <!-- </l-layer-group> -->
 </template>
+<style scoped>
+small {
+    display: inline-block;
+}
+
+.leaflet-popup-content>div>small {
+    margin-bottom: var(--spacing);
+}
+</style>
