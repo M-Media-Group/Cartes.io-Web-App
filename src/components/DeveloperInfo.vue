@@ -23,7 +23,9 @@ const url = import.meta.env.VITE_API_URL;
                 target="_BLANK">Read the docs</a>.
         </p>
         <ul>
-            <li>Use the API to get the map and markers
+            <li>Use <a href="https://github.com/M-Media-Group/Cartes.io/wiki/API"
+                    rel="noopener"
+                    target="_BLANK">the API</a> to get this map and its markers
                 <!-- Code block showing API call -->
                 <pre><code>GET {{ url }}/api/maps/{{ map.uuid }}
 GET {{ url }}/api/maps/{{ map.uuid }}/markers</code></pre>
@@ -35,15 +37,18 @@ GET {{ url }}/api/maps/{{ map.uuid }}/markers</code></pre>
   height="400"
   frameborder="0"&gt;&lt;/iframe&gt;</code></pre>
             </li>
-            <li>Shortcode using our WordPress plugin
+            <li>Shortcode using our <a target="_BLANK"
+                    href="https://wordpress.org/plugins/cartes/">WordPress plugin</a>
                 <!-- Code block showing API call -->
                 <pre><code>[cartes_map uuid="{{ map.uuid }}"]</code></pre>
             </li>
-            <li>Python using our Python package
+            <li>Python using our <a target="_BLANK"
+                    href="https://pypi.org/project/py-cartes-io/">Python package</a>
                 <!-- Code block showing API call -->
                 <pre><code>cartes.Maps('{{ map.uuid }}').get()</code></pre>
             </li>
-            <li>JS using our NPM package
+            <li>JS using our <a target="_BLANK"
+                    href="https://www.npmjs.com/package/@m-media/npm-cartes-io/">NPM package</a>
                 <!-- Code block showing API call -->
                 <pre><code>cartes.maps('{{ map.uuid }}').get()</code></pre>
             </li>
