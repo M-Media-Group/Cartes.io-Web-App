@@ -118,7 +118,8 @@ watch(() => user.value?.id, () => {
                     <article v-for="map in privateMaps"
                         :key="map.uuid">
                         <header class="full">
-                            <NewMapComponent :mapId="map.uuid"
+                            <NewMapComponent v-if="map.markers_count && map.markers_count > 0"
+                                :mapId="map.uuid"
                                 :map="map"
                                 :markers="map.markers ?? []"
                                 style="height: 400px" />
