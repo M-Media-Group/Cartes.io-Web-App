@@ -3,6 +3,7 @@ import axios from "axios";
 import { PersonalAccessToken, User } from "@/types/user";
 import router from "@/router";
 import $bus, { eventTypes } from "@/eventBus/events";
+import cartes from "@m-media/npm-cartes-io";
 
 const user = ref(null) as Ref<User | null>;
 
@@ -105,8 +106,8 @@ const getUser = async () => {
         await getCsrfToken();
     }
 
-    axios.get("/api/user").then((response) => {
-        authenticateUser(response.data);
+    cartes.me().get().then((response) => {
+        authenticateUser(response);
     }).catch((error) => {
         console.log("User error", error);
     }).finally(() => {
