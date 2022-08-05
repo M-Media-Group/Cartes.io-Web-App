@@ -105,7 +105,7 @@ const getUser = async () => {
         await getCsrfToken();
     }
 
-    axios.get("/api/user", { withCredentials: true }).then((response) => {
+    axios.get("/api/user").then((response) => {
         authenticateUser(response.data);
     }).catch((error) => {
         console.log("User error", error);
