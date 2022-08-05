@@ -9,7 +9,7 @@ import { defineComponent } from 'vue';
 
 import { useProgress } from '@marcoschulte/vue3-progress';
 
-import trickleComposable from '@marcoschulte/vue3-progress/src/trickleComposable';
+import trickleComposable from '@/composables/trickleComposable';
 
 export default defineComponent({
     name: 'Vue3ProgressBar',
