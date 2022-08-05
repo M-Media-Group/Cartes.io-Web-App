@@ -8,4 +8,4 @@ declare module 'leaflet/dist/leaflet-src.esm';
 
 declare module 'leaflet.markercluster/dist/leaflet.markercluster-src.js';
 
-declare module '@marcoschulte/vue3-progress/dist/trickleComposable';
+declare module '@marcoschulte/vue3-progress/src/trickleComposable';
