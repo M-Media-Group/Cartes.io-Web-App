@@ -191,8 +191,9 @@ export default {
   created_map: (event: Map) => {
     new CustomNotification(
       "success",
-      "Map created!",
-      ["alert"]
+      "Map created! Right click or long-tap on mobile to create a marker.",
+      ["browser"],
+      5000
     ).show();
   },
   deleted_map: (event: Map) => {
@@ -205,7 +206,14 @@ export default {
   created_marker: (event: Marker) => {
     new CustomNotification(
       "success",
-      "Marker created!",
+      event.category.name + " marker created!",
+      ["browser"]
+    ).show();
+  },
+  deleted_marker: (event: Marker) => {
+    new CustomNotification(
+      "success",
+      event.category.name + " marker deleted!",
       ["browser"]
     ).show();
   },
@@ -213,14 +221,14 @@ export default {
     new CustomNotification(
       "warning",
       "You are no longer connected to the internet",
-      ["alert"]
+      ["browser"]
     ).show();
   },
   came_online: () => {
     new CustomNotification(
       "success",
       "You are now connected to the internet",
-      ["alert"]
+      ["browser"]
     ).show();
   },
 } as Record<eventTypes, any>;
