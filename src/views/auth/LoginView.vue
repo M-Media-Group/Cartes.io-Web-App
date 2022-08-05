@@ -8,43 +8,48 @@ const { email, password, login, isLoading } = useUser();
 <template>
     <AppLayout>
         <div class="container">
-            <article class="grid">
-                <div>
-                    <div class="headings">
-                        <h1>Login</h1>
-                        <h2>Login to Cartes.io</h2>
+            <article>
+                <div class="grid">
+                    <div>
+                        <div class="headings">
+                            <h1>Login</h1>
+                            <h2>Login to Cartes.io</h2>
+                        </div>
+                        <form @submit.prevent="login()"
+                            :disabled="isLoading">
+                            <input type="email"
+                                name="email"
+                                placeholder="Email"
+                                aria-label="Email"
+                                autocomplete="email"
+                                required
+                                v-model="email">
+                            <input type="password"
+                                name="password"
+                                placeholder="Password"
+                                aria-label="Password"
+                                autocomplete="current-password"
+                                required
+                                v-model="password">
+                            <fieldset>
+                                <label for="remember">
+                                    <input type="checkbox"
+                                        role="switch"
+                                        id="remember"
+                                        name="remember">
+                                    Remember me
+                                </label>
+                            </fieldset>
+                            <button type="submit"
+                                :disabled="isLoading"
+                                class="contrast">Login</button>
+                        </form>
                     </div>
-                    <form @submit.prevent="login()"
-                        :disabled="isLoading">
-                        <input type="email"
-                            name="email"
-                            placeholder="Email"
-                            aria-label="Email"
-                            autocomplete="email"
-                            required
-                            v-model="email">
-                        <input type="password"
-                            name="password"
-                            placeholder="Password"
-                            aria-label="Password"
-                            autocomplete="current-password"
-                            required
-                            v-model="password">
-                        <fieldset>
-                            <label for="remember">
-                                <input type="checkbox"
-                                    role="switch"
-                                    id="remember"
-                                    name="remember">
-                                Remember me
-                            </label>
-                        </fieldset>
-                        <button type="submit"
-                            :disabled="isLoading"
-                            class="contrast">Login</button>
-                    </form>
+                    <img src="/images/earth.jpg" />
                 </div>
-                <img src="/images/earth.jpg" />
+                <footer>
+                    <router-link to="/register">Don't have an account? Sign up!</router-link>
+                </footer>
             </article>
         </div>
     </AppLayout>
