@@ -241,6 +241,7 @@ export function useMarker() {
                     return;
                 }
                 addMarkerToMarkerArray(e.marker, mapId);
+                $bus.$emit(eventTypes.created_marker_via_websocket, e.marker);
                 if (emit) {
                     emit("addedMarker", e.marker);
                 }
@@ -254,6 +255,7 @@ export function useMarker() {
             "MarkerDeleted",
             (e: { marker: Marker; }) => {
                 removeMarkerFromMarkerArray(e.marker, mapId);
+                $bus.$emit(eventTypes.deleted_marker_via_websocket, e.marker);
             }
         );
     }

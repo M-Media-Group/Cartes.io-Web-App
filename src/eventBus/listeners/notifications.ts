@@ -203,14 +203,14 @@ export default {
       ["alert"]
     ).show();
   },
-  created_marker: (event: Marker) => {
+  created_marker_via_websocket: (event: Marker) => {
     new CustomNotification(
       "success",
       event.category.name + " marker created!",
       ["browser"]
     ).show();
   },
-  deleted_marker: (event: Marker) => {
+  deleted_marker_via_websocket: (event: Marker) => {
     new CustomNotification(
       "success",
       event.category.name + " marker deleted!",
