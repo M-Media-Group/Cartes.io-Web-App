@@ -3,6 +3,9 @@ import { useMap } from '@/composables/map';
 import { Map } from '@/types/map';
 import { Marker } from '@/types/marker';
 import { PropType, reactive, watch } from 'vue';
+import { useUser } from '@/composables/user';
+
+const { user } = useUser();
 
 const props = defineProps({
     map: {
@@ -42,7 +45,7 @@ const settings = reactive({
                 value: 'private',
                 label: 'Private',
                 description: '',
-                disabled: true,
+                disabled: user.value?.id ? false : true,
             },
         ],
     },
