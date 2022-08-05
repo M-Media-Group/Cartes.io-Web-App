@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Ref, ref } from 'vue';
 import { Map } from '@/types/map';
 import { useMarker } from '@/composables/marker';
-import { useUser } from '@/composables/user.js';
+import { useUser } from '@/composables/user';
 
 const url = import.meta.env.VITE_API_URL;
 
