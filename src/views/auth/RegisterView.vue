@@ -7,58 +7,56 @@ const { email, password, username, register, isLoading } = useUser();
 </script>
 <template>
     <AppLayout>
-        <div class="container">
-            <article>
-                <div class="grid">
-                    <div>
-                        <div class="headings">
-                            <h1>Register</h1>
-                            <h2>Sign up to Cartes.io</h2>
-                        </div>
-                        <form @submit.prevent="register()"
-                            :disabled="isLoading">
-                            <input type="text"
-                                name="username"
-                                placeholder="Username"
-                                aria-label="Username"
-                                autocomplete="nickname"
-                                required
-                                v-model="username">
-                            <input type="email"
-                                name="email"
-                                placeholder="Email"
-                                aria-label="Email"
-                                autocomplete="email"
-                                required
-                                v-model="email">
-                            <input type="password"
-                                name="password"
-                                placeholder="Password"
-                                aria-label="Password"
-                                autocomplete="current-password"
-                                required
-                                v-model="password">
-                            <fieldset>
-                                <label for="remember">
-                                    <input type="checkbox"
-                                        role="switch"
-                                        id="remember"
-                                        name="remember">
-                                    Accept terms and conditions
-                                </label>
-                            </fieldset>
-                            <button type="submit"
-                                :disabled="isLoading"
-                                class="contrast">Register</button>
-                        </form>
+        <article>
+            <div class="grid">
+                <div>
+                    <div class="headings">
+                        <h1>Register</h1>
+                        <h2>Sign up to Cartes.io</h2>
                     </div>
-                    <img src="/images/earth.jpg" />
+                    <form @submit.prevent="register()"
+                        :disabled="isLoading">
+                        <input type="text"
+                            name="username"
+                            placeholder="Username"
+                            aria-label="Username"
+                            autocomplete="nickname"
+                            required
+                            v-model="username">
+                        <input type="email"
+                            name="email"
+                            placeholder="Email"
+                            aria-label="Email"
+                            autocomplete="email"
+                            required
+                            v-model="email">
+                        <input type="password"
+                            name="password"
+                            placeholder="Password"
+                            aria-label="Password"
+                            autocomplete="current-password"
+                            required
+                            v-model="password">
+                        <fieldset>
+                            <label for="remember">
+                                <input type="checkbox"
+                                    role="switch"
+                                    id="remember"
+                                    name="remember">
+                                Accept terms and conditions
+                            </label>
+                        </fieldset>
+                        <button type="submit"
+                            :disabled="isLoading"
+                            class="contrast">Register</button>
+                    </form>
                 </div>
-                <footer>
-                    <router-link to="/login">Already have an account? Log in!</router-link>
-                </footer>
-            </article>
-        </div>
+                <img src="/images/earth.jpg" />
+            </div>
+            <footer>
+                <router-link to="/login">Already have an account? Log in!</router-link>
+            </footer>
+        </article>
     </AppLayout>
 </template>
 <style scoped>
