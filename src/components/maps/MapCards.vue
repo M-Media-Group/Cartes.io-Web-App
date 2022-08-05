@@ -22,13 +22,6 @@ const sortedMarkers = computed(() => {
         v-if="sortedMarkers.length > 0">
         <MapCard v-for="marker in sortedMarkers"
             :key="marker.id"
-            :description="marker.description"
-            :created_at="marker.created_at"
-            :updated_at="marker.updated_at"
-            :id="marker.id"
-            :category="marker.category"
-            :link="marker.link"
-            :elevation="marker.elevation"
             :marker="marker" />
     </div>
     <div v-else>No markers yet</div>

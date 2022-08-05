@@ -1,39 +1,9 @@
 <script setup lang="ts">
 import { useMapPosition } from '@/composables/mapPosition';
-import { Category as CategoryType } from '@/types/category';
 import { Marker } from '@/types/marker';
 import { PropType } from 'vue';
 
 defineProps({
-    //   Define the props as from the marker.ts declaration
-    category: {
-        type: Object as PropType<CategoryType>,
-        required: true,
-    },
-    description: {
-        type: String as PropType<string | number | null>,
-        required: false,
-    },
-    link: {
-        type: String as PropType<string | number | null>,
-        required: false,
-    },
-    elevation: {
-        type: Number as PropType<number | string | null>,
-        required: false,
-    },
-    created_at: {
-        type: String as PropType<string | Date>,
-        required: true,
-    },
-    updated_at: {
-        type: String as PropType<string | Date>,
-        required: true,
-    },
-    id: {
-        type: Number,
-        required: true,
-    },
     marker: {
         type: Object as PropType<Marker>,
         required: true,
@@ -47,10 +17,13 @@ const handleClick = (marker: Marker) => {
     window.scrollTo(0, 0);
 
     //    Set the center
+
     center.value = {
         lat: marker.location.coordinates[1],
         lng: marker.location.coordinates[0],
     }
+
+    console.log(marker.location, center.value)
 
     zoom.value = 16;
 }
@@ -60,11 +33,11 @@ const handleClick = (marker: Marker) => {
     <div class="card"
         @click="handleClick(marker)">
         <header>
-            <h3>{{ category.name }}</h3>
+            <h3>{{ marker.category.name }}</h3>
         </header>
-        <template v-if="description">{{ description }}</template>
+        <template v-if="marker.description">{{ marker.description }}</template>
         <footer>
-            <time :datetime="created_at.toString()">{{ new Date(created_at).toLocaleString() }}</time>
+            <time :datetime="marker.created_at.toString()">{{ new Date(marker.created_at).toLocaleString() }}</time>
         </footer>
     </div>
 </template>
