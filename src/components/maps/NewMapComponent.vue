@@ -283,10 +283,6 @@ const mapInstance = useMap();
   border: unset;
 }
 
-.leaflet-container a {
-  color: var(--color);
-}
-
 .leaflet-control-geosearch a.leaflet-bar-part:after,
 .leaflet-control-geosearch a.leaflet-bar-part:before {
   border-color: inherit;
