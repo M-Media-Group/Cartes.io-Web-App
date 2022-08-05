@@ -43,6 +43,7 @@ const { email, password, login, isLoading } = useUser();
                             <button type="submit"
                                 :disabled="isLoading"
                                 class="contrast">Login</button>
+                            <a href="https://cartes.io/password/reset">Forgot your password?</a>
                         </form>
                     </div>
                     <img src="/images/earth.jpg" />
