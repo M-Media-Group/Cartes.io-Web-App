@@ -4,12 +4,15 @@ import { RouterView } from 'vue-router';
 
 // Probably better to move it, views like EmbedView dont need this
 import { useUser } from '@/composables/user';
+import ProgressBar from './components/ProgressBar.vue';
 const { getUser } = useUser();
 getUser();
 
 </script>
 
 <template>
+  <progress-bar />
+
   <router-view />
 </template>
 

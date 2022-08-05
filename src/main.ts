@@ -6,6 +6,22 @@ import router from '@/router';
 import axios from 'axios';
 import VueGtag from "vue-gtag";
 import cartes from "@m-media/npm-cartes-io";
+import { Vue3ProgressPlugin, ProgressFinisher, useProgress } from '@marcoschulte/vue3-progress';
+
+const progresses = [] as ProgressFinisher[];
+
+axios.interceptors.request.use(config => {
+    progresses.push(useProgress().start());
+    return config;
+});
+
+axios.interceptors.response.use(resp => {
+    progresses.pop()?.finish();
+    return resp;
+}, (error) => {
+    progresses.pop()?.finish();
+    return Promise.reject(error);
+});
 
 // Event bus listeners
 import "./eventBus/listeners/index";
@@ -56,5 +72,7 @@ app.use(VueGtag, {
     config: { id: import.meta.env.VITE_GA_MEASUREMENT_ID },
     pageTrackerEnabled: false,
 }, router);
+
+app.use(Vue3ProgressPlugin)
 
 app.mount('#app')
