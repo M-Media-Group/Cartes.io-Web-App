@@ -44,7 +44,7 @@ const getMyMaps = () => {
         .get("/api/maps", {
             params: {
                 ids: ids ?? [],
-                withMine: true,
+                withMine: 1,
                 orderBy: "updated_at",
             },
         })
