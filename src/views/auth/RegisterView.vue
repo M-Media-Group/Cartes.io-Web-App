@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import AppLayout from "@/templates/AppLayout.vue";
 import { useUser } from "@/composables/user";
+import { ref } from "vue";
 
 const { email, password, username, register, isLoading } = useUser();
+
+const termsAndConditionsAccepted = ref(false);
 
 </script>
 <template>
@@ -42,12 +45,15 @@ const { email, password, username, register, isLoading } = useUser();
                                 <input type="checkbox"
                                     role="switch"
                                     id="remember"
-                                    name="remember">
-                                Accept terms and conditions
+                                    name="remember"
+                                    v-model="termsAndConditionsAccepted">
+                                Accept <a href="https://cartes.io/terms-and-conditions"
+                                    target="_blank">terms and conditions</a>
                             </label>
                         </fieldset>
-                        <button type="submit"
-                            :disabled="isLoading"
+                        <button tooltip="Test"
+                            type="submit"
+                            :disabled="isLoading || !termsAndConditionsAccepted"
                             class="contrast">Register</button>
                     </form>
                 </div>
