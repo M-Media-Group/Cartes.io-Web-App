@@ -42,7 +42,7 @@ const props = defineProps({
     required: true,
   },
   map: {
-    type: Object as PropType<Map>,
+    type: Object as PropType<Map | undefined>,
     required: false,
   },
   markers: {
@@ -140,8 +140,6 @@ const setReady = async () => {
   ready.value = true;
   leafletObject.value = mapElement.value.leafletObject;
 };
-
-const mapInstance = useMap();
 
 </script>
 <template>

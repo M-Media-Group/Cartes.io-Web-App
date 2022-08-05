@@ -90,16 +90,18 @@ const handleMarkerClick = (marker: Marker) => {
                     }}</small>
                 </details>
 
+                <a href="#"
+                    role="button"
+                    v-if="canDeleteMarker(marker)"
+                    @click.prevent="deleteMarker(mapId, marker)">Delete</a>
+
+                <hr v-if="canDeleteMarker(marker)" />
+
                 <small>Last update:
                     <span :datetime="marker.updated_at">{{
                             marker.updated_at
                     }}</span>.
                 </small>
-
-                <a href="#"
-                    role="button"
-                    v-if="canDeleteMarker(marker)"
-                    @click.prevent="deleteMarker(mapId, marker)">Delete</a>
                 <!--
           <a  v-if="canMarkAsSpamPost(marker)" @click="markAsSpam(marker.id)"
             :disabled="submit_data.loading">Report as spam</a> -->
@@ -112,10 +114,6 @@ const handleMarkerClick = (marker: Marker) => {
 </template>
 <style scoped>
 small {
-    display: inline-block;
-}
-
-.leaflet-popup-content>div>small {
-    margin-bottom: var(--spacing);
+    display: block;
 }
 </style>
