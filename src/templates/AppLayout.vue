@@ -35,7 +35,7 @@ import AppFooter from "@/components/AppFooter.vue";
 /* we will explain what these classes do next! */
 .v-enter-active,
 .v-leave-active {
-    transition: opacity 0.15s ease;
+    transition: opacity 0.1s ease;
 }
 
 .v-enter-from,

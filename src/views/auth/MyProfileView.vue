@@ -40,21 +40,24 @@ getPersonalAccessTokens().then(tokens => accessTokens.value = tokens);
                     </template>
                 </article>
             </section>
-            <section v-if="accessTokens.length > 0">
+            <section>
                 <div class="headings">
                     <h2>Your API access tokens</h2>
                     <p></p>
                 </div>
 
-                <article>
-                    <!-- <header>All access tokens</header> -->
-                    <!-- List of user attributes -->
-                    <ul>
-                        <li v-for="token in accessTokens">
-                            <strong>{{ token.name ?? "Untitled token" }}: </strong>
-                            <span>created {{ token.created_at }}</span>
-                        </li>
-                    </ul>
+                <article :aria-busy="isLoading">
+                    <template v-if="!isLoading && accessTokens.length > 0">
+                        <ul>
+                            <li v-for="token in accessTokens">
+                                <strong>{{ token.name ?? "Untitled token" }}: </strong>
+                                <span>created {{ token.created_at }}</span>
+                            </li>
+                        </ul>
+                    </template>
+                    <template v-else-if="!isLoading">
+                        You have no API access tokens.
+                    </template>
                 </article>
             </section>
             <section>
