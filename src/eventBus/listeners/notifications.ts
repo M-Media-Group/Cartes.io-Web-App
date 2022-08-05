@@ -213,7 +213,7 @@ export default {
   deleted_marker_via_websocket: (event: Marker) => {
     new CustomNotification(
       "success",
-      event.category.name + " marker deleted!",
+      "Marker deleted!",
       ["browser"]
     ).show();
   },
