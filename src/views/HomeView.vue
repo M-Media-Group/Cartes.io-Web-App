@@ -3,7 +3,7 @@ import { useMap } from '@/composables/map';
 import AppLayout from "@/templates/AppLayout.vue";
 import NewMapComponent from '@/components/maps/NewMapComponent.vue';
 import axios from 'axios';
-import { Ref, ref } from 'vue';
+import { Ref, ref, watch } from 'vue';
 import { Map } from '@/types/map';
 import { useMarker } from '@/composables/marker';
 import { useUser } from '@/composables/user';
@@ -27,6 +27,8 @@ Maps.getAllMaps().then(() => {
 });
 
 const Markers = useMarker();
+const { user } = useUser();
+
 
 const privateMaps = ref([]) as Ref<Map[]>;
 
@@ -37,11 +39,12 @@ Object.keys(localStorage).forEach(function (key) {
     }
 });
 
-if (ids.length > 0) {
+const getMyMaps = () => {
     axios
         .get("/api/maps", {
             params: {
-                ids: ids,
+                ids: ids ?? [],
+                withMine: true,
                 orderBy: "updated_at",
             },
         })
@@ -63,7 +66,13 @@ if (ids.length > 0) {
         });
 }
 
-const { user } = useUser();
+if (ids.length > 0 || user.value?.id) {
+    getMyMaps();
+}
+
+watch(() => user.value?.id, () => {
+    getMyMaps();
+});
 
 </script>
 <template>
