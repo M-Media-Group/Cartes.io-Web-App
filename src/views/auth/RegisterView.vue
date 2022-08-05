@@ -15,7 +15,7 @@ const { email, password, username, register, isLoading } = useUser();
                         <h2>Sign up to Cartes.io</h2>
                     </div>
                     <form @submit.prevent="register()"
-                        :disabled="isLoading">
+                        :disabled="isLoading ? 'disabled' : null">
                         <input type="text"
                             name="username"
                             placeholder="Username"

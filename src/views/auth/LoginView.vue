@@ -15,7 +15,7 @@ const { email, password, login, isLoading } = useUser();
                         <h2>Login to Cartes.io</h2>
                     </div>
                     <form @submit.prevent="login()"
-                        :disabled="isLoading">
+                        :disabled="isLoading ? 'disabled' : null">
                         <input type="email"
                             name="email"
                             placeholder="Email"

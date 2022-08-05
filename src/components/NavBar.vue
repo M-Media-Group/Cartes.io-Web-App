@@ -24,7 +24,7 @@ const { user, isLoading } = useUser();
                 </router-link>
                 <router-link v-else
                     :aria-busy="isLoading"
-                    :disabled="isLoading"
+                    :disabled="isLoading ? 'disabled' : null"
                     to='/login'>{{ isLoading ? '' : 'Login' }}
                 </router-link>
             </li>
