@@ -128,11 +128,26 @@ const getPersonalAccessTokens = () => {
     });
 }
 
+const createPersonalAccessToken = (name: string) => {
+    return axios.post('/oauth/personal-access-tokens', {
+        name: name,
+    }).then((response) => {
+        $bus.$emit(eventTypes.created_personal_access_token, response.data);
+        return response.data;
+    }).catch((error) => {
+        console.log("Personal access tokens error", error);
+        alert(error.response.data.message);
+    }).finally(() => {
+        isLoading.value = false;
+    });
+}
+
 export function useUser() {
     return {
         login,
         getUser,
         getPersonalAccessTokens,
+        createPersonalAccessToken,
         logout,
         register,
         isLoading,

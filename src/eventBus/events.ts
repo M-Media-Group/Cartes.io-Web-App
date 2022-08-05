@@ -17,6 +17,8 @@ export enum eventTypes {
   logged_in = "logged_in",
   logged_out = "logged_out",
   registered = "registered",
+  created_personal_access_token = "created_personal_access_token",
+  deleted_personal_access_token = "deleted_personal_access_token",
 }
 
 type EventsObject = { [P in eventTypes]?: any };

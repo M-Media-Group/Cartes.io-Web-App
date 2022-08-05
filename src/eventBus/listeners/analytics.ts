@@ -49,5 +49,8 @@ export default {
   },
   registered: () => {
     event('sign_up');
+  },
+  created_personal_access_token: () => {
+    event('created_personal_access_token');
   }
 } as Record<eventTypes, any>;

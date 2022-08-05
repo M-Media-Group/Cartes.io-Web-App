@@ -3,11 +3,22 @@ import AppLayout from "@/templates/AppLayout.vue";
 import { PersonalAccessToken } from "@/types/user";
 import { useUser } from '@/composables/user';
 import { ref } from "vue";
+import $bus, { eventTypes } from "@/eventBus/events";
 
-const { user, isLoading, getPersonalAccessTokens, logout } = useUser();
+const { user, isLoading, getPersonalAccessTokens, logout, createPersonalAccessToken } = useUser();
 
 const accessTokens = ref<PersonalAccessToken[]>([]);
 getPersonalAccessTokens().then(tokens => accessTokens.value = tokens);
+
+const tokenName = ref("");
+
+const isLoadingToken = ref(false);
+
+$bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, token: PersonalAccessToken }) => {
+    accessTokens.value.push(e.token);
+    alert(e.accessToken)
+    isLoadingToken.value = false;
+});
 
 </script>
 <template>
@@ -58,6 +69,20 @@ getPersonalAccessTokens().then(tokens => accessTokens.value = tokens);
                     <template v-else-if="!isLoading">
                         You have no API access tokens.
                     </template>
+                    <footer>
+                        <form @submit.prevent="isLoadingToken = true; createPersonalAccessToken(tokenName)"
+                            class="grid"
+                            :disabled="isLoadingToken ? 'disabled' : null">
+                            <input type="text"
+                                name="token"
+                                placeholder="Token name"
+                                aria-label="Token name"
+                                required
+                                v-model="tokenName">
+                            <button type="submit"
+                                :disabled="isLoadingToken">Create token</button>
+                        </form>
+                    </footer>
                 </article>
             </section>
             <section>
