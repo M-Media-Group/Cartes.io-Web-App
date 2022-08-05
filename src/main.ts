@@ -5,6 +5,7 @@ import Pusher from 'pusher-js';
 import router from '@/router';
 import axios from 'axios';
 import VueGtag from "vue-gtag";
+import cartes from "@m-media/npm-cartes-io";
 
 // Event bus listeners
 import "./eventBus/listeners/index";
@@ -14,6 +15,8 @@ const app = createApp(App)
 app.config.globalProperties.window = window
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+cartes.setBaseUrl(import.meta.env.VITE_API_URL + '/api/');
+
 axios.defaults.withCredentials = true;
 
 declare global {
