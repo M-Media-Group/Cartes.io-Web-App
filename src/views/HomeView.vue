@@ -44,8 +44,8 @@ const getMyMaps = () => {
         .get("/api/maps", {
             params: {
                 ids: ids ?? [],
-                withMine: 1,
                 orderBy: "updated_at",
+                withMine: user.value ? 1 : 0,
             },
         })
         .then((response: { data: { data: Map[]; }; }) => {
@@ -206,6 +206,7 @@ watch(() => user.value?.id, () => {
 
 article>header.full {
     padding: 0;
+    /* margin-bottom: calc(var(--block-spacing-vertical) *0.5); */
 }
 
 /* The first article child of a section */
