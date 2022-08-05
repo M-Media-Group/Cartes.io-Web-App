@@ -1,5 +1,5 @@
 // Taken from https://www.digitalocean.com/community/tutorials/vuejs-vue-router-modify-head
-export const setMetaAttributes = (to: any, from: any, next: () => any) => {
+export const setMetaAttributes = (to: any, from: any) => {
     updateOrCreateMetaTag("og:description", to.meta.description);
     updateOrCreateMetaTag("og:image", to.meta.image);
     updateOrCreateMetaTag("og:site_name", "Cartes.io");

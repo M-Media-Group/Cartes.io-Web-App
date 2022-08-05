@@ -1,7 +1,7 @@
 import userDevice from "@/classes/userDevice";
 import { Map, MapForm } from "@/types/map";
 import { computed } from "@vue/reactivity";
-import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
+import { getCurrentInstance, ref, reactive } from "vue";
 import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { Marker } from "@/types/marker";
@@ -12,26 +12,6 @@ const maps = ref<Map[]>([]);
 const totalMaps = ref(0);
 
 const selectedMapUuid = ref('');
-
-// reactive map
-const oldMap = reactive<Map>({
-    uuid: "",
-    title: "",
-    slug: "",
-    description: "",
-    created_at: new Date(),
-    updated_at: new Date(),
-    privacy: "unlisted",
-    users_can_create_markers: "only_logged_in",
-    options: {
-        links: "optional",
-        default_expiration_time: null,
-        limit_to_geographical_body_type: "no",
-    },
-    categories: [],
-    markers: [],
-    related: [],
-});
 
 const map = computed(() => {
     return maps.value.find((m) => m.uuid === selectedMapUuid.value);
@@ -77,10 +57,6 @@ export function useMap() {
         const data = await cartes.maps(mapId).get();
         maps.value.push(data);
         return map.value;
-    }
-
-    const getMapFromMapsArray = (mapId: string) => {
-        return maps.value.find((m) => m.uuid === mapId);
     }
 
     const getMapIndexFromMapsArray = (mapId: string) => {

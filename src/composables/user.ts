@@ -29,7 +29,7 @@ const login = async () => {
     axios.post("/login", {
         email: email.value,
         password: password.value,
-    }).then((response) => {
+    }).then(() => {
         $bus.$emit(eventTypes.logged_in);
         router.push("/");
         getUser();
@@ -55,7 +55,7 @@ const register = async () => {
         password: password.value,
         username: username.value,
         password_confirmation: password.value,
-    }).then((response) => {
+    }).then(() => {
         $bus.$emit(eventTypes.registered);
         router.push("/");
         getUser();

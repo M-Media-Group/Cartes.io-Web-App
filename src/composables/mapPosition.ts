@@ -1,4 +1,3 @@
-import { Marker } from "@/types/marker";
 import { computed, ref, watch } from "vue";
 import { useMarker } from "@/composables/marker";
 import { useUrlPositionParameters } from "./urlPositionParameters";

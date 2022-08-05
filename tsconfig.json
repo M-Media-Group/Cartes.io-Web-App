@@ -12,8 +12,8 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "baseUrl": ".",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
     "lib": [
       "esnext",
       "dom"

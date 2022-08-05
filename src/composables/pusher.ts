@@ -1,4 +1,4 @@
-import { inject, ref } from "vue";
+import { inject } from "vue";
 
 export function usePusher() {
     const isLive = inject('isConnectedToPusher');

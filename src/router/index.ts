@@ -1,5 +1,4 @@
 import { useMap } from "@/composables/map";
-import { Map } from "@/types/map";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { setMetaAttributes, setFollow, setTitle, setDescription } from "./metaTagsHandler";
@@ -90,7 +89,7 @@ router.beforeEach(async (to, from, next) => {
     if (pathStayedTheSame(to, from)) {
         return next();
     }
-    setMetaAttributes(to, from, next);
+    setMetaAttributes(to, from);
     // We are using beforeEach instead of beforeEnter on the individual route because beforeEach is also called when the view/component updates (when going from one mapId to another)
     if (to.params.mapId) {
         await Maps.getMap(to.params.mapId as string).then((map) => {

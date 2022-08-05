@@ -5,7 +5,9 @@ import { eventTypes } from '../events';
 
 export default {
   created_map: (e: Map) => {
-    event('created_map');
+    event('created_map', {
+      map_id: e.uuid,
+    });
   },
   updated_map: (e: Map) => {
     event('updated_map', {
@@ -13,7 +15,9 @@ export default {
     });
   },
   deleted_map: (e: Map) => {
-    event('deleted_map');
+    event('deleted_map', {
+      map_id: e.uuid,
+    });
   },
   created_marker: (e: Marker) => {
     event('created_marker', {

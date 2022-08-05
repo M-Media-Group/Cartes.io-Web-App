@@ -2,7 +2,7 @@ import userDevice from "@/classes/userDevice";
 import { Map } from "@/types/map";
 import { Marker, MarkerForm } from "@/types/marker";
 import { computed } from "@vue/reactivity";
-import { PropType, defineEmits, getCurrentInstance, ref, reactive } from "vue";
+import { getCurrentInstance, ref, reactive } from "vue";
 import { useMap } from "./map";
 import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
@@ -20,8 +20,6 @@ const markers = computed(() => {
 
 
 const showExpired = ref(false);
-const fromTime = ref(null);
-const toTime = ref(Date.now());
 
 const nonExpiredMarkers = computed(() => {
     if (!markers.value) {
@@ -75,22 +73,22 @@ export function useMarker() {
         // }
     }
 
-    const updateMarkerInMarkerArray = (marker: Marker) => {
-        const index = markers.value?.findIndex((m) => m.id === marker.id);
-        if (index !== -1 && markers.value && index) {
-            // Get all the current marker values
-            const currentMarker = markers.value[index];
-            // Update only the changed values
-            markers.value[index] = {
-                ...currentMarker,
-                ...marker,
-            };
-        }
-    }
+    // const updateMarkerInMarkerArray = (marker: Marker) => {
+    //     const index = markers.value?.findIndex((m) => m.id === marker.id);
+    //     if (index !== -1 && markers.value && index) {
+    //         // Get all the current marker values
+    //         const currentMarker = markers.value[index];
+    //         // Update only the changed values
+    //         markers.value[index] = {
+    //             ...currentMarker,
+    //             ...marker,
+    //         };
+    //     }
+    // }
 
-    const markerExistsInArray = (marker: Marker) => {
-        return !!markers.value?.find(m => m.id === marker.id);
-    }
+    // const markerExistsInArray = (marker: Marker) => {
+    //     return !!markers.value?.find(m => m.id === marker.id);
+    // }
 
     const markerExistsInArrayForMapId = (marker: Marker, mapId: string) => {
         return Map.markerExistsInMapArray(mapId, marker.id);
