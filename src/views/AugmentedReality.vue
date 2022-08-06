@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import { ref, computed, PropType, onUnmounted, onBeforeMount } from "vue";
+import { ref, computed, PropType, onUnmounted, onBeforeMount, defineAsyncComponent } from "vue";
 import AddMarkerForm from "@/components/AddMarkerForm.vue";
 
 import 'aframe'
@@ -159,6 +159,10 @@ onUnmounted(() => {
   document.querySelector("html")?.classList.remove("a-fullscreen");
 });
 
+const AppLayout = defineAsyncComponent(() =>
+  import("@/templates/AppLayout.vue")
+)
+
 </script>
 <template>
   <div v-if="userDevice.supportsAr">
@@ -226,10 +230,12 @@ onUnmounted(() => {
       :markerElevation="userPosition.elevation"
       @addedMarker="handleNewMarkerEvent($event)" />
   </div>
-  <div v-else>
-    <p>Your browser/device does not support Augmented Reality.</p>
-    <button @click="close()">Open map instead</button>
-  </div>
+  <AppLayout v-else>
+    <div>
+      <p>Your browser/device does not support Augmented Reality.</p>
+      <button @click="close()">Open map instead</button>
+    </div>
+  </AppLayout>
 </template>
 <style>
 a-scene {
