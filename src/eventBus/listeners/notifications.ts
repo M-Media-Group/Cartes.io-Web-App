@@ -239,4 +239,12 @@ export default {
       ["browser"]
     ).show();
   },
+  registered: () => {
+    new CustomNotification(
+      "success",
+      "You've signed up to Cartes.io! Make sure to verify your email by clicking on the verification link sent to you.",
+      ["browser"],
+      5000
+    ).show();
+  }
 } as Record<eventTypes, any>;
