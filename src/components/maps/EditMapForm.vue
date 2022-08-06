@@ -43,7 +43,7 @@ const settings = reactive({
             {
                 value: 'private',
                 label: 'Private',
-                description: '',
+                description: user.value?.id ? '' : 'You need to login to make this map private',
                 disabled: user.value?.id ? false : true,
             },
         ],
@@ -182,7 +182,7 @@ const updateMapSettings = (map: Map, settings: any) => {
 <template>
     <div>
         <form @submit.prevent="updateMapSettings(map, settings)">
-            <div v-for="(setting, key) in settings"
+            <template v-for="(setting, key) in settings"
                 :key="key">
                 <label>{{ setting.title }}
                     <template v-if="'options' in setting">
@@ -208,7 +208,7 @@ const updateMapSettings = (map: Map, settings: any) => {
                             :placeholder="setting.title">
                     </template>
                 </label>
-            </div>
+            </template>
             <button type="submit"
                 :aria-busy="Maps.isLoading.value"
                 :disabled="Maps.isLoading.value">Save</button>
@@ -219,3 +219,16 @@ const updateMapSettings = (map: Map, settings: any) => {
             class="contrast">Delete map</button>
     </div>
 </template>
+<style scoped>
+small {
+    display: unset;
+}
+
+form>label {
+    margin-bottom: var(--spacing);
+}
+
+form>label>input[type="text"] {
+    margin-bottom: 0;
+}
+</style>
