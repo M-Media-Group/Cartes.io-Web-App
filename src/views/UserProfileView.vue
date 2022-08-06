@@ -52,7 +52,7 @@ watch(() => props.user, () => {
             <section>
                 <div class="headings">
                     <h2>Maps</h2>
-                    <p>All the public maps that user has created</p>
+                    <p>All the public maps that {{ user.username }} has created</p>
                 </div>
                 <div v-if="user.public_maps">
                     <MapArticle v-for="map in user.public_maps"

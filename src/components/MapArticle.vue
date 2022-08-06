@@ -32,7 +32,7 @@ defineProps({
             v-slot="{ navigate }">
             <button @click="navigate">Open map</button>
         </router-link>
-        <footer>
+        <footer v-if="map.markers_count">
             <small>{{ map.markers_count }} live markers</small>
         </footer>
     </article>
