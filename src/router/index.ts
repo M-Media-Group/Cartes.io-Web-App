@@ -100,9 +100,7 @@ router.beforeEach(async (to, from, next) => {
                 // to.name = newName;
                 setTitle(newName);
                 setDescription(map.description);
-                if (map.privacy === "private" || map.privacy === "unlisted") {
-                    setFollow(false);
-                }
+                setFollow(map.privacy === "public");
             }
         }).catch((e) => {
             alert(e.message);
