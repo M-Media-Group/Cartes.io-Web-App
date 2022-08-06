@@ -2,13 +2,35 @@
 <script setup lang="ts">
 import AppLayout from "@/templates/AppLayout.vue";
 import MapArticle from "@/components/MapArticle.vue";
+import { PropType, ref, watch } from "vue";
 
-defineProps({
+import { now } from "@/composables/time";
+import { User } from "@/types/user";
+
+const props = defineProps({
     user: {
-        type: Object,
+        type: Object as PropType<User>,
         required: true,
     },
 })
+
+const accountAgeInDays = ref(0);
+
+const accountAgeInText = ref("");
+
+// Watch the user for changes
+watch(() => props.user, () => {
+
+    const createdAt = new Date(props.user.created_at);
+    const diff = now.value - createdAt.getTime();
+
+    accountAgeInDays.value = Math.round(diff / (1000 * 60 * 60 * 24));
+
+    accountAgeInText.value = new Intl.RelativeTimeFormat("en", {
+        numeric: "auto",
+    }).format(-accountAgeInDays.value, "day");
+
+}, { immediate: true })
 
 </script>
 
@@ -19,7 +41,7 @@ defineProps({
                 <div class="container">
                     <div class="headings">
                         <h1>{{ user.username }}</h1>
-                        <p>Joined 246 days ago</p>
+                        <p>Joined {{ accountAgeInText }}</p>
                     </div>
                 </div>
             </div>

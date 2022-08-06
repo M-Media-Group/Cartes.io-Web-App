@@ -1,3 +1,5 @@
+import { Map } from "./map";
+
 export interface User {
     id: number;
     username: string;
@@ -12,6 +14,7 @@ export interface User {
     description: string | null;
     is_public: boolean;
     personal_access_tokens?: PersonalAccessToken[];
+    public_maps?: Map[];
 }
 
 export interface PersonalAccessToken {
