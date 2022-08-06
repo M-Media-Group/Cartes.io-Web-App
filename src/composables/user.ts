@@ -1,4 +1,4 @@
-import { Ref, ref } from "vue";
+import { reactive, Ref, ref } from "vue";
 import axios from "axios";
 import { PersonalAccessToken, User } from "@/types/user";
 import router from "@/router";
@@ -7,8 +7,20 @@ import cartes from "@m-media/npm-cartes-io";
 
 const user = ref(null) as Ref<User | null>;
 
+const userForm = reactive({
+    email: "",
+    description: "",
+    password: "",
+    username: "",
+    is_public: false,
+});
+
 const authenticateUser = (authenticableUser: User) => {
     user.value = authenticableUser;
+    userForm.email = user.value.email;
+    userForm.description = user.value.description ?? "";
+    userForm.username = user.value.username;
+    userForm.is_public = user.value.is_public;
 }
 
 const isLoading = ref(false);
@@ -115,6 +127,25 @@ const getUser = async () => {
     });
 }
 
+const updateUser = async () => {
+    isLoading.value = true;
+
+    if (!user.value) {
+        return;
+    }
+
+    cartes.me().update(userForm).then((response) => {
+        $bus.$emit(eventTypes.updated_user, response);
+        user.value = response;
+    }).catch((error) => {
+        console.log("Update error", error);
+        alert(error.response.data.message);
+        isLoading.value = false;
+    }).finally(() => {
+        isLoading.value = false;
+    });
+}
+
 const getPersonalAccessTokens = () => {
     return axios.get('/oauth/personal-access-tokens').then((response) => {
         if (!user.value) {
@@ -155,5 +186,7 @@ export function useUser() {
         username,
         email,
         password,
+        userForm,
+        updateUser,
     };
 }

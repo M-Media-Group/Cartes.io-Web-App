@@ -5,7 +5,7 @@ import { useUser } from '@/composables/user';
 import { ref } from "vue";
 import $bus, { eventTypes } from "@/eventBus/events";
 
-const { user, isLoading, getPersonalAccessTokens, logout, createPersonalAccessToken } = useUser();
+const { user, userForm, isLoading, getPersonalAccessTokens, logout, createPersonalAccessToken, updateUser } = useUser();
 
 const accessTokens = ref<PersonalAccessToken[]>([]);
 getPersonalAccessTokens().then(tokens => accessTokens.value = tokens);
@@ -33,21 +33,50 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
                 <article :aria-busy="isLoading">
                     <template v-if="user">
                         <header>{{ user.username }}</header>
-                        <!-- List of user attributes -->
-                        <ul>
-                            <li>
-                                <strong>Email: </strong>
-                                <span>{{ user.email }}</span>
-                            </li>
-                            <li>
-                                <strong>Created at: </strong>
-                                <span>{{ user.created_at }}</span>
-                            </li>
-                            <li>
-                                <strong>Updated at: </strong>
-                                <span>{{ user.updated_at }}</span>
-                            </li>
-                        </ul>
+                        <form @submit.prevent="updateUser()">
+                            <label for="username">Username
+                                <input type="text"
+                                    name="username"
+                                    placeholder="Username"
+                                    aria-label="Username"
+                                    autocomplete="nickname"
+                                    required
+                                    autofocus
+                                    v-model="userForm.username">
+                                <small>Pick a unique name</small>
+                            </label>
+                            <label for="username">Email
+                                <input type="text"
+                                    name="username"
+                                    placeholder="Username"
+                                    aria-label="Username"
+                                    autocomplete="nickname"
+                                    required
+                                    autofocus
+                                    v-model="userForm.email">
+                                <small>Your email address</small>
+                            </label>
+                            <fieldset>
+                                <label for="remember">
+                                    <input type="checkbox"
+                                        role="switch"
+                                        id="remember"
+                                        name="remember"
+                                        v-model="userForm.is_public">
+                                    Public profile
+                                </label>
+                            </fieldset>
+                            <label for="description">
+                                <textarea name="description"
+                                    placeholder="Description"
+                                    aria-label="Description"
+                                    v-model="userForm.description"></textarea>
+                                <small>Describe yourself</small>
+                            </label>
+                            <button type="submit"
+                                :disabled="isLoading"
+                                class="contrast">Update</button>
+                        </form>
                     </template>
                 </article>
             </section>

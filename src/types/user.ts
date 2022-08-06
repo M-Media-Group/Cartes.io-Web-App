@@ -9,6 +9,8 @@ export interface User {
     seen_at: Date;
     created_at: Date;
     updated_at: Date;
+    description: string | null;
+    is_public: boolean;
     personal_access_tokens?: PersonalAccessToken[];
 }
 
