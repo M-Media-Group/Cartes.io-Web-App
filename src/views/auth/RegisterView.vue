@@ -3,7 +3,7 @@ import AppLayout from "@/templates/AppLayout.vue";
 import { useUser } from "@/composables/user";
 import { ref } from "vue";
 
-const { email, password, username, register, isLoading } = useUser();
+const { userForm, formErrors, register, isLoading } = useUser();
 
 const termsAndConditionsAccepted = ref(false);
 
@@ -26,21 +26,26 @@ const termsAndConditionsAccepted = ref(false);
                             autocomplete="nickname"
                             required
                             autofocus
-                            v-model="username">
+                            v-model="userForm.username">
+                        <small v-if="formErrors.username">{{ formErrors.username.join(' ') }}</small>
                         <input type="email"
                             name="email"
                             placeholder="Email"
                             aria-label="Email"
                             autocomplete="email"
                             required
-                            v-model="email">
+                            v-model="userForm.email">
+                        <small v-if="formErrors.email">{{ formErrors.email.join(' ') }}</small>
+
                         <input type="password"
                             name="password"
                             placeholder="New password"
                             aria-label="New password"
                             autocomplete="current-password"
                             required
-                            v-model="password">
+                            v-model="userForm.password">
+                        <small v-if="formErrors.password">{{ formErrors.password.join(' ') }}</small>
+
                         <fieldset>
                             <label for="remember">
                                 <input type="checkbox"

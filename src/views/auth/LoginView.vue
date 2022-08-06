@@ -2,7 +2,7 @@
 import AppLayout from "@/templates/AppLayout.vue";
 import { useUser } from "@/composables/user";
 
-const { email, password, login, isLoading } = useUser();
+const { userForm, login, isLoading } = useUser();
 
 </script>
 <template>
@@ -23,14 +23,14 @@ const { email, password, login, isLoading } = useUser();
                             autocomplete="email"
                             required
                             autofocus
-                            v-model="email">
+                            v-model="userForm.email">
                         <input type="password"
                             name="password"
                             placeholder="Password"
                             aria-label="Password"
                             autocomplete="current-password"
                             required
-                            v-model="password">
+                            v-model="userForm.password">
                         <fieldset>
                             <label for="remember">
                                 <input type="checkbox"

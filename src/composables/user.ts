@@ -15,6 +15,18 @@ const userForm = reactive({
     is_public: false,
 });
 
+const formErrors = reactive({
+    email: [],
+    password: [],
+    username: [],
+});
+
+const resetFormErrors = () => {
+    formErrors.email = [];
+    formErrors.password = [];
+    formErrors.username = [];
+}
+
 const authenticateUser = (authenticableUser: User) => {
     user.value = authenticableUser;
     userForm.email = user.value.email;
@@ -30,6 +42,8 @@ const email = ref("");
 const password = ref("");
 
 const login = async () => {
+    resetFormErrors();
+
     isLoading.value = true;
 
     // Remove laravel_token and laravel_session cookies
@@ -39,8 +53,8 @@ const login = async () => {
     await getCsrfToken();
 
     axios.post("/login", {
-        email: email.value,
-        password: password.value,
+        email: userForm.email,
+        password: userForm.password,
     }).then(() => {
         $bus.$emit(eventTypes.logged_in);
         router.push("/");
@@ -54,6 +68,8 @@ const login = async () => {
 }
 
 const register = async () => {
+    resetFormErrors();
+
     isLoading.value = true;
 
     // Remove laravel_token and laravel_session cookies
@@ -63,10 +79,10 @@ const register = async () => {
     await getCsrfToken();
 
     axios.post("/register", {
-        email: email.value,
-        password: password.value,
-        username: username.value,
-        password_confirmation: password.value,
+        email: userForm.email,
+        password: userForm.password,
+        username: userForm.username,
+        password_confirmation: userForm.password,
     }).then(() => {
         $bus.$emit(eventTypes.registered);
         router.push("/");
@@ -75,9 +91,11 @@ const register = async () => {
     ).catch((error) => {
         console.log("Register error", error);
         alert(error.response.data.message);
+        formErrors.email = error.response.data.errors.email;
+        formErrors.password = error.response.data.errors.password;
+        formErrors.username = error.response.data.errors.username;
         isLoading.value = false;
     });
-
 }
 
 const logout = () => {
@@ -187,6 +205,7 @@ export function useUser() {
         email,
         password,
         userForm,
+        formErrors,
         updateUser,
     };
 }
