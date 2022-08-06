@@ -6,6 +6,7 @@ import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { Marker } from "@/types/marker";
 import router from "@/router";
+import "@picocss/pico";
 
 const maps = ref<Map[]>([]);
 
@@ -214,6 +215,7 @@ export function useMap() {
         if (!canUpdateMap(map)) {
             return;
         }
+
         if (!userDevice.online) {
             return alert("You must be online to update a map.");
         }
