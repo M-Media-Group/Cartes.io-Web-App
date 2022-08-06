@@ -75,7 +75,7 @@ app.use(VueGtag, {
 }, router);
 
 app.use(VueHotjar, {
-    id: import.meta.env.VITE_HOTJAR_ID ?? 1,
+    id: parseFloat(import.meta.env.VITE_HOTJAR_ID) ?? 1,
     isProduction: import.meta.env.VITE_HOTJAR_ID && import.meta.env.PROD,
     snippetVersion: 6
 });

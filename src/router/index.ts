@@ -2,6 +2,7 @@ import { useMap } from "@/composables/map";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { setMetaAttributes, setFollow, setTitle, setDescription } from "./metaTagsHandler";
+import axios from "axios";
 
 const Maps = useMap();
 
@@ -68,12 +69,13 @@ const routes: Array<RouteRecordRaw> = [
         component: () =>
             import(/* webpackChunkName: "ar" */ "@/views/auth/MyProfileView.vue"),
     },
-    // {
-    //     path: "/users/:username",
-    //     name: "User",
-    //     component: () =>
-    //         import(/* webpackChunkName: "ar" */ "@/views/UserProfileView.vue"),
-    // },
+    {
+        path: "/users/:username",
+        name: "User",
+        props: true,
+        component: () =>
+            import(/* webpackChunkName: "ar" */ "@/views/UserProfileView.vue"),
+    },
     // 404 page
     {
         path: "/:pathMatch(.*)*",
@@ -114,6 +116,19 @@ router.beforeEach(async (to, from, next) => {
                 setTitle(newName);
                 setDescription(map.description);
                 setFollow(map.privacy === "public");
+            }
+        }).catch((e) => {
+            alert(e.message);
+            router.push("/");
+            return false
+        });
+    }
+
+    if (to.params.username) {
+        await axios.get(`/api/users/${to.params.username}?with[]=maps`).then((res) => {
+            console.log(res.data, 'user');
+            if (res.data) {
+                to.params.user = res.data;
             }
         }).catch((e) => {
             alert(e.message);

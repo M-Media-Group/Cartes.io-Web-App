@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { useMap } from '@/composables/map';
 import AppLayout from "@/templates/AppLayout.vue";
-import NewMapComponent from '@/components/maps/NewMapComponent.vue';
 import axios from 'axios';
 import { Ref, ref, watch } from 'vue';
 import { Map } from '@/types/map';
 import { useMarker } from '@/composables/marker';
 import { useUser } from '@/composables/user';
-
-const url = import.meta.env.VITE_API_URL;
+import MapArticle from '@/components/MapArticle.vue';
 
 const Maps = useMap();
 Maps.getAllMaps().then(() => {
@@ -28,7 +26,6 @@ Maps.getAllMaps().then(() => {
 
 const Markers = useMarker();
 const { user } = useUser();
-
 
 const privateMaps = ref([]) as Ref<Map[]>;
 
@@ -115,27 +112,9 @@ watch(() => user.value?.id, () => {
                         <p>These are the maps that you've created on the site.</p>
                     </div>
 
-                    <article v-for="map in privateMaps"
-                        :key="map.uuid">
-                        <header class="full">
-                            <NewMapComponent v-if="map.markers_count && map.markers_count > 0"
-                                :mapId="map.uuid"
-                                :map="map"
-                                :markers="map.markers ?? []"
-                                style="height: 400px" />
-                        </header>
-                        <h3>{{ map.title ?? "Untitled map" }}</h3>
-                        <p>{{ map.description }}</p>
-                        <router-link :to="'/maps/' + map.uuid"
-                            custom
-                            v-slot="{ navigate }">
-                            <button @click="navigate">Open map</button>
-                        </router-link>
-                        <footer>
-
-                            <small>{{ map.markers_count }} live markers</small>
-                        </footer>
-                    </article>
+                    <MapArticle v-for="map in privateMaps"
+                        :key="map.uuid"
+                        :map="map" />
 
                     <article v-if="privateMaps.length === 0">
                         <div class="headings">
@@ -153,27 +132,10 @@ watch(() => user.value?.id, () => {
                         <p>These maps are made by the community and shared with everyone.</p>
                     </div>
                     <div>
-                        <article v-for="(map, i) in Maps.maps.value"
-                            :key="map.uuid">
-                            <header class="full"
-                                v-if="i < 2 ? true : false">
-                                <NewMapComponent :mapId="map.uuid"
-                                    :map="map"
-                                    :markers="map.markers ?? []"
-                                    style="height: 400px" />
-                            </header>
-                            <h3>{{ map.title ?? "Untitled map" }}</h3>
-                            <p>{{ map.description }}</p>
-                            <router-link :to="'/maps/' + map.uuid"
-                                custom
-                                v-slot="{ navigate }">
-                                <button @click="navigate">Open map</button>
-                            </router-link>
-                            <footer>
-
-                                <small>{{ map.markers_count }} live markers</small>
-                            </footer>
-                        </article>
+                        <MapArticle v-for="(map, i) in Maps.maps.value"
+                            :key="map.uuid"
+                            :map="map"
+                            :showMap="i < 2 ? true : false" />
                     </div>
                     <div>Showing {{ Maps.maps.value.length }} out of {{ Maps.totalMaps.value }} public maps and
                         many more
@@ -207,16 +169,6 @@ watch(() => user.value?.id, () => {
     justify-content: center;
 }
 
-article>header.full {
-    padding: 0;
-    /* margin-bottom: calc(var(--block-spacing-vertical) *0.5); */
-}
-
-/* The first article child of a section */
-article {
-    margin-top: 0;
-}
-
 @media (min-width: 992px) {
     .column-2-grid {
         grid-template-columns: 1fr 1fr;
@@ -225,9 +177,5 @@ article {
     .column-4-1-grid {
         grid-template-columns: 4fr 1fr;
     }
-}
-
-h3 {
-    margin-bottom: var(--spacing);
 }
 </style>
