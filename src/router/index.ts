@@ -68,6 +68,19 @@ const routes: Array<RouteRecordRaw> = [
         component: () =>
             import(/* webpackChunkName: "ar" */ "@/views/auth/MyProfileView.vue"),
     },
+    // {
+    //     path: "/users/:username",
+    //     name: "User",
+    //     component: () =>
+    //         import(/* webpackChunkName: "ar" */ "@/views/UserProfileView.vue"),
+    // },
+    // 404 page
+    {
+        path: "/:pathMatch(.*)*",
+        name: "404",
+        component: () =>
+            import(/* webpackChunkName: "404" */ "@/views/404View.vue"),
+    },
 ];
 
 const router = createRouter({
