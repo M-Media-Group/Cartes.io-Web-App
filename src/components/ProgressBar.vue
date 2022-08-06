@@ -4,32 +4,14 @@
         max="100"></progress>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
+<script setup lang="ts">
 import { useProgress } from '@marcoschulte/vue3-progress';
-
 import trickleComposable from '@/composables/trickleComposable';
 
-export default defineComponent({
-    name: 'Vue3ProgressBar',
-
-    setup: () => {
-        const state = useProgress().state();
-        const { value } = trickleComposable(state);
-        return { state, value };
-    },
-
-    computed: {
-        style() {
-            return {
-                transform: `translate3d(${this.value - 100}%,0,0)`,
-            };
-        },
-    },
-
-});
+const state = useProgress().state();
+const { value } = trickleComposable(state);
 </script>
+
 <style scoped>
 progress {
     position: absolute;
