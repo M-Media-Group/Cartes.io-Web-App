@@ -46,6 +46,7 @@ watch(() => props.user, () => {
                         <h1>{{ user.username }}</h1>
                         <p>Joined {{ accountAgeInText }}</p>
                     </div>
+                    <p v-if="user.description">{{ user.description }}</p>
                     <h2 v-if="userInstance.user.value?.username === user.username && user.is_public === false">
                         Only you can see this page because your profile is set to private.
                     </h2>
