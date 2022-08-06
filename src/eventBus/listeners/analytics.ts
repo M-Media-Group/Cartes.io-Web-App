@@ -1,5 +1,6 @@
 import { Map } from '@/types/map';
 import { Marker } from '@/types/marker';
+import { User } from '@/types/user';
 import { event, pageview } from 'vue-gtag'
 import { eventTypes } from '../events';
 
@@ -40,7 +41,15 @@ export default {
   },
   shared_map: (e: { map: Map, action: string }) => {
     event('share', {
+      resource: 'map',
       map_id: e.map.uuid,
+      action: e.action,
+    });
+  },
+  shared_profile: (e: { user: User, action: string }) => {
+    event('share', {
+      resource: 'profile',
+      username: e.user.username,
       action: e.action,
     });
   },

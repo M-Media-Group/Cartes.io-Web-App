@@ -8,6 +8,8 @@ import { now } from "@/composables/time";
 import { User } from "@/types/user";
 import { useUser } from "@/composables/user.js";
 
+import $bus, { eventTypes } from "@/eventBus/events";
+
 const props = defineProps({
     user: {
         type: Object as PropType<User>,
@@ -35,6 +37,29 @@ watch(() => props.user, () => {
 
 }, { immediate: true })
 
+const share = async () => {
+    // Current url
+    const url = window.location.href;
+    // Trigger the Share Web API, or copy to clipboard if not supported
+    navigator.share;
+    if (navigator.share) {
+        await navigator.share({
+            title: props.user.username + " - Cartes.io",
+            text: `Check out this profile on Cartes.io! ${url}`,
+            url: url,
+        }).then(() => {
+            $bus.$emit(eventTypes.shared_profile, { user: props.user, action: "navigator.share" });
+        }).catch(() => {
+            // Just need an empty catch to avoid the error
+        });
+    } else {
+        // Copy to clipboard
+        await navigator.clipboard.writeText(url);
+        $bus.$emit(eventTypes.shared_profile, { user: props.user, action: "navigator.clipboard" });
+        alert("Profile link copied to clipboard!");
+    }
+}
+
 </script>
 
 <template>
@@ -50,6 +75,9 @@ watch(() => props.user, () => {
                     <h2 v-if="userInstance.user.value?.username === user.username && user.is_public === false">
                         Only you can see this page because your profile is set to private.
                     </h2>
+                    <div class="grid">
+                        <button @click="share()">Share profile</button>
+                    </div>
                 </div>
             </div>
         </template>
