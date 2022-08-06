@@ -6,6 +6,7 @@ import { PropType, ref, watch } from "vue";
 
 import { now } from "@/composables/time";
 import { User } from "@/types/user";
+import { useUser } from "@/composables/user.js";
 
 const props = defineProps({
     user: {
@@ -17,6 +18,8 @@ const props = defineProps({
 const accountAgeInDays = ref(0);
 
 const accountAgeInText = ref("");
+
+const userInstance = useUser();
 
 // Watch the user for changes
 watch(() => props.user, () => {
@@ -43,12 +46,14 @@ watch(() => props.user, () => {
                         <h1>{{ user.username }}</h1>
                         <p>Joined {{ accountAgeInText }}</p>
                     </div>
+                    <h2 v-if="userInstance.user.value?.username === user.username && user.is_public === false">
+                        Only you can see this page because your profile is set to private.
+                    </h2>
                 </div>
             </div>
         </template>
 
         <div>
-
             <section>
                 <div class="headings">
                     <h2>Maps</h2>
@@ -61,6 +66,22 @@ watch(() => props.user, () => {
                 </div>
                 <template v-else>
                     <h3>{{ user.username }} has no public maps</h3>
+                </template>
+            </section>
+
+            <section>
+                <div class="headings">
+                    <h2>Maps contributed to</h2>
+                    <p>All the public maps that {{ user.username }} has created markers on</p>
+                </div>
+                <div v-if="user.public_maps_contributed_to">
+                    <MapArticle v-for="map in user.public_maps_contributed_to"
+                        :key="map.uuid"
+                        :map="map"
+                        :showMap="false" />
+                </div>
+                <template v-else>
+                    <h3>{{ user.username }} has no public map contributions to show right now</h3>
                 </template>
             </section>
         </div>

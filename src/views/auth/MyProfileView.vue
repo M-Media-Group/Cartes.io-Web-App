@@ -63,7 +63,9 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
                                         id="remember"
                                         name="remember"
                                         v-model="userForm.is_public">
-                                    Public profile
+                                    Public profile <router-link :to="`/users/${user.username}`"><small>View
+                                            profile</small>
+                                    </router-link>
                                 </label>
                             </fieldset>
                             <label for="description">

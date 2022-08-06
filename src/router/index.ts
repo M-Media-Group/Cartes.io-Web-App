@@ -125,13 +125,13 @@ router.beforeEach(async (to, from, next) => {
     }
 
     if (to.params.username) {
-        await axios.get(`/api/users/${to.params.username}?with[]=maps`).then((res) => {
+        await axios.get(`/api/users/${to.params.username}?with[]=maps&with[]=contributions`).then((res) => {
             console.log(res.data, 'user');
             if (res.data) {
                 to.params.user = res.data;
             }
         }).catch((e) => {
-            alert(e.message);
+            alert(e.response.data.message);
             router.push("/");
             return false
         });
