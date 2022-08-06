@@ -19,6 +19,7 @@
     "idb": "^7.0.2",
     "vue": "^3.2.25",
     "vue-gtag": "^2.0.1",
+    "vue-hotjar-next": "^1.4.0",
     "vue-router": "^4.1.3"
   },
   "devDependencies": {
