@@ -191,9 +191,9 @@ const setReady = async () => {
 
       <l-control class="leaflet-control-ar leaflet-bar leaflet-control"
         v-if="showAr && userDevice.supportsAr">
-        <a :href="'https://cartesio.netlify.app/?mapId=' + mapId"
-          target="_BLANK"
-          @click.prevent="emit('showAr')">AR</a>
+        <router-link :to="'/maps/' + mapId + '/ar'">
+          AR
+        </router-link>
       </l-control>
 
       <MapMarkers :mapId="mapId"

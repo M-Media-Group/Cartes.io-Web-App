@@ -185,8 +185,10 @@ watch(() => user.value?.id, () => {
                 <h4>Cartes.io.</h4>
                 <p>This is an open source project. Feel free to contribute to the development on <a
                         href="https://github.com/M-Media-Group/Cartes.io">GitHub</a></p>
-                <p><a :href="url + '/register'">Sign up</a> to Cartes.io to get more info, make
-                    maps private, and get updates as the project grows.</p>
+                <p>
+                    <router-link to="/register">Sign up</router-link> to Cartes.io to get more info, make
+                    maps private, and get updates as the project grows.
+                </p>
             </aside>
         </div>
     </AppLayout>

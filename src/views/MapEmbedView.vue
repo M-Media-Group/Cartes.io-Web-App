@@ -4,7 +4,6 @@ import { onMounted, ref } from "vue";
 import NewMapComponent from "@/components/maps/NewMapComponent.vue"
 import { useMarker } from "@/composables/marker";
 import { useMap } from "@/composables/map";
-import userDevice from "@/classes/userDevice";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -13,12 +12,8 @@ const { displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap } =
 
 const Maps = useMap();
 
-const searchParams = new URLSearchParams(window.location.search);
-
 // Get the map ID from the url ?mapId parameter
 const mapId = route.params.mapId as string;
-
-const showMap = ref((userDevice.supportsAr && searchParams.get("showAr")) ?? true);
 
 const canCreateMarkers = ref();
 
@@ -38,10 +33,7 @@ onMounted(() => {
     }
 });
 
-const toggleMapVisibility = () => {
-    showMap.value = !showMap.value;
-    searchParams.set("showAr", showMap.value ? "true" : "false");
-}
+
 </script>
 
 <template>
@@ -50,8 +42,7 @@ const toggleMapVisibility = () => {
         <NewMapComponent :mapId="mapId"
             :show-ar="false"
             :markers="displayableMarkers"
-            style="height: 100vh"
-            @showAr="toggleMapVisibility()" />
+            style="height: 100vh" />
     </div>
     <div v-else>
         Map not found

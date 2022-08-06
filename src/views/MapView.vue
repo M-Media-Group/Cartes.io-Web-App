@@ -96,7 +96,6 @@ const mapCreatedTimeAgo = computed(() => {
                 :markers="displayableMarkers"
                 style="height: 70vh"
                 :autoCenterOnLoad="true"
-                @showAr="$router.push('/maps/' + mapId + '/ar')"
                 :map="Maps.map.value" />
         </template>
 
