@@ -196,6 +196,14 @@ export default {
       5000
     ).show();
   },
+  updated_map: (event: Map) => {
+    new CustomNotification(
+      "success",
+      "Map updated!",
+      ["browser"],
+      5000
+    ).show();
+  },
   deleted_map: (event: Map) => {
     new CustomNotification(
       "success",
