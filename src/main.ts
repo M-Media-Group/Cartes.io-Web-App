@@ -8,6 +8,7 @@ import VueGtag from "vue-gtag";
 import cartes from "@m-media/npm-cartes-io";
 import { Vue3ProgressPlugin, ProgressFinisher, useProgress } from '@marcoschulte/vue3-progress';
 import VueHotjar from 'vue-hotjar-next'
+import BaseButton from '@/components/BaseButton.vue'
 
 const progresses = [] as ProgressFinisher[];
 
@@ -81,5 +82,7 @@ app.use(VueHotjar, {
 });
 
 app.use(Vue3ProgressPlugin)
+
+app.component('BaseButton', BaseButton);
 
 app.mount('#app')
