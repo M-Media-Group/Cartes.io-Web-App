@@ -207,7 +207,8 @@ updateOrCreateSchema(structuredData);
                     </div>
                     <div>
 
-                        <button @click="share()">Share this map</button>
+                        <button v-if="Maps.map.value?.privacy !== 'private'"
+                            @click="share()">Share this map</button>
 
                         <!-- Markers -->
                         <details open
