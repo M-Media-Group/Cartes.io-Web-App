@@ -279,7 +279,8 @@ updateOrCreateSchema(structuredData);
                             labels or create your own.</p>
 
                         <!-- Public contributors -->
-                        <details v-if="Maps.map.value?.public_contributors">
+                        <details
+                            v-if="Maps.map.value?.public_contributors && Maps.map.value?.public_contributors.length > 0">
                             <summary>Public contributors</summary>
                             <p>These people have contributed markers to this map and have their profile set to public.
                             </p>

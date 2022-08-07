@@ -100,13 +100,13 @@ const share = async () => {
                     <h2>Maps</h2>
                     <p>All the public maps that {{ user.username }} has created</p>
                 </div>
-                <div v-if="user.public_maps">
+                <div v-if="user.public_maps && user.public_maps.length > 0">
                     <MapArticle v-for="map in user.public_maps"
                         :key="map.uuid"
                         :map="map" />
                 </div>
                 <template v-else>
-                    <h3>{{ user.username }} has no public maps</h3>
+                    <h3>{{ user.username }} has no public maps to show right now</h3>
                 </template>
             </section>
 
@@ -115,7 +115,7 @@ const share = async () => {
                     <h2>Maps contributed to</h2>
                     <p>All the public maps that {{ user.username }} has created markers on</p>
                 </div>
-                <div v-if="user.public_maps_contributed_to">
+                <div v-if="user.public_maps_contributed_to && user.public_maps_contributed_to.length > 0">
                     <MapArticle v-for="map in user.public_maps_contributed_to"
                         :key="map.uuid"
                         :map="map"
