@@ -25,7 +25,10 @@ Maps.getAllMaps().then(() => {
 });
 
 const Markers = useMarker();
-const { user } = useUser();
+
+const { users, getUsers, user } = useUser();
+
+getUsers();
 
 const privateMaps = ref([]) as Ref<Map[]>;
 
@@ -126,6 +129,7 @@ watch(() => user.value?.id, () => {
                         </button>
                     </article>
                 </section>
+
                 <section>
                     <div class="headings">
                         <h2>Public maps</h2>
@@ -140,6 +144,27 @@ watch(() => user.value?.id, () => {
                     <div>Showing {{ Maps.maps.value.length }} out of {{ Maps.totalMaps.value }} public maps and
                         many more
                         private ones
+                    </div>
+                </section>
+
+                <section>
+                    <div class="headings">
+                        <h2>Public profiles</h2>
+                        <p>These profiles are public on Cartes.io</p>
+                    </div>
+                    <div>
+                        <article v-for="user in users">
+                            <h3>{{ user.username }}</h3>
+                            <p v-if="user.description">{{ user.description }}</p>
+                            <router-link :to="`/users/${user.username}`"
+                                custom
+                                v-slot="{ navigate }">
+                                <button @click="navigate">View profile</button>
+                            </router-link>
+                            <footer v-if="user.public_maps_count">
+                                {{ user.public_maps_count }} public maps
+                            </footer>
+                        </article>
                     </div>
                 </section>
             </div>
