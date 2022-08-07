@@ -16,6 +16,8 @@ import { usePusher } from "@/composables/pusher";
 
 import $bus, { eventTypes } from "@/eventBus/events";
 
+import { updateOrCreateSchema } from "@/router/metaTagsHandler";
+
 const route = useRoute();
 
 const { markers, displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap, showExpired } = useMarker();
@@ -85,6 +87,79 @@ const mapCreatedTimeAgo = computed(() => {
         return new Intl.RelativeTimeFormat("en-US").format(-mapAgeInMinutes.value, 'minute');
     }
 })
+
+const structuredData = {
+    "@context": "https://schema.org/",
+    "@type": "Dataset",
+    "name": Maps.map.value?.title ?? "Untitled map",
+    "description": Maps.map.value?.description,
+    "url": window.location.href,
+    // "sameAs": "https://gis.ncdc.noaa.gov/geoportal/catalog/search/resource/details.page?id=gov.noaa.ncdc:C00510",
+    // "identifier": ["https://doi.org/10.1000/182",
+    //     "https://identifiers.org/ark:/12345/fk1234"],
+    // "keywords": [
+    //     "ATMOSPHERE > ATMOSPHERIC PHENOMENA > CYCLONES",
+    //     "ATMOSPHERE > ATMOSPHERIC PHENOMENA > DROUGHT",
+    //     "ATMOSPHERE > ATMOSPHERIC PHENOMENA > FOG",
+    //     "ATMOSPHERE > ATMOSPHERIC PHENOMENA > FREEZE"
+    // ],
+    // "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "isAccessibleForFree": true,
+    // "hasPart": [
+    //     {
+    //         "@type": "Dataset",
+    //         "name": "Sub dataset 01",
+    //         "description": "Informative description of the first subdataset...",
+    //         "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+    //         "creator": {
+    //             "@type": "Organization",
+    //             "name": "Sub dataset 01 creator"
+    //         }
+    //     },
+    //     {
+    //         "@type": "Dataset",
+    //         "name": "Sub dataset 02",
+    //         "description": "Informative description of the second subdataset...",
+    //         "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+    //         "creator": {
+    //             "@type": "Organization",
+    //             "name": "Sub dataset 02 creator"
+    //         }
+    //     }
+    // ],
+    "creator": {
+        "@type": "Organization",
+        "url": "https://app.cartes.io/",
+        "name": "Cartes.io",
+    },
+    // "funder": {
+    //     "@type": "Organization",
+    //     "sameAs": "https://ror.org/00tgqzw13",
+    //     "name": "National Weather Service"
+    // },
+    // "includedInDataCatalog": {
+    //     "@type": "DataCatalog",
+    //     "name": "data.gov"
+    // },
+    "distribution": [
+        {
+            "@type": "DataDownload",
+            "encodingFormat": "JSON",
+            "contentUrl": import.meta.env.VITE_API_URL + '/api/maps/' + Maps.map.value?.uuid
+        }
+    ],
+    "temporalCoverage": Maps.map.value?.created_at + "/..",
+    // "spatialCoverage": {
+    //     "@type": "Place",
+    //     "geo": {
+    //         "@type": "GeoShape",
+    //         "box": "18.0 -65.0 72.0 172.0"
+    //     }
+    // }
+}
+
+updateOrCreateSchema(structuredData);
+
 </script>
 
 <template>

@@ -6,6 +6,7 @@ export const setMetaAttributes = (to: any, from: any) => {
     updateOrCreateMetaTag("og:locale", to.meta.locale ?? "en_US");
     setFollow(true);
     setCurrentUrl();
+    updateOrCreateSchema();
 
     // This goes through the matched routes from last to first, finding the closest route with a title.
     // e.g., if we have `/some/deep/nested/route` and `/some`, `/deep`, and `/nested` have titles,
@@ -84,5 +85,33 @@ export const updateOrCreateMetaTag = (tagName: string, content: string) => {
         newMetaTag.setAttribute("name", tagName);
         newMetaTag.setAttribute("content", content);
         document.head.appendChild(newMetaTag);
+    }
+}
+
+export const setDefaultSchema = () => {
+    updateOrCreateSchema({
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Cartes.io",
+        "applicationCategory": "BrowserApplication",
+        "offers": {
+            "@type": "Offer",
+            "price": "0"
+        }
+    });
+}
+
+export const updateOrCreateSchema = (json = null as null | Object) => {
+    if (!json) {
+        setDefaultSchema();
+    }
+    const schema = document.querySelector("script[type='application/ld+json']");
+    if (schema) {
+        schema.innerHTML = JSON.stringify(json);
+    } else {
+        const newSchema = document.createElement("script");
+        newSchema.setAttribute("type", "application/ld+json");
+        newSchema.innerHTML = JSON.stringify(json);
+        document.head.appendChild(newSchema);
     }
 }
