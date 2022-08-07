@@ -111,8 +111,18 @@ const mapCreatedTimeAgo = computed(() => {
                                 alt="Cartes.io logo" />
                             Anonymous
                         </div>
-
-                        <h1>{{ Maps.map.value?.title ?? "Untitled map" }}</h1>
+                        <div class="headings">
+                            <h1>{{ Maps.map.value?.title ?? "Untitled map" }}</h1>
+                            <p v-if="Maps.map.value?.is_linked_to_user">Made by a
+                                <span data-tooltip="This map was created by a registered Cartes.io user">Cartes.io
+                                    user</span>
+                            </p>
+                            <p v-else>Made
+                                by an
+                                <span data-tooltip="This map was created by someone not signed in">anonymous
+                                    user</span>
+                            </p>
+                        </div>
                         <p style="white-space: pre-wrap;">{{ Maps.map.value?.description }}</p>
                     </div>
                     <div>
@@ -188,6 +198,8 @@ const mapCreatedTimeAgo = computed(() => {
                         <!-- Public contributors -->
                         <details v-if="Maps.map.value?.public_contributors">
                             <summary>Public contributors</summary>
+                            <p>These people have contributed markers to this map and have their profile set to public.
+                            </p>
                             <div v-for="user in Maps.map.value?.public_contributors">
                                 <router-link :to="'/users/' + user.username">
                                     <!-- <div class="grid"> -->
@@ -318,9 +330,5 @@ summary {
     100% {
         transform: scale(0.8);
     }
-}
-
-h1 {
-    margin-bottom: var(--spacing);
 }
 </style>
