@@ -11,6 +11,14 @@ defineProps({
         type: Boolean,
         default: true,
     },
+    showDescription: {
+        type: Boolean,
+        default: true,
+    },
+    showFooter: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 const NewMapComponent = defineAsyncComponent(() =>
@@ -29,13 +37,13 @@ const NewMapComponent = defineAsyncComponent(() =>
                 style="height: 400px" />
         </header>
         <h3>{{ map.title ?? "Untitled map" }}</h3>
-        <p>{{ map.description }}</p>
+        <p v-if="showDescription">{{ map.description }}</p>
         <router-link :to="'/maps/' + map.uuid"
             custom
             v-slot="{ navigate }">
             <button @click="navigate">Open map</button>
         </router-link>
-        <footer v-if="map.markers_count">
+        <footer v-if="showFooter && map.markers_count">
             <small>{{ map.markers_count }} live markers</small>
         </footer>
     </article>
