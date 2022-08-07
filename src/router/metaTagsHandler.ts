@@ -103,7 +103,7 @@ export const setDefaultSchema = () => {
 
 export const updateOrCreateSchema = (json = null as null | Object) => {
     if (!json) {
-        setDefaultSchema();
+        return setDefaultSchema();
     }
     const schema = document.querySelector("script[type='application/ld+json']");
     if (schema) {
