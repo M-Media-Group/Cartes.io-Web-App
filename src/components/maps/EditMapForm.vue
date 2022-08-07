@@ -209,14 +209,14 @@ const updateMapSettings = (map: Map, settings: any) => {
                     </template>
                 </label>
             </template>
-            <button type="submit"
+            <BaseButton type="submit"
                 :aria-busy="Maps.isLoading.value"
-                :disabled="Maps.isLoading.value">Save</button>
+                :disabled="Maps.isLoading.value">Save</BaseButton>
         </form>
-        <button :disabled="Maps.isLoading.value"
+        <BaseButton :disabled="Maps.isLoading.value"
             v-if="Maps.canDeleteMap(map)"
             @click="Maps.deleteMap(map)"
-            class="contrast">Delete map</button>
+            class="contrast">Delete map</BaseButton>
     </div>
 </template>
 <style scoped>

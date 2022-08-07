@@ -166,8 +166,8 @@ const AppLayout = defineAsyncComponent(() =>
 </script>
 <template>
   <div v-if="userDevice.supportsAr">
-    <button class="close"
-      @click="close()">Open map</button>
+    <BaseButton class="close"
+      @click="close()">Open map</BaseButton>
     <a-scene vr-mode-ui="enabled: false"
       arjs="trackingMethod: best; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; videoTexture: true; debugUIEnabled: false;"
       loading-screen="dotsColor: blue; backgroundColor: black"
@@ -233,7 +233,7 @@ const AppLayout = defineAsyncComponent(() =>
   <AppLayout v-else>
     <div>
       <p>Your browser/device does not support Augmented Reality.</p>
-      <button @click="close()">Open map instead</button>
+      <BaseButton @click="close()">Open map instead</BaseButton>
     </div>
   </AppLayout>
 </template>

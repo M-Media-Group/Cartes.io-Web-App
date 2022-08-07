@@ -207,8 +207,8 @@ updateOrCreateSchema(structuredData);
                     </div>
                     <div>
 
-                        <button v-if="Maps.map.value?.privacy !== 'private'"
-                            @click="share()">Share this map</button>
+                        <BaseButton v-if="Maps.map.value?.privacy !== 'private'"
+                            @click="share()">Share this map</BaseButton>
 
                         <!-- Markers -->
                         <details open
@@ -228,10 +228,10 @@ updateOrCreateSchema(structuredData);
                                         expired instead.
                                     </p>
                                 </div>
-                                <button @click="showExpired = true"
+                                <BaseButton @click="showExpired = true"
                                     class="secondary">
                                     Show expired markers
-                                </button>
+                                </BaseButton>
                             </div>
                             <MapCards v-else
                                 role="listbox"

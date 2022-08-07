@@ -29,9 +29,9 @@ const { user, isLoading } = useUser();
                 </router-link>
             </li>
             <li>
-                <button :aria-busy="Maps.isLoading.value"
+                <BaseButton :aria-busy="Maps.isLoading.value"
                     :disabled="Maps.isLoading.value"
-                    @click="Maps.addMap(null, true)">New map</button>
+                    @click="Maps.addMap(null, true)">New map</BaseButton>
             </li>
         </ul>
     </nav>

@@ -20,11 +20,8 @@ getUsers();
                 <article v-for="user in users">
                     <h3>{{ user.username }}</h3>
                     <p v-if="user.description">{{ user.description }}</p>
-                    <router-link :to="`/users/${user.username}`"
-                        custom
-                        v-slot="{ navigate }">
-                        <button @click="navigate">View profile</button>
-                    </router-link>
+                    <BaseButton :to="`/users/${user.username}`">View profile
+                    </BaseButton>
                     <footer v-if="user.public_maps_count">
                         {{ user.public_maps_count }} public maps
                     </footer>

@@ -40,9 +40,9 @@ const { userForm, login, isLoading } = useUser();
                                 Remember me
                             </label>
                         </fieldset>
-                        <button type="submit"
+                        <BaseButton type="submit"
                             :disabled="isLoading"
-                            class="contrast">Login</button>
+                            class="contrast">Login</BaseButton>
                         <a href="https://cartes.io/password/reset">Forgot your password?</a>
                     </form>
                 </div>

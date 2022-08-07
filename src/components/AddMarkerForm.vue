@@ -288,10 +288,10 @@ defineExpose({
       </div>
     </details>
 
-    <button type="submit"
+    <BaseButton type="submit"
       :disabled="!canSubmit">
       Add {{ submitData.category_name ?? "marker" }}
-    </button>
+    </BaseButton>
   </form>
 </template>
 

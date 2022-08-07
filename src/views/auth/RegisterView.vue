@@ -57,10 +57,9 @@ const termsAndConditionsAccepted = ref(false);
                                     target="_blank">terms and conditions</a>
                             </label>
                         </fieldset>
-                        <button tooltip="Test"
-                            type="submit"
+                        <BaseButton type="submit"
                             :disabled="isLoading || !termsAndConditionsAccepted"
-                            class="contrast">Register</button>
+                            class="contrast">Register</BaseButton>
                     </form>
                 </div>
                 <img src="/images/earth.jpg" />

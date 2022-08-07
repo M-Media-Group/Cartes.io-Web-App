@@ -38,11 +38,7 @@ const NewMapComponent = defineAsyncComponent(() =>
         </header>
         <h3>{{ map.title ?? "Untitled map" }}</h3>
         <p v-if="showDescription">{{ map.description }}</p>
-        <router-link :to="'/maps/' + map.uuid"
-            custom
-            v-slot="{ navigate }">
-            <button @click="navigate">Open map</button>
-        </router-link>
+        <BaseButton :to="'/maps/' + map.uuid">Open map</BaseButton>
         <footer v-if="showFooter && map.markers_count">
             <small>{{ map.markers_count }} live markers</small>
         </footer>

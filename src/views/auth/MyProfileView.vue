@@ -75,8 +75,8 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
                                     v-model="userForm.description"></textarea>
                                 <small>Describe yourself</small>
                             </label>
-                            <button type="submit"
-                                :disabled="isLoading">Update</button>
+                            <BaseButton type="submit"
+                                :disabled="isLoading">Update</BaseButton>
                         </form>
                     </template>
                 </article>
@@ -109,8 +109,8 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
                                 aria-label="Token name"
                                 required
                                 v-model="tokenName">
-                            <button type="submit"
-                                :disabled="isLoadingToken">Create token</button>
+                            <BaseButton type="submit"
+                                :disabled="isLoadingToken">Create token</BaseButton>
                         </form>
                     </footer>
                 </article>

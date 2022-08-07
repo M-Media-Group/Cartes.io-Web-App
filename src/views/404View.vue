@@ -16,11 +16,7 @@ import { ref } from "vue";
                         <h1>Page not found</h1>
                         <p>The page you're looking for isn't here.</p>
                     </div>
-                    <router-link to="/"
-                        custom
-                        v-slot="{ navigate }">
-                        <button @click="navigate">Explore all maps</button>
-                    </router-link>
+                    <BaseButton to="/">Explore all maps</BaseButton>
                 </div>
             </div>
         </template>

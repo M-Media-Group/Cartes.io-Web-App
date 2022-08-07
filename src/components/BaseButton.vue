@@ -22,7 +22,8 @@ defineProps({
         :to="to"
         custom
         v-slot="{ navigate }">
-        <button @click="navigate">
+        <button v-bind="$attrs"
+            @click="navigate">
             <slot />
         </button>
     </router-link>
