@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Map } from '@/types/map';
-import { PropType } from 'vue';
-import NewMapComponent from '@/components/maps/NewMapComponent.vue';
+import { defineAsyncComponent, PropType } from 'vue';
 
 defineProps({
     map: {
@@ -13,6 +12,10 @@ defineProps({
         default: true,
     },
 });
+
+const NewMapComponent = defineAsyncComponent(() =>
+    import('@/components/maps/NewMapComponent.vue')
+)
 
 </script>
 <template>

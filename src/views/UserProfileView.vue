@@ -76,7 +76,7 @@ const share = async () => {
                         <img height="96"
                             width="96"
                             :src="user.avatar ?? 'https://via.placeholder.com/96'"
-                            :alt="user.avatar + ' avatar on Cartes.io'" />
+                            :alt="user.username + ' avatar on Cartes.io'" />
                         <div class="headings">
                             <h1>{{ user.username }}</h1>
                             <p>Joined {{ accountAgeInText }}</p>
