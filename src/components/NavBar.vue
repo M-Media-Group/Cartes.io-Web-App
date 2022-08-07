@@ -20,7 +20,7 @@ const { user, isLoading } = useUser();
         <ul>
             <li>
                 <router-link v-if="user?.id"
-                    to='/me'>{{ user.username }}
+                    :to='`/users/${user.username}`'>{{ user.username }}
                 </router-link>
                 <router-link v-else
                     :aria-busy="isLoading"

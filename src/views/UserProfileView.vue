@@ -79,7 +79,11 @@ const share = async () => {
                             :alt="user.username + ' avatar on Cartes.io'" />
                         <div class="headings">
                             <h1>{{ user.username }}</h1>
-                            <p>Joined {{ accountAgeInText }}</p>
+                            <p>Joined {{ accountAgeInText }}
+                                <template v-if="userInstance.user.value?.username === user.username">
+                                    · <router-link to="/me">Edit</router-link>
+                                </template>
+                            </p>
                         </div>
                     </div>
                     <p v-if="user.description">{{ user.description }}</p>
