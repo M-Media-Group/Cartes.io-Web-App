@@ -23,7 +23,7 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
 </script>
 <template>
     <AppLayout>
-        <div class="container">
+        <div>
             <section>
                 <div class="headings">
                     <h2>Your profile</h2>
