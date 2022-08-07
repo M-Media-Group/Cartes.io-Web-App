@@ -196,7 +196,8 @@ const setReady = async () => {
         </router-link>
       </l-control>
 
-      <MapMarkers :mapId="mapId"
+      <MapMarkers v-if="mapId && markers.length > 0"
+        :mapId="mapId"
         :markers="markers"></MapMarkers>
     </l-map>
   </div>

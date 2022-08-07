@@ -119,7 +119,7 @@ const mapCreatedTimeAgo = computed(() => {
                                 }}</router-link>
                             </p>
                             <p v-else-if="Maps.map.value?.is_linked_to_user">Made by a
-                                <span data-tooltip="This map was created by a registered Cartes.io user">Cartes.io
+                                <span data-tooltip="This map was created by a private Cartes.io user">Cartes.io
                                     user</span>
                             </p>
                             <p v-else>Made
@@ -207,20 +207,23 @@ const mapCreatedTimeAgo = computed(() => {
                             <summary>Public contributors</summary>
                             <p>These people have contributed markers to this map and have their profile set to public.
                             </p>
-                            <div v-for="user in Maps.map.value?.public_contributors">
-                                <router-link :to="'/users/' + user.username">
-                                    <!-- <div class="grid"> -->
-                                    <!-- <img height="24"
+                            <template v-if="Maps.map.value?.public_contributors.length > 0">
+                                <div v-for="user in Maps.map.value?.public_contributors">
+                                    <router-link :to="'/users/' + user.username">
+                                        <!-- <div class="grid"> -->
+                                        <!-- <img height="24"
                                             width="24"
                                             :src="user.avatar ?? 'https://via.placeholder.com/96'"
                                             :alt="user.avatar + ' avatar on Cartes.io'" /> -->
-                                    <div class="headings">
-                                        <p>{{ user.username }}</p>
-                                        <p>{{ user.description }}</p>
-                                    </div>
-                                    <!-- </div> -->
-                                </router-link>
-                            </div>
+                                        <div class="headings">
+                                            <p>{{ user.username }}</p>
+                                            <p>{{ user.description }}</p>
+                                        </div>
+                                        <!-- </div> -->
+                                    </router-link>
+                                </div>
+                            </template>
+                            <p v-else>There's no public contributors to show.</p>
                         </details>
 
                         <!-- Developer -->
