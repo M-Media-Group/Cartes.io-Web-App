@@ -15,6 +15,11 @@ const props = defineProps({
         type: Object as PropType<User>,
         required: true,
     },
+    // Currently unused
+    username: {
+        type: null,
+        required: false,
+    },
 })
 
 const accountAgeInDays = ref(0);
