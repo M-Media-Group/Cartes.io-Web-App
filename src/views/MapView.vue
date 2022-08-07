@@ -185,6 +185,25 @@ const mapCreatedTimeAgo = computed(() => {
                             one of the existing
                             labels or create your own.</p>
 
+                        <!-- Public contributors -->
+                        <details v-if="Maps.map.value?.public_contributors">
+                            <summary>Public contributors</summary>
+                            <div v-for="user in Maps.map.value?.public_contributors">
+                                <router-link :to="'/users/' + user.username">
+                                    <!-- <div class="grid"> -->
+                                    <!-- <img height="24"
+                                            width="24"
+                                            :src="user.avatar ?? 'https://via.placeholder.com/96'"
+                                            :alt="user.avatar + ' avatar on Cartes.io'" /> -->
+                                    <div class="headings">
+                                        <p>{{ user.username }}</p>
+                                        <p>{{ user.description }}</p>
+                                    </div>
+                                    <!-- </div> -->
+                                </router-link>
+                            </div>
+                        </details>
+
                         <!-- Developer -->
                         <details v-if="Maps.map.value">
                             <summary>Developer info</summary>

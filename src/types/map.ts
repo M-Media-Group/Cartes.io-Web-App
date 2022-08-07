@@ -2,6 +2,7 @@
 
 import { Category } from "./category";
 import { Marker } from "./marker";
+import { User } from "./user";
 
 export type privacyOptions = "public" | "unlisted" | "private";
 export type usersCanCreateMarkersOptions = "yes" | "no" | "only_logged_in";
@@ -21,6 +22,7 @@ export interface Map {
     markers?: Marker[];
     related?: Map[];
     markers_count?: number;
+    public_contributors?: User[];
 }
 
 export interface Options {
