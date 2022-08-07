@@ -6,6 +6,7 @@ import $bus, { eventTypes } from "@/eventBus/events";
 import cartes from "@m-media/npm-cartes-io";
 
 const user = ref(null) as Ref<User | null>;
+const users = ref(null) as Ref<User[] | null>;
 
 const userForm = reactive({
     email: "",
@@ -145,6 +146,26 @@ const getUser = async () => {
     });
 }
 
+const getUsers = async () => {
+
+    isLoading.value = true;
+
+    // Check if axios has a laravel_token cookie
+    const laravel_token = document.cookie.match(/laravel_token=([^;]+)/);
+    if (!laravel_token) {
+        // We need to get another token - this one will come with a laravel_token which we will use to auth all our API calls later on
+        await getCsrfToken();
+    }
+
+    cartes.users().get().then((response) => {
+        users.value = response.data
+    }).catch((error) => {
+        console.log("User error", error);
+    }).finally(() => {
+        isLoading.value = false;
+    });
+}
+
 const updateUser = async () => {
     isLoading.value = true;
 
@@ -206,6 +227,8 @@ export function useUser() {
         password,
         userForm,
         formErrors,
+        users,
         updateUser,
+        getUsers,
     };
 }

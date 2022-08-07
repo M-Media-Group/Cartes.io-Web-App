@@ -15,6 +15,7 @@ export interface User {
     is_public: boolean;
     personal_access_tokens?: PersonalAccessToken[];
     public_maps?: Map[];
+    public_maps_count?: number;
     public_maps_contributed_to?: Map[];
 }
 

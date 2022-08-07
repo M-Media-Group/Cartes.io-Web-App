@@ -6,7 +6,7 @@ import { PropType, ref, watch } from "vue";
 
 import { now } from "@/composables/time";
 import { User } from "@/types/user";
-import { useUser } from "@/composables/user.js";
+import { useUser } from "@/composables/user";
 
 import $bus, { eventTypes } from "@/eventBus/events";
 

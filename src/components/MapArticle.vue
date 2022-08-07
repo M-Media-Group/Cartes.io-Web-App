@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Map } from '@/types/map.js';
+import { Map } from '@/types/map';
 import { PropType } from 'vue';
 import NewMapComponent from '@/components/maps/NewMapComponent.vue';
 
