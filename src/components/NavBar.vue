@@ -19,14 +19,30 @@ const { user, isLoading } = useUser();
         </ul>
         <ul>
             <li>
-                <router-link v-if="user?.id"
-                    :to='`/users/${user.username}`'>{{ user.username }}
+            <li role="list"
+                v-if="user?.id">
+                <router-link :to='`/users/${user.username}`'
+                    aria-haspopup="listbox">{{ user.username }}
                 </router-link>
-                <router-link v-else
-                    :aria-busy="isLoading"
-                    :disabled="isLoading ? 'disabled' : null"
-                    to='/login'>{{ isLoading ? '' : 'Login' }}
-                </router-link>
+                <ul role="listbox">
+                    <li>
+                        <router-link :to='`/users/${user.username}`'
+                            aria-haspopup="listbox">Profile
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to='`/me`'
+                            aria-haspopup="listbox">Settings
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+
+            <router-link v-else
+                :aria-busy="isLoading"
+                :disabled="isLoading ? 'disabled' : null"
+                to='/login'>{{ isLoading ? '' : 'Login' }}
+            </router-link>
             </li>
             <li>
                 <BaseButton :aria-busy="Maps.isLoading.value"
