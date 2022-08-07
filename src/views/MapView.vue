@@ -103,7 +103,7 @@ const structuredData = {
     //     "ATMOSPHERE > ATMOSPHERIC PHENOMENA > FOG",
     //     "ATMOSPHERE > ATMOSPHERIC PHENOMENA > FREEZE"
     // ],
-    // "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "license": "https://creativecommons.org/publicdomain/zero/1.0/",
     "isAccessibleForFree": true,
     // "hasPart": [
     //     {
