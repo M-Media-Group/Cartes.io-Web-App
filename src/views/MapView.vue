@@ -113,7 +113,12 @@ const mapCreatedTimeAgo = computed(() => {
                         </div>
                         <div class="headings">
                             <h1>{{ Maps.map.value?.title ?? "Untitled map" }}</h1>
-                            <p v-if="Maps.map.value?.is_linked_to_user">Made by a
+                            <p v-if="Maps.map.value?.user">Made by
+                                <router-link :to="`/users/${Maps.map.value.user.username}`">{{
+                                        Maps.map.value.user.username
+                                }}</router-link>
+                            </p>
+                            <p v-else-if="Maps.map.value?.is_linked_to_user">Made by a
                                 <span data-tooltip="This map was created by a registered Cartes.io user">Cartes.io
                                     user</span>
                             </p>
