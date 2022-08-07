@@ -116,7 +116,7 @@ const share = async () => {
 
             <section>
                 <div class="headings">
-                    <h2>Maps contributed to</h2>
+                    <h2>Contributions</h2>
                     <p>All the public maps that {{ user.username }} has created markers on</p>
                 </div>
                 <div v-if="user.public_maps_contributed_to && user.public_maps_contributed_to.length > 0">
