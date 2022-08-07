@@ -23,6 +23,7 @@ export interface Map {
     related?: Map[];
     markers_count?: number;
     public_contributors?: User[];
+    is_linked_to_user?: boolean;
 }
 
 export interface Options {
