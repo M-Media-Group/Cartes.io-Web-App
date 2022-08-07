@@ -24,6 +24,7 @@ export interface Map {
     markers_count?: number;
     public_contributors?: User[];
     is_linked_to_user?: boolean;
+    user?: User;
 }
 
 export interface Options {
