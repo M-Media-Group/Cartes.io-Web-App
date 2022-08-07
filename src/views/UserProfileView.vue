@@ -67,9 +67,15 @@ const share = async () => {
         <template #header>
             <div class="header">
                 <div class="container">
-                    <div class="headings">
-                        <h1>{{ user.username }}</h1>
-                        <p>Joined {{ accountAgeInText }}</p>
+                    <div class="grid">
+                        <img height="96"
+                            width="96"
+                            :src="user.avatar ?? 'https://via.placeholder.com/96'"
+                            :alt="user.avatar + ' avatar on Cartes.io'" />
+                        <div class="headings">
+                            <h1>{{ user.username }}</h1>
+                            <p>Joined {{ accountAgeInText }}</p>
+                        </div>
                     </div>
                     <p v-if="user.description">{{ user.description }}</p>
                     <h2 v-if="userInstance.user.value?.username === user.username && user.is_public === false">
@@ -117,6 +123,18 @@ const share = async () => {
     </AppLayout>
 </template>
 <style scoped>
+img {
+    height: 96px;
+    width: 96px;
+    border-radius: 50%;
+    background-color: var(--primary);
+}
+
+.grid {
+    grid-template-columns: auto 1fr;
+    margin-bottom: var(--spacing);
+}
+
 .header {
     min-height: 23rem;
     background-color: var(--background-color);

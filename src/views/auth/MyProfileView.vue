@@ -76,8 +76,7 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
                                 <small>Describe yourself</small>
                             </label>
                             <button type="submit"
-                                :disabled="isLoading"
-                                class="contrast">Update</button>
+                                :disabled="isLoading">Update</button>
                         </form>
                     </template>
                 </article>
