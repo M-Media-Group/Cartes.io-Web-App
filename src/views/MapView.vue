@@ -147,8 +147,10 @@ const mapCreatedTimeAgo = computed(() => {
                             <div
                                 v-if="!showExpired && (!displayableMarkers || displayableMarkers.length === 0) && markers && markers.length > 0">
                                 <div class="headings">
-                                    <h3>There's no active markers to show.</h3>
-                                    <p>When new markers are added, they'll show here.</p>
+                                    <h3>{{ markers.length - displayableMarkers.length }} markers have expired.</h3>
+                                    <p>There's no active markers to show. You can choose to show markers that have
+                                        expired instead.
+                                    </p>
                                 </div>
                                 <button @click="showExpired = true"
                                     class="secondary">
