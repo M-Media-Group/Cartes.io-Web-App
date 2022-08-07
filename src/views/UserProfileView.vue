@@ -90,9 +90,9 @@ const share = async () => {
                     <h2 v-if="userInstance.user.value?.username === user.username && user.is_public === false">
                         Only you can see this page because your profile is set to private.
                     </h2>
-                    <div class="grid">
-                        <BaseButton v-if="user.is_public"
-                            @click="share()">Share profile</BaseButton>
+                    <div class="grid"
+                        v-if="user.is_public !== false">
+                        <BaseButton @click="share()">Share profile</BaseButton>
                     </div>
                 </div>
             </div>
