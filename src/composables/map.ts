@@ -44,7 +44,7 @@ export function useMap() {
         }
         const data = await cartes.maps().addParam('orderBy', 'markers_count').get();
         maps.value = data.data;
-        totalMaps.value = data.total;
+        totalMaps.value = data.meta.total;
     }
 
     const getMap = async (mapId: string) => {
