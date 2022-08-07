@@ -158,7 +158,12 @@ const getUsers = async () => {
     }
 
     cartes.users().get().then((response) => {
-        users.value = response.data
+
+        // Order response.data by maps_count
+        users.value = response.data.sort((a: User, b: User) => {
+            return (b.public_maps_count ?? 0) - (a.public_maps_count ?? 0);
+        });
+
     }).catch((error) => {
         console.log("User error", error);
     }).finally(() => {
