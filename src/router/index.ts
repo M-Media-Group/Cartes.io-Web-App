@@ -136,6 +136,9 @@ router.beforeEach(async (to, from, next) => {
             console.log(res.data, 'user');
             if (res.data) {
                 to.params.user = res.data;
+                setTitle(res.data.username + " - Cartes.io");
+                setDescription(res.data.description);
+                setFollow(res.data.is_public);
             }
         }).catch((e) => {
             alert(e.response.data.message);
