@@ -8,8 +8,6 @@ import { useRouter } from 'vue-router';
 const user = ref(null) as Ref<User | null>;
 const users = ref(null) as Ref<User[] | null>;
 
-const router = useRouter();
-
 const userForm = reactive({
     email: "",
     description: "",
@@ -56,7 +54,6 @@ const login = async () => {
         password: userForm.password,
     }).then(() => {
         $bus.$emit(eventTypes.logged_in);
-        router.push("/");
         getUser();
     }).catch((error) => {
         console.log("Login error", error);
@@ -84,7 +81,6 @@ const register = async () => {
         password_confirmation: userForm.password,
     }).then(() => {
         $bus.$emit(eventTypes.registered);
-        router.push("/");
         getUser();
     }
     ).catch((error) => {
@@ -102,7 +98,6 @@ const logout = () => {
     axios.post("/logout").then(() => {
         $bus.$emit(eventTypes.logged_out, user.value);
         user.value = null;
-        router.push("/login");
     }).catch((error) => {
         console.log("Logout error", error);
     });
@@ -216,6 +211,17 @@ const createPersonalAccessToken = (name: string) => {
 }
 
 export function useUser() {
+    // We have to do it this way since it seems useRouter() is null when calling globally
+    const router = useRouter();
+    $bus.$on(eventTypes.logged_in, () => {
+        router.push("/");
+    })
+    $bus.$on(eventTypes.registered, () => {
+        router.push("/");
+    })
+    $bus.$on(eventTypes.logged_out, () => {
+        router.push("/login");
+    })
     return {
         login,
         getUser,
