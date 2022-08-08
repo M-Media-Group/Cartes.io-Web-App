@@ -87,7 +87,7 @@ h3 {
 }
 
 /* If its the last element of the article except the footer, set margin 0 */
-article :last-child:not(footer) {
+article> :last-child:not(footer) {
     margin-bottom: 0;
 }
 </style>
