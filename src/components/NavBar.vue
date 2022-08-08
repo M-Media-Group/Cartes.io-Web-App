@@ -42,7 +42,7 @@ const search = async (query: string) => {
                     <strong>Cartes.io</strong>
                 </router-link>
             </li>
-            <li>
+            <li style="display:none;">
                 <input type="search"
                     placeholder="search"
                     @focus="searchIsFocused = true"
