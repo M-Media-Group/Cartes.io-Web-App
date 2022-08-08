@@ -24,9 +24,7 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
 <template>
     <AppLayout>
         <div>
-            <section>
-                <BaseHeading as="h2"
-                    title="Settings" />
+            <BaseSection title="Settings">
 
                 <article :aria-busy="isLoading">
                     <template v-if="user">
@@ -80,10 +78,9 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
                         </form>
                     </template>
                 </article>
-            </section>
-            <section>
-                <BaseHeading as="h2"
-                    title="Your API access tokens" />
+            </BaseSection>
+
+            <BaseSection title="Your API access tokens">
 
                 <article :aria-busy="isLoading">
                     <template v-if="!isLoading && accessTokens.length > 0">
@@ -112,11 +109,8 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
                         </form>
                     </footer>
                 </article>
-            </section>
-            <section>
-                <BaseHeading as="h2"
-                    title="Log out" />
-
+            </BaseSection>
+            <BaseSection title="Log out">
                 <article :aria-busy="isLoading">
                     <a v-if="user"
                         @click.prevent="logout()"
@@ -124,7 +118,7 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
                         href="#"
                         class="contrast">Log out</a>
                 </article>
-            </section>
+            </BaseSection>
         </div>
     </AppLayout>
 </template>

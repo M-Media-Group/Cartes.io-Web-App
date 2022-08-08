@@ -10,6 +10,7 @@ import { Vue3ProgressPlugin, ProgressFinisher, useProgress } from '@marcoschulte
 import VueHotjar from 'vue-hotjar-next'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseHeading from '@/components/BaseHeading.vue'
+import BaseSection from '@/components/BaseSection.vue'
 
 const progresses = [] as ProgressFinisher[];
 
@@ -86,5 +87,6 @@ app.use(Vue3ProgressPlugin)
 
 app.component('BaseButton', BaseButton);
 app.component('BaseHeading', BaseHeading);
+app.component('BaseSection', BaseSection);
 
 app.mount('#app')

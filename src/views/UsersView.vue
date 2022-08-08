@@ -12,11 +12,8 @@ getUsers();
 <template>
     <AppLayout>
         <div>
-            <section>
-                <BaseHeading as="h2"
-                    title="Users"
-                    :subtitle="`All public users`" />
-
+            <BaseSection title="Users"
+                :subtitle="`All public users`">
                 <article v-for="user in users">
                     <BaseHeading as="h3"
                         :title='user.username' />
@@ -27,7 +24,7 @@ getUsers();
                         {{ user.public_maps_count }} public maps
                     </footer>
                 </article>
-            </section>
+            </BaseSection>
         </div>
     </AppLayout>
 </template>

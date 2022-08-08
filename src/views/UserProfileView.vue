@@ -101,10 +101,8 @@ const share = async () => {
         </template>
 
         <div>
-            <section>
-                <BaseHeading as="h2"
-                    title="Maps"
-                    :subtitle="`All the public maps that ${user.username} has created`" />
+            <BaseSection title="Maps"
+                :subtitle="`All the public maps that ${user.username} has created`">
 
                 <div v-if="user.public_maps && user.public_maps.length > 0">
                     <MapArticle v-for="map in user.public_maps"
@@ -115,12 +113,10 @@ const share = async () => {
                     <BaseHeading as="h3"
                         :title='user.username + " has no public maps to show right now"' />
                 </template>
-            </section>
+            </BaseSection>
 
-            <section>
-                <BaseHeading as="h2"
-                    title="Contributions"
-                    :subtitle="`All the public maps that ${user.username} has created markers on`" />
+            <BaseSection title="Contributions"
+                :subtitle="`All the public maps that ${user.username} has created markers on`">
 
                 <div v-if="user.public_maps_contributed_to && user.public_maps_contributed_to.length > 0">
                     <MapArticle v-for="map in user.public_maps_contributed_to"
@@ -132,7 +128,7 @@ const share = async () => {
                     <BaseHeading as="h3"
                         :title='user.username + " has no public map contributions to show right now"' />
                 </template>
-            </section>
+            </BaseSection>
         </div>
     </AppLayout>
 </template>
