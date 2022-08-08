@@ -52,7 +52,7 @@ const login = async () => {
     axios.post("/login", {
         email: userForm.email,
         password: userForm.password,
-    }).then(() => {
+    }).then(async () => {
         $bus.$emit(eventTypes.logged_in);
         getUser();
     }).catch((error) => {
@@ -79,7 +79,7 @@ const register = async () => {
         password: userForm.password,
         username: userForm.username,
         password_confirmation: userForm.password,
-    }).then(() => {
+    }).then(async () => {
         $bus.$emit(eventTypes.registered);
         getUser();
     }
@@ -95,7 +95,7 @@ const register = async () => {
 
 const logout = () => {
     // Delete all cookies
-    axios.post("/logout").then(() => {
+    axios.post("/logout").then(async () => {
         $bus.$emit(eventTypes.logged_out, user.value);
         user.value = null;
     }).catch((error) => {
