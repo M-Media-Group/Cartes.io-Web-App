@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useMap } from '@/composables/map.js';
+import { useMapPosition } from '@/composables/mapPosition.js';
 import { Map } from '@/types/map';
 import { defineAsyncComponent, PropType } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
     map: {
@@ -38,11 +39,25 @@ const NewMapComponent = defineAsyncComponent(() =>
 const MapInstance = useMap();
 
 const router = useRouter();
+const route = useRoute();
+
+const mapPosition = useMapPosition();
 
 const handleClick = () => {
-    if (props.clickable) {
-        router.push('/maps/' + props.map.uuid);
+    if (props.clickable === true) {
+        goToMap();
     }
+}
+
+const goToMap = () => {
+    router.push({
+        path: '/maps/' + props.map.uuid,
+        query: {
+            lat: mapPosition.center.value.lat,
+            lng: mapPosition.center.value.lng,
+            zoom: mapPosition.zoom.value,
+        },
+    });
 }
 
 </script>
@@ -60,8 +75,8 @@ const handleClick = () => {
         <BaseHeading as="h3"
             :title='map.title ?? "Untitled map"' />
         <p v-if="showDescription">{{ map.description }}</p>
-        <BaseButton v-if="showAction && !clickable"
-            :to="'/maps/' + map.uuid">Open map</BaseButton>
+        <BaseButton v-if="showAction"
+            @click="goToMap()">Open map</BaseButton>
         <small v-if="MapInstance.wouldLinkToCurrentUser(map)">{{ "This map is linked to you only through this device."
         }}
         </small>
@@ -73,7 +88,7 @@ const handleClick = () => {
 <style scoped>
 article>header.full {
     padding: 0;
-    /* margin-bottom: calc(var(--block-spacing-vertical) *0.5); */
+    margin-bottom: calc(var(--block-spacing-vertical) *0.5);
 }
 
 /* The first article child of a section */

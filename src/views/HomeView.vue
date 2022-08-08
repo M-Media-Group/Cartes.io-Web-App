@@ -121,18 +121,13 @@ watch(() => user.value?.id, () => {
                 <BaseSection title="Public maps"
                     subtitle="These maps are made by the community and shared with everyone.">
 
-                    <div>
+                    <MapArticle v-for="(map, i) in Maps.maps.value"
+                        :key="map.uuid"
+                        :map="map"
+                        :showDescription="true"
+                        :showMap="true"
+                        :showFooter="false" />
 
-                        <MapArticle v-for="(map, i) in Maps.maps.value"
-                            @click="$router.push('/maps/' + map.uuid)"
-                            :key="map.uuid"
-                            :map="map"
-                            :showDescription="true"
-                            :showMap="true"
-                            :showFooter="false" />
-
-
-                    </div>
                     <div>Showing {{ Maps.maps.value.length }} out of {{ Maps.totalMaps.value }} public maps and
                         many more
                         private ones
