@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { useMap } from "@/composables/map.js";
 import { Map } from "@/types/map";
 import { PropType } from "vue";
+
+const { getMapToken } = useMap();
 
 defineProps({
     map: {
@@ -45,12 +48,12 @@ GET {{ url }}/api/maps/{{ map.uuid }}/markers</code></pre>
             <li>Python using our <a target="_BLANK"
                     href="https://pypi.org/project/py-cartes-io/">Python package</a>
                 <!-- Code block showing API call -->
-                <pre><code>cartes.Maps('{{ map.uuid }}').get()</code></pre>
+                <pre><code>cartes.Maps('{{ map.uuid }}', '{{ getMapToken(map) ?? 'optional_map_token' }}').get()</code></pre>
             </li>
             <li>JS using our <a target="_BLANK"
                     href="https://www.npmjs.com/package/@m-media/npm-cartes-io/">NPM package</a>
                 <!-- Code block showing API call -->
-                <pre><code>cartes.maps('{{ map.uuid }}').get()</code></pre>
+                <pre><code>cartes.maps('{{ map.uuid }}', '{{ getMapToken(map) ?? 'optional_map_token' }}').get()</code></pre>
             </li>
         </ul>
         <p>When using the API or embedding the map, you must attribute this website on your front-end.</p>

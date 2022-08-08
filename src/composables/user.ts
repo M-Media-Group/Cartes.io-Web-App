@@ -38,10 +38,6 @@ const authenticateUser = (authenticableUser: User) => {
 
 const isLoading = ref(false);
 
-const username = ref("");
-const email = ref("");
-const password = ref("");
-
 const login = async () => {
     resetFormErrors();
 
@@ -227,9 +223,6 @@ export function useUser() {
         register,
         isLoading,
         user,
-        username,
-        email,
-        password,
         userForm,
         formErrors,
         users,

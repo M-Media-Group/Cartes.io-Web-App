@@ -42,26 +42,27 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
                                     autocomplete="nickname"
                                     required
                                     autofocus
+                                    :minlength="3"
                                     v-model="userForm.username">
-                                <small>Pick a unique name</small>
+                                <small>Pick a unique username for your profile</small>
                             </label>
                             <label for="username">Email
-                                <input type="text"
-                                    name="username"
-                                    placeholder="Username"
-                                    aria-label="Username"
-                                    autocomplete="nickname"
+                                <input type="email"
+                                    name="email"
+                                    placeholder="Email"
+                                    aria-label="Email"
+                                    autocomplete="email"
                                     required
                                     autofocus
                                     v-model="userForm.email">
-                                <small>Your email address</small>
+                                <small>Your email is never visible to anyone</small>
                             </label>
                             <fieldset>
-                                <label for="remember">
+                                <label for="is_public">
                                     <input type="checkbox"
                                         role="switch"
-                                        id="remember"
-                                        name="remember"
+                                        id="is_public"
+                                        name="is_public"
                                         v-model="userForm.is_public">
                                     Public profile <router-link :to="`/users/${user.username}`"><small>View
                                             profile</small>
@@ -72,8 +73,9 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
                                 <textarea name="description"
                                     placeholder="Description"
                                     aria-label="Description"
+                                    :maxlength="191"
                                     v-model="userForm.description"></textarea>
-                                <small>Describe yourself</small>
+                                <small>Your profile description is shown on your profile</small>
                             </label>
                             <BaseButton type="submit"
                                 :disabled="isLoading">Update</BaseButton>

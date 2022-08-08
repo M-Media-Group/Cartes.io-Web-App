@@ -189,7 +189,7 @@ export function useMap() {
     };
 
     const canDeleteMap = (map: Map) => {
-        return map.token || localStorage.getItem("map_" + map.uuid);
+        return getMapToken(map);
     };
 
     const canUpdateMap = (map: Map) => {
@@ -200,7 +200,7 @@ export function useMap() {
         if (!map) {
             return false;
         }
-        return map.users_can_create_markers === 'yes' || map.token || localStorage.getItem("map_" + map.uuid);
+        return map.users_can_create_markers === 'yes' || getMapToken(map);
     }
 
     const canCreateMarkersByMapId = (mapId: string) => {
@@ -209,6 +209,10 @@ export function useMap() {
             return false;
         }
         return canCreateMarkers(map);
+    }
+
+    const getMapToken = (map: Map) => {
+        return map.token || localStorage.getItem("map_" + map.uuid);
     }
 
     const updateMap = async (map: Map, formData: MapForm) => {
@@ -221,7 +225,7 @@ export function useMap() {
         }
 
         isLoading.value = true;
-        const data = await cartes.maps(map.uuid, map.token || localStorage.getItem("map_" + map.uuid)).update(formData);
+        const data = await cartes.maps(map.uuid, getMapToken(map)).update(formData);
         if (data.uuid) {
             $bus.$emit(eventTypes.updated_map, data);
             emit("updatedMap", data);
@@ -277,6 +281,7 @@ export function useMap() {
         removeMarkerFromMarkerArray,
         canCreateMarkersByMapId,
         markerExistsInMapArray,
+        getMapToken,
         isLoading,
         formErrors,
         hasErrors,
