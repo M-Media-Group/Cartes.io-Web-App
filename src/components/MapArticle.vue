@@ -88,7 +88,7 @@ const goToMap = () => {
 <style scoped>
 article>header.full {
     padding: 0;
-    margin-bottom: calc(var(--block-spacing-vertical) *0.5);
+    /* margin-bottom: calc(var(--block-spacing-vertical) *0.5); */
 }
 
 /* The first article child of a section */
