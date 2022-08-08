@@ -7,6 +7,9 @@ import $bus, { eventTypes } from "@/eventBus/events";
 import { Marker } from "@/types/marker";
 import router from "@/router";
 import "@picocss/pico";
+import { useUser } from "./user";
+
+const { user } = useUser();
 
 const maps = ref<Map[]>([]);
 
@@ -189,7 +192,7 @@ export function useMap() {
     };
 
     const canDeleteMap = (map: Map) => {
-        return getMapToken(map);
+        return getMapToken(map) || (map.user && user.value?.id === map.user.id);
     };
 
     const canUpdateMap = (map: Map) => {
@@ -200,7 +203,7 @@ export function useMap() {
         if (!map) {
             return false;
         }
-        return map.users_can_create_markers === 'yes' || getMapToken(map);
+        return map.users_can_create_markers === 'yes' || getMapToken(map) || canUpdateMap(map);
     }
 
     const canCreateMarkersByMapId = (mapId: string) => {
