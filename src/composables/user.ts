@@ -1,12 +1,14 @@
 import { reactive, Ref, ref } from "vue";
 import axios from "axios";
 import { PersonalAccessToken, User } from "@/types/user";
-import router from "@/router";
 import $bus, { eventTypes } from "@/eventBus/events";
 import cartes from "@m-media/npm-cartes-io";
+import { useRouter } from 'vue-router';
 
 const user = ref(null) as Ref<User | null>;
 const users = ref(null) as Ref<User[] | null>;
+
+const router = useRouter();
 
 const userForm = reactive({
     email: "",
