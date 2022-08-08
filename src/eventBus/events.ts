@@ -20,6 +20,7 @@ export enum eventTypes {
   updated_user = "updated_user",
   shared_profile = "shared_profile",
   registered = "registered",
+  searched = "searched",
   created_personal_access_token = "created_personal_access_token",
   deleted_personal_access_token = "deleted_personal_access_token",
 }

@@ -68,7 +68,17 @@ export function useMap() {
         if (query.length < minCategoryNameLength) {
             return;
         }
-        return await cartes.maps().search(query);
+        const results = await cartes.maps().search(query);
+
+        if (results.data.length > 0) {
+            $bus.$emit(eventTypes.searched, {
+                resource: 'map',
+                query: query,
+                results: results.data,
+            });
+        }
+
+        return results;
     }
 
     const getMapIndexFromMapsArray = (mapId: string) => {

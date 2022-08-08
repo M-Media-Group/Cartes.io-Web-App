@@ -53,6 +53,13 @@ export default {
       action: e.action,
     });
   },
+  searched: (e) => {
+    event('search', {
+      resource: e.resource,
+      search_term: e.query,
+      // results: e.results
+    });
+  },
   logged_in: () => {
     event('login');
   },
