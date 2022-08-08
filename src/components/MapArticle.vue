@@ -2,8 +2,9 @@
 import { useMap } from '@/composables/map.js';
 import { Map } from '@/types/map';
 import { defineAsyncComponent, PropType } from 'vue';
+import { useRouter } from 'vue-router';
 
-defineProps({
+const props = defineProps({
     map: {
         type: Object as PropType<Map>,
         required: true,
@@ -20,6 +21,14 @@ defineProps({
         type: Boolean,
         default: true,
     },
+    showAction: {
+        type: Boolean,
+        default: true,
+    },
+    clickable: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 const NewMapComponent = defineAsyncComponent(() =>
@@ -28,9 +37,18 @@ const NewMapComponent = defineAsyncComponent(() =>
 
 const MapInstance = useMap();
 
+const router = useRouter();
+
+const handleClick = () => {
+    if (props.clickable) {
+        router.push('/maps/' + props.map.uuid);
+    }
+}
+
 </script>
 <template>
-    <article :key="map.uuid">
+    <article :key="map.uuid"
+        @click="handleClick()">
         <header class="full"
             v-if="map.markers_count && map.markers_count > 0">
             <NewMapComponent v-if="showMap"
@@ -42,7 +60,8 @@ const MapInstance = useMap();
         <BaseHeading as="h3"
             :title='map.title ?? "Untitled map"' />
         <p v-if="showDescription">{{ map.description }}</p>
-        <BaseButton :to="'/maps/' + map.uuid">Open map</BaseButton>
+        <BaseButton v-if="showAction && !clickable"
+            :to="'/maps/' + map.uuid">Open map</BaseButton>
         <small v-if="MapInstance.wouldLinkToCurrentUser(map)">{{ "This map is linked to you only through this device."
         }}
         </small>
@@ -65,5 +84,10 @@ article {
 h3 {
 
     margin-bottom: var(--spacing);
+}
+
+/* If its the last P element in the article, set margin-bottom to 0 */
+article :last-child {
+    margin-bottom: 0;
 }
 </style>
