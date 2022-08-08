@@ -73,7 +73,7 @@ const settings = reactive({
         ],
     },
     'options.default_expiration_time': {
-        title: "Default expiration time",
+        title: "Default marker expiration time",
         value: props.map.options?.default_expiration_time ?? '',
         options: [
             {
