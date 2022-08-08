@@ -14,10 +14,11 @@ const { value } = trickleComposable(state);
 
 <style scoped>
 progress {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    margin: 0;
     z-index: 1000;
 }
 </style>

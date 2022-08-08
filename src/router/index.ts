@@ -3,6 +3,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { setMetaAttributes, setFollow, setTitle, setDescription } from "./metaTagsHandler";
 import axios from "axios";
+import { useProgress } from "@marcoschulte/vue3-progress";
 
 const Maps = useMap();
 
@@ -117,6 +118,8 @@ router.beforeEach(async (to, from, next) => {
     if (pathStayedTheSame(to, from)) {
         return next();
     }
+    const progress = useProgress().start();
+
     setMetaAttributes(to, from);
     // We are using beforeEach instead of beforeEnter on the individual route because beforeEach is also called when the view/component updates (when going from one mapId to another)
     if (to.params.mapId) {
@@ -151,6 +154,7 @@ router.beforeEach(async (to, from, next) => {
             return false
         });
     }
+    progress.finish();
     next();
 })
 
