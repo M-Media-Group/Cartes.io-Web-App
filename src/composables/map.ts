@@ -9,8 +9,6 @@ import router from "@/router";
 import "@picocss/pico";
 import { useUser } from "./user";
 
-const { user } = useUser();
-
 const maps = ref<Map[]>([]);
 
 const totalMaps = ref(0);
@@ -192,7 +190,7 @@ export function useMap() {
     };
 
     const canDeleteMap = (map: Map) => {
-        return getMapToken(map) || (map.user && user.value?.id === map.user.id);
+        return getMapToken(map);
     };
 
     const canUpdateMap = (map: Map) => {
