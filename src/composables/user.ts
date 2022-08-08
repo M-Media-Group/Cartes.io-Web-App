@@ -8,6 +8,8 @@ import { useRouter } from 'vue-router';
 const user = ref(null) as Ref<User | null>;
 const users = ref(null) as Ref<User[] | null>;
 
+const router = useRouter();
+
 const userForm = reactive({
     email: "",
     description: "",
@@ -52,8 +54,9 @@ const login = async () => {
     axios.post("/login", {
         email: userForm.email,
         password: userForm.password,
-    }).then(() => {
+    }).then(async () => {
         $bus.$emit(eventTypes.logged_in);
+        await router.push("/");
         getUser();
     }).catch((error) => {
         console.log("Login error", error);
@@ -79,8 +82,9 @@ const register = async () => {
         password: userForm.password,
         username: userForm.username,
         password_confirmation: userForm.password,
-    }).then(() => {
+    }).then(async () => {
         $bus.$emit(eventTypes.registered);
+        await router.push("/");
         getUser();
     }
     ).catch((error) => {
@@ -95,9 +99,10 @@ const register = async () => {
 
 const logout = () => {
     // Delete all cookies
-    axios.post("/logout").then(() => {
+    axios.post("/logout").then(async () => {
         $bus.$emit(eventTypes.logged_out, user.value);
         user.value = null;
+        await router.push("/login");
     }).catch((error) => {
         console.log("Logout error", error);
     });
@@ -211,17 +216,6 @@ const createPersonalAccessToken = (name: string) => {
 }
 
 export function useUser() {
-    // We have to do it this way since it seems useRouter() is null when calling globally
-    const router = useRouter();
-    $bus.$on(eventTypes.logged_in, () => {
-        router.push("/");
-    })
-    $bus.$on(eventTypes.registered, () => {
-        router.push("/");
-    })
-    $bus.$on(eventTypes.logged_out, () => {
-        router.push("/login");
-    })
     return {
         login,
         getUser,
