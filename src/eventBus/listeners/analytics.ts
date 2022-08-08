@@ -53,7 +53,7 @@ export default {
       action: e.action,
     });
   },
-  searched: (e) => {
+  searched: (e: { resource: string; query: string; results: any[]; }) => {
     event('search', {
       resource: e.resource,
       search_term: e.query,
