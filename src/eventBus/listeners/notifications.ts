@@ -246,5 +246,13 @@ export default {
       ["browser"],
       5000
     ).show();
+  },
+  sent_reset_password_email: () => {
+    new CustomNotification(
+      "success",
+      "We've sent you an email with a link to reset your password.",
+      ["browser"],
+      5000
+    ).show();
   }
 } as Record<eventTypes, any>;

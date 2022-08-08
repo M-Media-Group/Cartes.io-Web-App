@@ -62,6 +62,25 @@ const login = async () => {
     });
 }
 
+const sendPasswordReset = async () => {
+    resetFormErrors();
+
+    isLoading.value = true;
+
+    // await getCsrfToken();
+
+    axios.post("/password/email", {
+        email: userForm.email,
+    }).then(() => {
+        $bus.$emit(eventTypes.sent_reset_password_email);
+    }).catch((error) => {
+        console.log("Password reset error", error);
+        alert(error.response.data.message);
+    }).finally(() => {
+        isLoading.value = false;
+    });
+}
+
 const register = async () => {
     resetFormErrors();
 
@@ -217,6 +236,7 @@ export function useUser() {
         createPersonalAccessToken,
         logout,
         register,
+        sendPasswordReset,
         isLoading,
         user,
         userForm,

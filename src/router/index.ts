@@ -64,6 +64,12 @@ const routes: Array<RouteRecordRaw> = [
             import(/* webpackChunkName: "ar" */ "@/views/auth/RegisterView.vue"),
     },
     {
+        path: "/forgot-password",
+        name: "PasswordReset",
+        component: () =>
+            import(/* webpackChunkName: "ar" */ "@/views/auth/ResetPasswordView.vue"),
+    },
+    {
         path: "/me",
         name: "MyAccount",
         component: () =>

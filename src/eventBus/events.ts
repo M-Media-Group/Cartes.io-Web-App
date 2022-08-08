@@ -16,6 +16,7 @@ export enum eventTypes {
   viewed_page = "viewed_page",
   logged_in = "logged_in",
   logged_out = "logged_out",
+  sent_reset_password_email = "sent_reset_password_email",
   updated_user = "updated_user",
   shared_profile = "shared_profile",
   registered = "registered",

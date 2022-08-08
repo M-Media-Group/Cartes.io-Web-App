@@ -4,11 +4,11 @@ import { useUser } from "@/composables/user";
 import { useRouter } from "vue-router";
 import $bus, { eventTypes } from "@/eventBus/events";
 
-const { userForm, login, isLoading } = useUser();
+const { userForm, sendPasswordReset, isLoading } = useUser();
 const router = useRouter();
 
-$bus.$on(eventTypes.logged_in, () => {
-    router.push("/");
+$bus.$on(eventTypes.sent_reset_password_email, () => {
+    router.push("/login");
 })
 </script>
 <template>
@@ -16,9 +16,9 @@ $bus.$on(eventTypes.logged_in, () => {
         <article>
             <div class="grid">
                 <div>
-                    <BaseHeading title="Login"
-                        subtitle="Login to Cartes.io" />
-                    <form @submit.prevent="login()"
+                    <BaseHeading title="Reset your password"
+                        subtitle="Send yourself a password reset link" />
+                    <form @submit.prevent="sendPasswordReset()"
                         :disabled="isLoading ? 'disabled' : null">
                         <input type="email"
                             name="email"
@@ -28,33 +28,13 @@ $bus.$on(eventTypes.logged_in, () => {
                             required
                             autofocus
                             v-model="userForm.email">
-                        <input type="password"
-                            name="password"
-                            placeholder="Password"
-                            aria-label="Password"
-                            autocomplete="current-password"
-                            required
-                            v-model="userForm.password">
-                        <fieldset>
-                            <label for="remember">
-                                <input type="checkbox"
-                                    role="switch"
-                                    id="remember"
-                                    name="remember">
-                                Remember me
-                            </label>
-                        </fieldset>
                         <BaseButton type="submit"
                             :disabled="isLoading"
-                            class="contrast">Login</BaseButton>
-                        <router-link to="/forgot-password">Forgot your password?</router-link>
+                            class="contrast">Send password reset link</BaseButton>
                     </form>
                 </div>
                 <img src="/images/earth.jpg" />
             </div>
-            <footer>
-                <router-link to="/register">Don't have an account? Sign up!</router-link>
-            </footer>
         </article>
     </AppLayout>
 </template>
