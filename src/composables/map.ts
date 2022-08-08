@@ -19,6 +19,8 @@ const map = computed(() => {
     return maps.value.find((m) => m.uuid === selectedMapUuid.value);
 });
 
+const isLoading = ref(false);
+
 // reactive maps
 // const maps = reactive<Map[]>([]);
 
@@ -28,8 +30,6 @@ export function useMap() {
     const minCategoryNameLength = 3;
 
     const emit = getCurrentInstance()?.emit as any;
-
-    const isLoading = ref(false);
 
     const formErrors = reactive<MapForm>({
         title: null,
