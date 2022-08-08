@@ -185,7 +185,9 @@ const setReady = async () => {
             @addedMarker="handleNewMarkerEvent($event)" />
           <div v-else-if="map?.users_can_create_markers === 'no'">Only the map owner can create markers on this map.
           </div>
-          <div v-else>You must be logged in to create markers on this map.</div>
+          <div v-else>
+            <router-link to="/login">Log in</router-link> to create markers on this map.
+          </div>
         </l-popup>
       </l-layer-group>
 
