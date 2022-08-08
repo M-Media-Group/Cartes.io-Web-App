@@ -2,10 +2,18 @@
 import AppLayout from "@/templates/AppLayout.vue";
 import { useUser } from "@/composables/user";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import $bus, { eventTypes } from "@/eventBus/events";
 
 const { userForm, formErrors, register, isLoading } = useUser();
 
+const router = useRouter();
+
 const termsAndConditionsAccepted = ref(false);
+
+$bus.$on(eventTypes.registered, async () => {
+    router.push("/");
+});
 
 </script>
 <template>

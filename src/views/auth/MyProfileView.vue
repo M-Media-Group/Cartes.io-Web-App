@@ -4,11 +4,14 @@ import { PersonalAccessToken } from "@/types/user";
 import { useUser } from '@/composables/user';
 import { ref } from "vue";
 import $bus, { eventTypes } from "@/eventBus/events";
+import { useRouter } from "vue-router";
 
 const { user, userForm, isLoading, getPersonalAccessTokens, logout, createPersonalAccessToken, updateUser } = useUser();
 
 const accessTokens = ref<PersonalAccessToken[]>([]);
 getPersonalAccessTokens().then(tokens => accessTokens.value = tokens);
+
+const router = useRouter();
 
 const tokenName = ref("");
 
@@ -19,6 +22,10 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
     alert(e.accessToken)
     isLoadingToken.value = false;
 });
+
+$bus.$on(eventTypes.logged_out, async () => {
+    router.push("/login");
+})
 
 </script>
 <template>

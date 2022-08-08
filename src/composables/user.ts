@@ -3,7 +3,6 @@ import axios from "axios";
 import { PersonalAccessToken, User } from "@/types/user";
 import $bus, { eventTypes } from "@/eventBus/events";
 import cartes from "@m-media/npm-cartes-io";
-import { useRouter } from 'vue-router';
 
 const user = ref(null) as Ref<User | null>;
 const users = ref(null) as Ref<User[] | null>;
@@ -211,17 +210,6 @@ const createPersonalAccessToken = (name: string) => {
 }
 
 export function useUser() {
-    // We have to do it this way since it seems useRouter() is null when calling globally
-    const router = useRouter();
-    $bus.$on(eventTypes.logged_in, async () => {
-        await router.push("/");
-    })
-    $bus.$on(eventTypes.registered, async () => {
-        await router.push("/");
-    })
-    $bus.$on(eventTypes.logged_out, async () => {
-        await router.push("/login");
-    })
     return {
         login,
         getUser,

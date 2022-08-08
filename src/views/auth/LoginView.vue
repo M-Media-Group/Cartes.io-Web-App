@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import AppLayout from "@/templates/AppLayout.vue";
 import { useUser } from "@/composables/user";
+import { useRouter } from "vue-router";
+import $bus, { eventTypes } from "@/eventBus/events";
 
 const { userForm, login, isLoading } = useUser();
+const router = useRouter();
 
+$bus.$on(eventTypes.logged_in, () => {
+    router.push("/");
+})
 </script>
 <template>
     <AppLayout>
