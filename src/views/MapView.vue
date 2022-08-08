@@ -8,7 +8,7 @@ import MapCards from "@/components/maps/MapCards.vue";
 import EditMapForm from "@/components/maps/EditMapForm.vue";
 import DeveloperInfo from "@/components/DeveloperInfo.vue";
 import AppLayout from "@/templates/AppLayout.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useMapPosition } from "@/composables/mapPosition";
 
 import { now } from "@/composables/time";
@@ -18,6 +18,7 @@ import $bus, { eventTypes } from "@/eventBus/events";
 
 import { updateOrCreateSchema } from "@/router/metaTagsHandler";
 
+const router = useRouter();
 const route = useRoute();
 
 const { markers, displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap, showExpired } = useMarker();
@@ -159,6 +160,10 @@ const structuredData = {
 }
 
 updateOrCreateSchema(structuredData);
+
+$bus.$on(eventTypes.deleted_map, () => {
+    router.push("/");
+})
 
 </script>
 

@@ -265,7 +265,6 @@ export function useMap() {
                 localStorage.removeItem("map_" + map.uuid);
                 $bus.$emit(eventTypes.deleted_map, map);
                 emit('deletedMap', map);
-                router.push("/");
             })
                 .catch((error) => {
                     alert(error.message);
