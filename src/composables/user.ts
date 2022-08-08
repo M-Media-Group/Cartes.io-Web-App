@@ -213,14 +213,14 @@ const createPersonalAccessToken = (name: string) => {
 export function useUser() {
     // We have to do it this way since it seems useRouter() is null when calling globally
     const router = useRouter();
-    $bus.$on(eventTypes.logged_in, () => {
-        router.push("/");
+    $bus.$on(eventTypes.logged_in, async () => {
+        await router.push("/");
     })
-    $bus.$on(eventTypes.registered, () => {
-        router.push("/");
+    $bus.$on(eventTypes.registered, async () => {
+        await router.push("/");
     })
-    $bus.$on(eventTypes.logged_out, () => {
-        router.push("/login");
+    $bus.$on(eventTypes.logged_out, async () => {
+        await router.push("/login");
     })
     return {
         login,
