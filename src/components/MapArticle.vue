@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useMap } from '@/composables/map.js';
 import { Map } from '@/types/map';
 import { defineAsyncComponent, PropType } from 'vue';
 
@@ -25,6 +26,8 @@ const NewMapComponent = defineAsyncComponent(() =>
     import('@/components/maps/NewMapComponent.vue')
 )
 
+const MapInstance = useMap();
+
 </script>
 <template>
     <article :key="map.uuid">
@@ -36,9 +39,13 @@ const NewMapComponent = defineAsyncComponent(() =>
                 :markers="map.markers ?? []"
                 style="height: 400px" />
         </header>
-        <h3>{{ map.title ?? "Untitled map" }}</h3>
+        <BaseHeading as="h3"
+            :title='map.title ?? "Untitled map"' />
         <p v-if="showDescription">{{ map.description }}</p>
         <BaseButton :to="'/maps/' + map.uuid">Open map</BaseButton>
+        <small v-if="MapInstance.wouldLinkToCurrentUser(map)">{{ "This map is linked to you only through this device."
+        }}
+        </small>
         <footer v-if="showFooter && map.markers_count">
             <small>{{ map.markers_count }} live markers</small>
         </footer>

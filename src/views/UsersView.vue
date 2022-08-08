@@ -13,12 +13,13 @@ getUsers();
     <AppLayout>
         <div>
             <section>
-                <div class="headings">
-                    <h2>Users</h2>
-                    <p>All public users</p>
-                </div>
+                <BaseHeading as="h2"
+                    title="Users"
+                    :subtitle="`All public users`" />
+
                 <article v-for="user in users">
-                    <h3>{{ user.username }}</h3>
+                    <BaseHeading as="h3"
+                        :title='user.username' />
                     <p v-if="user.description">{{ user.description }}</p>
                     <BaseButton :to="`/users/${user.username}`">View profile
                     </BaseButton>

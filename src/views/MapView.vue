@@ -222,12 +222,11 @@ updateOrCreateSchema(structuredData);
                             </summary>
                             <div
                                 v-if="!showExpired && (!displayableMarkers || displayableMarkers.length === 0) && markers && markers.length > 0">
-                                <div class="headings">
-                                    <h3>{{ markers.length - displayableMarkers.length }} markers have expired.</h3>
-                                    <p>There's no active markers to show. You can choose to show markers that have
-                                        expired instead.
-                                    </p>
-                                </div>
+                                <BaseHeading as="h3"
+                                    :title="`${markers.length - displayableMarkers.length} markers have expired.`"
+                                    subtitle="There's no active markers to show. You can choose to show markers that have
+                                        expired instead." />
+
                                 <BaseButton @click="showExpired = true"
                                     class="secondary">
                                     Show expired markers
@@ -313,7 +312,8 @@ updateOrCreateSchema(structuredData);
                 </section>
 
                 <section v-if="Maps.map.value?.related && Maps.map.value.related.length > 0">
-                    <h2>Related maps</h2>
+                    <BaseHeading as="h2"
+                        title='Related maps' />
                     <ul>
                         <li v-for="map in Maps.map.value.related"
                             :key="map.uuid">

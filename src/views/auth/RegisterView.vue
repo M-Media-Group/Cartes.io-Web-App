@@ -13,10 +13,9 @@ const termsAndConditionsAccepted = ref(false);
         <article>
             <div class="grid">
                 <div>
-                    <div class="headings">
-                        <h1>Register</h1>
-                        <h2>Sign up to Cartes.io</h2>
-                    </div>
+                    <BaseHeading title="Register"
+                        subtitle="Sign up to Cartes.io" />
+
                     <form @submit.prevent="register()"
                         :disabled="isLoading ? 'disabled' : null">
                         <input type="text"

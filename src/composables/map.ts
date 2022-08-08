@@ -215,6 +215,14 @@ export function useMap() {
         return map.token || localStorage.getItem("map_" + map.uuid);
     }
 
+    const wouldLinkToCurrentUser = (map: Map) => {
+        // If the user can edit the map but the map.is_linked_to_user_is_false, return false
+        if (canUpdateMap(map) && !map.is_linked_to_user) {
+            return true;
+        }
+        return false;
+    }
+
     const updateMap = async (map: Map, formData: MapForm) => {
         if (!canUpdateMap(map)) {
             return;
@@ -282,6 +290,7 @@ export function useMap() {
         canCreateMarkersByMapId,
         markerExistsInMapArray,
         getMapToken,
+        wouldLinkToCurrentUser,
         isLoading,
         formErrors,
         hasErrors,

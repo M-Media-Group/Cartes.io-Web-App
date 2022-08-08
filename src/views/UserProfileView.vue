@@ -87,9 +87,11 @@ const share = async () => {
                         </div>
                     </div>
                     <p v-if="user.description">{{ user.description }}</p>
-                    <h2 v-if="userInstance.user.value?.username === user.username && user.is_public === false">
-                        Only you can see this page because your profile is set to private.
-                    </h2>
+
+                    <BaseHeading v-if="userInstance.user.value?.username === user.username && user.is_public === false"
+                        as="h2"
+                        title='Only you can see this page because your profile is set to private.' />
+
                     <div class="grid"
                         v-if="user.is_public !== false">
                         <BaseButton @click="share()">Share profile</BaseButton>
@@ -100,25 +102,26 @@ const share = async () => {
 
         <div>
             <section>
-                <div class="headings">
-                    <h2>Maps</h2>
-                    <p>All the public maps that {{ user.username }} has created</p>
-                </div>
+                <BaseHeading as="h2"
+                    title="Maps"
+                    :subtitle="`All the public maps that ${user.username} has created`" />
+
                 <div v-if="user.public_maps && user.public_maps.length > 0">
                     <MapArticle v-for="map in user.public_maps"
                         :key="map.uuid"
                         :map="map" />
                 </div>
                 <template v-else>
-                    <h3>{{ user.username }} has no public maps to show right now</h3>
+                    <BaseHeading as="h3"
+                        :title='user.username + " has no public maps to show right now"' />
                 </template>
             </section>
 
             <section>
-                <div class="headings">
-                    <h2>Contributions</h2>
-                    <p>All the public maps that {{ user.username }} has created markers on</p>
-                </div>
+                <BaseHeading as="h2"
+                    title="Contributions"
+                    :subtitle="`All the public maps that ${user.username} has created markers on`" />
+
                 <div v-if="user.public_maps_contributed_to && user.public_maps_contributed_to.length > 0">
                     <MapArticle v-for="map in user.public_maps_contributed_to"
                         :key="map.uuid"
@@ -126,7 +129,8 @@ const share = async () => {
                         :showMap="false" />
                 </div>
                 <template v-else>
-                    <h3>{{ user.username }} has no public map contributions to show right now</h3>
+                    <BaseHeading as="h3"
+                        :title='user.username + " has no public map contributions to show right now"' />
                 </template>
             </section>
         </div>

@@ -12,10 +12,8 @@ import { ref } from "vue";
         <template #header>
             <div class="header">
                 <div class="container">
-                    <div class="headings">
-                        <h1>Page not found</h1>
-                        <p>The page you're looking for isn't here.</p>
-                    </div>
+                    <BaseHeading title="Page not found"
+                        subtitle="The page you're looking for isn't here." />
                     <BaseButton to="/">Explore all maps</BaseButton>
                 </div>
             </div>

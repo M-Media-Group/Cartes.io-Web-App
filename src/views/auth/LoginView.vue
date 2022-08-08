@@ -10,10 +10,8 @@ const { userForm, login, isLoading } = useUser();
         <article>
             <div class="grid">
                 <div>
-                    <div class="headings">
-                        <h1>Login</h1>
-                        <h2>Login to Cartes.io</h2>
-                    </div>
+                    <BaseHeading title="Login"
+                        subtitle="Login to Cartes.io" />
                     <form @submit.prevent="login()"
                         :disabled="isLoading ? 'disabled' : null">
                         <input type="email"
