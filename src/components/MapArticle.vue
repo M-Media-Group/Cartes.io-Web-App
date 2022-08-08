@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useMap } from '@/composables/map.js';
-import { useMapPosition } from '@/composables/mapPosition.js';
+import { useMap } from '@/composables/map';
+import { useMapPosition } from '@/composables/mapPosition';
 import { Map } from '@/types/map';
 import { defineAsyncComponent, PropType } from 'vue';
 import { useRoute, useRouter } from 'vue-router';

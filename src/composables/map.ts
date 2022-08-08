@@ -61,6 +61,16 @@ export function useMap() {
         return map.value;
     }
 
+    const searchForMap = async (query: string) => {
+        if (!userDevice.online) {
+            return alert("You must be online to search for a map.");
+        }
+        if (query.length < minCategoryNameLength) {
+            return;
+        }
+        return await cartes.maps().search(query);
+    }
+
     const getMapIndexFromMapsArray = (mapId: string) => {
         return maps.value.findIndex((m) => m.uuid === mapId);
     }
@@ -289,6 +299,7 @@ export function useMap() {
         markerExistsInMapArray,
         getMapToken,
         wouldLinkToCurrentUser,
+        searchForMap,
         isLoading,
         formErrors,
         hasErrors,
