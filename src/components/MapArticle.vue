@@ -86,8 +86,8 @@ h3 {
     margin-bottom: var(--spacing);
 }
 
-/* If its the last P element in the article, set margin-bottom to 0 */
-article :last-child {
+/* If its the last element of the article except the footer, set margin 0 */
+article :last-child:not(footer) {
     margin-bottom: 0;
 }
 </style>
