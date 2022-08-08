@@ -6,7 +6,6 @@ import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { Marker } from "@/types/marker";
 import { useUser } from "./user";
-import { useRouter } from "vue-router";
 
 const { user } = useUser();
 
@@ -25,8 +24,6 @@ const map = computed(() => {
 
 
 export function useMap() {
-
-    const router = useRouter();
 
     const minCategoryNameLength = 3;
 
@@ -169,7 +166,7 @@ export function useMap() {
         return !hasErrors.value;
     };
 
-    const addMap = (formData = null as MapForm | null, redirect = false) => {
+    const addMap = (formData = null as MapForm | null) => {
         if (formData && !validateMapForm(formData)) {
             return;
         };
@@ -177,14 +174,12 @@ export function useMap() {
             return alert("You must be online to add a map.");
         }
         isLoading.value = true;
-        cartes.maps().create(formData)
+        return cartes.maps().create(formData)
             .then((data: Map) => {
                 localStorage["map_" + data.uuid] = data.token;
                 $bus.$emit(eventTypes.created_map, data);
                 emit("addedMap", data);
-                if (redirect) {
-                    router.push("/maps/" + data.uuid);
-                }
+                return data;
             }).catch((error) => {
                 alert(error.message);
             }).finally(() => {

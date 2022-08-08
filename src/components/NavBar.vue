@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import { useMap } from '@/composables/map';
-
 import { useUser } from '@/composables/user';
-
-const Maps = useMap();
+import CreateMapButton from '@/components/CreateMapButton.vue';
 
 const { user, isLoading } = useUser();
 </script>
@@ -45,9 +42,7 @@ const { user, isLoading } = useUser();
             </router-link>
             </li>
             <li>
-                <BaseButton :aria-busy="Maps.isLoading.value"
-                    :disabled="Maps.isLoading.value"
-                    @click="Maps.addMap(null, true)">New map</BaseButton>
+                <create-map-button />
             </li>
         </ul>
     </nav>
