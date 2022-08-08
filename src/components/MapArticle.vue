@@ -28,7 +28,7 @@ const props = defineProps({
     },
     clickable: {
         type: Boolean,
-        default: true,
+        default: false,
     },
 });
 
