@@ -56,7 +56,7 @@ export function useMap() {
         if (mapExistsInMapsArray(mapId)) {
             return map.value;
         }
-        const data = await cartes.maps(mapId).get();
+        const data = await cartes.maps(mapId).addParam('with[]', 'markers').get();
         maps.value.push(data);
         return map.value;
     }

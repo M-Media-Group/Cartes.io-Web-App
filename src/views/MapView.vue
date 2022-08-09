@@ -37,12 +37,10 @@ const { center, averageCenter, zoom } = useMapPosition();
 watch(() => route.params.mapId, () => {
     mapId.value = route.params.mapId as string;
 
-    getAllMarkersForMap(mapId.value).then(() => {
-        if (!route.query.lat || !route.query.lng) {
-            center.value = averageCenter.value;
-            zoom.value = 3;
-        }
-    });
+    if (!route.query.lat || !route.query.lng) {
+        center.value = averageCenter.value;
+        zoom.value = 3;
+    }
 
     Maps.getRelatedMaps(mapId.value);
     listenForMarkerChangesOnMap(mapId.value);
