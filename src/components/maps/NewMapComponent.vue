@@ -64,7 +64,7 @@ const addMarkerPopup = ref();
 
 const addMarkerForm = ref<any>();
 
-const { center, zoom, contextMenuPosition, maxBounds, } = useMapPosition();
+const { center, zoom, contextMenuPosition, maxBounds, goToDeviceLocation } = useMapPosition();
 
 const { canCreateMarkerForMapByMapId } = useMarker();
 
@@ -121,9 +121,10 @@ watch(ready, () => {
   leafletObject.value.on('geosearch/showlocation', goToLocation);
 });
 
-const goToLocation = (event: { location: any; }) => {
-  const result = event.location;
-  center.value = { lat: result.y, lng: result.x };
+const goToLocation = async (event: { location: any; }) => {
+  const result = await event.location;
+  console.log(result, 'loc');
+  center.value = { lat: result.latitude, lng: result.longitude };
   // Count how many decimal places there are in the lat/lng, and zoom in accordingly
   const latDecimalPlaces = result.y.toString().split('.')[1].length;
   const lngDecimalPlaces = result.x.toString().split('.')[1].length;
@@ -160,6 +161,12 @@ const setReady = async () => {
       </l-control-attribution>
 
       <l-control-layers />
+
+      <l-control position="topleft"
+        class="leaflet-control-ar leaflet-bar leaflet-control">
+        <a href="#"
+          @click="goToDeviceLocation()">Me</a>
+      </l-control>
 
       <l-tile-layer name="Street"
         attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> &copy; <a href='https://carto.com/attributions'>CARTO</a>"

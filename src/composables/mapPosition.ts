@@ -1,14 +1,13 @@
 import { computed, ref, watch } from "vue";
 import { useMarker } from "@/composables/marker";
 import { useUrlPositionParameters } from "./urlPositionParameters";
+import userDevice from "@/classes/userDevice";
 
 const { setUrlPositionParameters, getUrlPositionParameters } = useUrlPositionParameters();
 
 const { markers } = useMarker();
 
-
 // @todo need to reconsider this whole approach with the current map position - we need a debounce here and when theres a lot of leaflet instnaces they all fight to update the position, and so it causes some lag and issues
-
 
 const zoom = ref(getUrlPositionParameters()['zoom'] || 2);
 const center = ref({ lat: getUrlPositionParameters()['lat'], lng: getUrlPositionParameters()['lng'] });
@@ -72,6 +71,14 @@ watch(zoom, (newVal, oldVal) => {
     }
 });
 
+const goToDeviceLocation = async () => {
+    const result = await userDevice.location;
+    if (result) {
+        center.value = { lat: result.latitude, lng: result.longitude };
+        zoom.value = 15;
+    }
+}
+
 export function useMapPosition() {
 
     // Provide a flyTo method
@@ -87,6 +94,7 @@ export function useMapPosition() {
     // provide("flyToMarker", flyToMarker);
 
     return {
+        goToDeviceLocation,
         center,
         zoom,
         contextMenuPosition,

@@ -5,6 +5,11 @@ class userDevice {
     #hasArSupport = null as null | Boolean;
     #isOnline = navigator.onLine;
     #deviceMediaDevices: MediaDeviceInfo[] = [];
+    #currentPosition = {
+        latitude: 0,
+        longitude: 0,
+        accuracy: 0
+    };
 
     constructor() {
         this.listenForOnlineStatusChange();
@@ -41,6 +46,41 @@ class userDevice {
     get supportsGeolocation() {
         return navigator.geolocation &&
             "geolocation" in navigator
+    }
+
+    getLongAndLat() {
+        return new Promise((resolve, reject) =>
+            navigator.geolocation.getCurrentPosition(resolve, reject)
+        );
+    }
+
+    async getCurrentPosition() {
+        let crd;
+        const options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        };
+
+        function error(err: { code: any; message: any; }) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+
+        const success = (pos: any) => {
+            crd = pos.coords;
+            this.#currentPosition = {
+                latitude: crd.latitude,
+                longitude: crd.longitude,
+                accuracy: crd.accuracy
+            };
+            return this.#currentPosition;
+        }
+
+        return await this.getLongAndLat().then(success, error);
+    }
+
+    get location() {
+        return this.getCurrentPosition();
     }
 
     get supportsMediaDevices() {
