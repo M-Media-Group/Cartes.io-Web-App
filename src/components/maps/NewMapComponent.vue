@@ -167,7 +167,8 @@ const setReady = async () => {
         class="leaflet-control-ar leaflet-bar leaflet-control">
         <a href="#"
           @click="goToDeviceLocation()">
-          <BaseSvg icon="gps" />
+          <BaseSvg icon="gps"
+            style="padding:4px;" />
         </a>
       </l-control>
 
