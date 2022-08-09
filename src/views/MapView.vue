@@ -25,6 +25,8 @@ const { markers, displayableMarkers, getAllMarkersForMap, listenForMarkerChanges
 
 const Maps = useMap();
 
+const cluster = ref(true);
+
 // Get the map ID from the url ?mapId parameter
 const mapId = ref(route.params.mapId) as Ref<string>;
 
@@ -176,7 +178,8 @@ $bus.$on(eventTypes.deleted_map, () => {
                 :markers="displayableMarkers"
                 style="height: 70vh"
                 :autoCenterOnLoad="true"
-                :map="Maps.map.value" />
+                :map="Maps.map.value"
+                :cluster="cluster" />
         </template>
 
         <template v-if="Maps.map">
@@ -262,6 +265,11 @@ $bus.$on(eventTypes.deleted_map, () => {
                                 <input type="checkbox"
                                     v-model="showExpired" />
                                 Also show expired markers
+                            </label>
+                            <label>
+                                <input type="checkbox"
+                                    v-model="cluster" />
+                                Cluster markers
                             </label>
                         </details>
 

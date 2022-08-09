@@ -42,6 +42,10 @@ const props = defineProps({
     type: Array as PropType<Marker[]>,
     required: true,
   },
+  cluster: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const emit = defineEmits([
@@ -200,7 +204,8 @@ const setReady = async () => {
 
       <MapMarkers v-if="mapId && markers.length > 0"
         :mapId="mapId"
-        :markers="markers"></MapMarkers>
+        :markers="markers"
+        :cluster="cluster"></MapMarkers>
     </l-map>
   </div>
 </template>
