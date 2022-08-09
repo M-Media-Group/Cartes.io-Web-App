@@ -22,6 +22,7 @@ import userDevice from "@/classes/userDevice";
 import MapMarkers from "./MapMarkers.vue";
 import { useMapPosition } from "@/composables/mapPosition";
 import { Map } from "@/types/map";
+import BaseSvg from "@/components/icons/BaseSvg.vue";
 
 
 const props = defineProps({
@@ -165,7 +166,9 @@ const setReady = async () => {
       <l-control position="topleft"
         class="leaflet-control-ar leaflet-bar leaflet-control">
         <a href="#"
-          @click="goToDeviceLocation()">Me</a>
+          @click="goToDeviceLocation()">
+          <BaseSvg icon="gps" />
+        </a>
       </l-control>
 
       <l-tile-layer name="Street"
