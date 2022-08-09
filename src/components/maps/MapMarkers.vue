@@ -34,13 +34,14 @@ const groupedMarkersByCategory = computed(() => {
     return groupedMarkers;
 });
 
+// Importing async here causes two circles to be drawn...
+// const MarkerCluster = defineAsyncComponent(() =>
+//     import('@/components/maps/MarkerCluster.vue')
+// )
+
 </script>
 
 <template>
-
-    <!-- Doesnt seem we can use layer groups together with marker clustering -->
-
-
     <marker-cluster v-if="cluster"
         :options="{ showCoverageOnHover: true, chunkedLoading: true }">
 
@@ -50,21 +51,18 @@ const groupedMarkersByCategory = computed(() => {
 
     </marker-cluster>
 
-    <l-layer-group v-else
+    <!-- Keeping the layer but not showing it (using v-show instead of v-if) and then conditionally loading the map-markers prevents the layergroup from being added multiple times on each addition on the dom -->
+    <l-layer-group v-show="!cluster"
         v-for="(category, index) in groupedMarkersByCategory"
         :key="index"
         ref="features"
         layer-type="overlay"
         :name="category[0].category.name">
 
-        <map-marker v-for="marker in category"
+        <map-marker v-if="!cluster"
+            v-for="marker in category"
             :mapId="mapId"
             :marker="marker" />
 
     </l-layer-group>
 </template>
-<style scoped>
-small {
-    display: block;
-}
-</style>
