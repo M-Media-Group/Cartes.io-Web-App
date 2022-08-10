@@ -81,7 +81,7 @@ const goToMap = () => {
         }}
         </small>
         <footer v-if="showFooter && map.markers_count">
-            <small>{{ map.markers_count }} live markers</small>
+            <small>{{ map.markers_count }} markers</small>
         </footer>
     </article>
 </template>
