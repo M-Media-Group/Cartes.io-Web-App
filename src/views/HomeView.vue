@@ -47,7 +47,7 @@ getUsers();
                         :key="map.uuid"
                         :map="map"
                         :showDescription="true"
-                        :showMap="true"
+                        :showMap="i < 4"
                         :showFooter="true" />
 
                     <div>Showing {{ Maps.maps.value.length }} out of {{ Maps.totalMaps.value }} public maps and
