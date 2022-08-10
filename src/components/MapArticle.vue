@@ -76,7 +76,14 @@ const goToMap = () => {
         <BaseHeading as="h3"
             :title='map.title ?? "Untitled map"'>
             <template #subtitle>
-                <p>{{ map.active_markers_count }} / {{ map.markers_count }} active markers •
+                <p>
+                    <template v-if="map.active_markers_count">
+                        {{ map.active_markers_count }} / {{ map.markers_count }} active
+                    </template>
+                    <template v-else>
+                        {{ map.markers_count }}
+                    </template>
+                    markers •
                     <MapAuthor :map="map" />
                 </p>
             </template>
