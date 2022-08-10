@@ -46,7 +46,7 @@ export function useMap() {
         const data = await cartes.maps()
             .with(['markers', 'user', 'publicContributors'])
             .addParam('withCount[]', 'activeMarkers')
-            .addParam('orderBy', 'updated_at')
+            .addParam('orderBy', 'active_markers_count')
             .addParam('query', 'description!= AND active_markers_count > 10')
             .get();
         maps.value = data.data;

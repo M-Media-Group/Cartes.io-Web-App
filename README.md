@@ -20,7 +20,7 @@ Since TypeScript cannot handle type information for `.vue` imports, they are shi
 You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
 
 ## Todo
-This is not slated for public release just yet. If you'd like to contribute to the following, feel free!
+If you'd like to contribute to the following, feel free!
 
 We need to:
 - [ ] Add better testing handling (currently unit test shows warnings/errors due to setup)
@@ -28,9 +28,7 @@ We need to:
 - [ ] Add precommit hooks with Husky
 - [ ] Verify TSconfig is setup correctly
 - [ ] Add linting config
-- [ ] Add a 404 page
-- [ ] Add vue-router
-- [ ] Finalise the UI draft version 1.0
+- [ ] Finalize the UI draft version 1.0
 
 Note that the current roadmap is to define functionality first, and then look at styling.
 
