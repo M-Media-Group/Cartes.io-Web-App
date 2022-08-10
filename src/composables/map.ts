@@ -43,7 +43,7 @@ export function useMap() {
         if (!userDevice.online) {
             return alert("You must be online to get all maps.");
         }
-        const data = await cartes.maps().addParam('orderBy', 'markers_count').get();
+        const data = await cartes.maps().addParam('with[]', 'markers').addParam('withCount[]', 'markers').addParam('orderBy', 'markers_count').get();
         maps.value = data.data;
         totalMaps.value = data.meta.total;
     }

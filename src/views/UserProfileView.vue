@@ -2,13 +2,16 @@
 <script setup lang="ts">
 import AppLayout from "@/templates/AppLayout.vue";
 import MapArticle from "@/components/MapArticle.vue";
-import { PropType, ref, watch } from "vue";
+import { PropType, Ref, ref, watch } from "vue";
 
 import { now } from "@/composables/time";
 import { User } from "@/types/user";
 import { useUser } from "@/composables/user";
 
 import $bus, { eventTypes } from "@/eventBus/events";
+import { Map } from "@/types/map.js";
+import axios from "axios";
+import CreateMapButton from '@/components/CreateMapButton.vue';
 
 const props = defineProps({
     user: {
@@ -65,6 +68,35 @@ const share = async () => {
     }
 }
 
+const privateMaps = ref([]) as Ref<Map[]>;
+
+var ids = [] as string[];
+Object.keys(localStorage).forEach(function (key) {
+    if (key.includes("map_")) {
+        ids.push(key.replace("map_", ""));
+    }
+});
+
+const getMyMaps = () => {
+    axios
+        .get("/api/maps", {
+            params: {
+                ids: ids ?? [],
+                orderBy: "updated_at",
+                withMine: userInstance.user.value ? 1 : 0,
+                query: "privacy!=public",
+                with: ['markers']
+            },
+        })
+        .then((response: { data: { data: Map[]; }; }) => {
+            privateMaps.value = response.data.data;
+        });
+}
+
+if (ids.length > 0 || userInstance.user.value?.id) {
+    getMyMaps();
+}
+
 </script>
 
 <template>
@@ -101,7 +133,23 @@ const share = async () => {
         </template>
 
         <div>
-            <BaseSection title="Maps"
+            <BaseSection v-if="userInstance.user.value?.username === user.username"
+                title="Your private and unlisted maps"
+                subtitle="These are the maps that you've created on the site.">
+
+                <MapArticle v-for="map in privateMaps"
+                    :key="map.uuid"
+                    :map="map" />
+
+                <article v-if="privateMaps.length === 0">
+                    <BaseHeading as="h3"
+                        title="You have no maps yet."
+                        subtitle="Create your first map or browse the public ones." />
+                    <create-map-button text="Create a new map" />
+                </article>
+            </BaseSection>
+
+            <BaseSection title="Public maps"
                 :subtitle="`All the public maps that ${user.username} has created`">
 
                 <div v-if="user.public_maps && user.public_maps.length > 0">
@@ -115,7 +163,7 @@ const share = async () => {
                 </template>
             </BaseSection>
 
-            <BaseSection title="Contributions"
+            <BaseSection title="Public contributions"
                 :subtitle="`All the public maps that ${user.username} has created markers on`">
 
                 <div v-if="user.public_maps_contributed_to && user.public_maps_contributed_to.length > 0">

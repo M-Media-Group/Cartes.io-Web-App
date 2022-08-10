@@ -1,80 +1,15 @@
 <script setup lang="ts">
 import { useMap } from '@/composables/map';
 import AppLayout from "@/templates/AppLayout.vue";
-import axios from 'axios';
-import { Ref, ref, watch } from 'vue';
-import { Map } from '@/types/map';
-import { useMarker } from '@/composables/marker';
 import { useUser } from '@/composables/user';
 import MapArticle from '@/components/MapArticle.vue';
 import CreateMapButton from '@/components/CreateMapButton.vue';
 
 const Maps = useMap();
-Maps.getAllMaps().then(() => {
-    // For each map, get all markers for it and wait in between each request
-    Maps.maps.value.forEach(async (map, index) => {
-        if (map.markers_count && map.markers_count > 0 && index < 2) {
-            setTimeout(async () => {
-                const markers = await Markers.getAllMarkersForMap(map.uuid);
-                // Assign the markers to the map if the markers is an array
-                if (Array.isArray(markers)) {
-                    map.markers = markers;
-                }
-            }, 3000);
-        }
-    });
-});
-
-const Markers = useMarker();
-
+Maps.getAllMaps();
 const { users, getUsers, user } = useUser();
 
 getUsers();
-
-const privateMaps = ref([]) as Ref<Map[]>;
-
-var ids = [] as string[];
-
-Object.keys(localStorage).forEach(function (key) {
-    if (key.includes("map_")) {
-        ids.push(key.replace("map_", ""));
-    }
-});
-
-const getMyMaps = () => {
-    axios
-        .get("/api/maps", {
-            params: {
-                ids: ids ?? [],
-                orderBy: "updated_at",
-                withMine: user.value ? 1 : 0,
-            },
-        })
-        .then((response: { data: { data: Map[]; }; }) => {
-            privateMaps.value = response.data.data;
-            privateMaps.value.forEach(async map => {
-                // If the markers_count is 0, then the map has no markers, so we can skip it
-                // Wait a little to not hit the rate limit
-                if (map.markers_count && map.markers_count > 0) {
-                    setTimeout(async () => {
-                        const markers = await Markers.getAllMarkersForMap(map.uuid);
-                        // Assign the markers to the map if the markers is an array
-                        if (Array.isArray(markers)) {
-                            map.markers = markers;
-                        }
-                    }, 2000);
-                }
-            });
-        });
-}
-
-if (ids.length > 0 || user.value?.id) {
-    getMyMaps();
-}
-
-watch(() => user.value?.id, () => {
-    getMyMaps();
-});
 
 </script>
 <template>
@@ -104,20 +39,7 @@ watch(() => user.value?.id, () => {
         </template>
         <div class="grid column-4-1-grid">
             <div>
-                <BaseSection title="Your maps"
-                    subtitle="These are the maps that you've created on the site.">
 
-                    <MapArticle v-for="map in privateMaps"
-                        :key="map.uuid"
-                        :map="map" />
-
-                    <article v-if="privateMaps.length === 0">
-                        <BaseHeading as="h3"
-                            title="You have no maps yet."
-                            subtitle="Create your first map or browse the public ones." />
-                        <create-map-button text="Create a new map" />
-                    </article>
-                </BaseSection>
                 <BaseSection title="Public maps"
                     subtitle="These maps are made by the community and shared with everyone.">
 
@@ -126,7 +48,7 @@ watch(() => user.value?.id, () => {
                         :map="map"
                         :showDescription="true"
                         :showMap="true"
-                        :showFooter="false" />
+                        :showFooter="true" />
 
                     <div>Showing {{ Maps.maps.value.length }} out of {{ Maps.totalMaps.value }} public maps and
                         many more
