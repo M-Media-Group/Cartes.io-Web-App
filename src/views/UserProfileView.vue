@@ -135,7 +135,7 @@ if (ids.length > 0 || userInstance.user.value?.id) {
         <div>
             <BaseSection v-if="userInstance.user.value?.username === user.username"
                 title="Your private and unlisted maps"
-                subtitle="These are the maps that you've created on the site.">
+                subtitle="These are the private, unlisted, or anonymous maps that you've created on the site. Only you can see this section.">
 
                 <MapArticle v-for="map in privateMaps"
                     :key="map.uuid"
