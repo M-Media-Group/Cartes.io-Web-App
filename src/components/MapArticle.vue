@@ -4,6 +4,7 @@ import { useMapPosition } from '@/composables/mapPosition';
 import { Map } from '@/types/map';
 import { defineAsyncComponent, PropType } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import MapAuthor from './maps/MapAuthor.vue';
 
 const props = defineProps({
     map: {
@@ -73,16 +74,20 @@ const goToMap = () => {
                 style="height: 400px" />
         </header>
         <BaseHeading as="h3"
-            :title='map.title ?? "Untitled map"' />
+            :title='map.title ?? "Untitled map"'>
+            <template #subtitle>
+                <p>{{ map.active_markers_count }} / {{ map.markers_count }} active markers •
+                    <MapAuthor :map="map" />
+                </p>
+            </template>
+        </BaseHeading>
         <p v-if="showDescription">{{ map.description }}</p>
         <BaseButton v-if="showAction"
             @click="goToMap()">Open map</BaseButton>
         <small v-if="MapInstance.wouldLinkToCurrentUser(map)">{{ "This map is linked to you only through this device."
         }}
         </small>
-        <footer v-if="showFooter && map.markers_count">
-            <small>{{ map.markers_count }} markers</small>
-        </footer>
+
     </article>
 </template>
 <style scoped>

@@ -22,6 +22,7 @@ export interface Map {
     markers?: Marker[];
     related?: Map[];
     markers_count?: number;
+    active_markers_count?: number;
     public_contributors?: User[];
     is_linked_to_user?: boolean;
     user?: User | null;

@@ -17,6 +17,7 @@ import { usePusher } from "@/composables/pusher";
 import $bus, { eventTypes } from "@/eventBus/events";
 
 import { updateOrCreateSchema } from "@/router/metaTagsHandler";
+import MapAuthor from "@/components/maps/MapAuthor.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -192,23 +193,15 @@ $bus.$on(eventTypes.deleted_map, () => {
                                 alt="Cartes.io logo" />
                             Anonymous
                         </div>
-                        <div class="headings">
-                            <h1>{{ Maps.map.value?.title ?? "Untitled map" }}</h1>
-                            <p v-if="Maps.map.value?.user">Made by
-                                <router-link :to="`/users/${Maps.map.value.user.username}`">{{
-                                        Maps.map.value.user.username
-                                }}</router-link>
-                            </p>
-                            <p v-else-if="Maps.map.value?.is_linked_to_user">Made by a
-                                <span data-tooltip="This map was created by a private Cartes.io user">Cartes.io
-                                    user</span>
-                            </p>
-                            <p v-else>Made
-                                by an
-                                <span data-tooltip="This map was created by someone not signed in">anonymous
-                                    user</span>
-                            </p>
-                        </div>
+                        <BaseHeading :title='Maps.map.value?.title ?? "Untitled map"'
+                            class="headings">
+                            <template #subtitle>
+                                <p>
+                                    <MapAuthor v-if="Maps.map.value"
+                                        :map="Maps.map.value" />
+                                </p>
+                            </template>
+                        </BaseHeading>
                         <p style="white-space: pre-wrap;">{{ Maps.map.value?.description }}</p>
                     </div>
                     <div>

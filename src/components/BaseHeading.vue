@@ -16,9 +16,12 @@ defineProps({
 </script>
 <template>
     <div class="headings"
-        v-if="subtitle">
+        v-if="subtitle || $slots.subtitle">
         <component :is="as">{{ title }}</component>
-        <p>{{ subtitle }}</p>
+        <slot name="subtitle">
+            <p>{{ subtitle }}</p>
+        </slot>
+
     </div>
     <component v-else
         :is="as">{{ title }}</component>

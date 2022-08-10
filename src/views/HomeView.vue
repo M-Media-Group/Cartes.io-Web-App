@@ -50,9 +50,7 @@ getUsers();
                         :showMap="i < 4"
                         :showFooter="true" />
 
-                    <div>Showing {{ Maps.maps.value.length }} out of {{ Maps.totalMaps.value }} public maps and
-                        many more
-                        private ones
+                    <div>Showing {{ Maps.maps.value.length }} out of hundreds of public and private maps
                     </div>
                 </BaseSection>
 
