@@ -1,7 +1,7 @@
 import { Map } from "./map";
 
 export interface User {
-    id: number;
+    id?: number;
     username: string;
     name: string | null;
     surname: string | null;
