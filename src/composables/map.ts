@@ -46,6 +46,7 @@ export function useMap() {
         const data = await cartes.maps()
             .addParam('with[]', 'markers')
             .addParam('with[]', 'user')
+            .addParam('with[]', 'publicContributors')
             .addParam('withCount[]', 'markers')
             .addParam('orderBy', 'markers_count')
             .get();
@@ -65,7 +66,6 @@ export function useMap() {
             .addParam('with[]', 'markers')
             .addParam('with[]', 'user')
             .addParam('with[]', 'publicContributors')
-            .addParam('with[]', 'categories')
             .get();
         maps.value.push(data);
         return map.value;
