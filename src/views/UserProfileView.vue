@@ -9,7 +9,7 @@ import { User } from "@/types/user";
 import { useUser } from "@/composables/user";
 
 import $bus, { eventTypes } from "@/eventBus/events";
-import { Map } from "@/types/map.js";
+import { Map } from "@/types/map";
 import axios from "axios";
 import CreateMapButton from '@/components/CreateMapButton.vue';
 

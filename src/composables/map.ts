@@ -44,9 +44,7 @@ export function useMap() {
             return alert("You must be online to get all maps.");
         }
         const data = await cartes.maps()
-            .addParam('with[]', 'markers')
-            .addParam('with[]', 'user')
-            .addParam('with[]', 'publicContributors')
+            .with(['markers', 'user', 'publicContributors'])
             .addParam('withCount[]', 'activeMarkers')
             .addParam('orderBy', 'updated_at')
             .addParam('query', 'description!= AND active_markers_count > 10')
@@ -64,9 +62,7 @@ export function useMap() {
             return map.value;
         }
         const data = await cartes.maps(mapId)
-            .addParam('with[]', 'user')
-            .addParam('with[]', 'publicContributors')
-            .addParam('with[]', 'markers')
+            .with(['markers', 'user', 'publicContributors'])
             .get();
         maps.value.push(data);
         return map.value;
