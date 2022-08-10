@@ -63,7 +63,8 @@ const search = async (query: string) => {
                 <router-link :to='`/users/${user.username}`'
                     aria-haspopup="listbox">{{ user.username }}
                 </router-link>
-                <ul role="listbox">
+                <ul role="listbox"
+                    style="z-index:1000">
                     <li>
                         <router-link :to='`/users/${user.username}`'
                             aria-haspopup="listbox">Profile
