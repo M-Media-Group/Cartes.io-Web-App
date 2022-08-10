@@ -47,8 +47,9 @@ export function useMap() {
             .addParam('with[]', 'markers')
             .addParam('with[]', 'user')
             .addParam('with[]', 'publicContributors')
-            .addParam('withCount[]', 'markers')
-            .addParam('orderBy', 'markers_count')
+            .addParam('withCount[]', 'activeMarkers')
+            .addParam('orderBy', 'updated_at')
+            .addParam('query', 'description!= AND active_markers_count > 10')
             .get();
         maps.value = data.data;
         totalMaps.value = data.meta.total;
@@ -63,9 +64,9 @@ export function useMap() {
             return map.value;
         }
         const data = await cartes.maps(mapId)
-            .addParam('with[]', 'markers')
             .addParam('with[]', 'user')
             .addParam('with[]', 'publicContributors')
+            .addParam('with[]', 'markers')
             .get();
         maps.value.push(data);
         return map.value;
