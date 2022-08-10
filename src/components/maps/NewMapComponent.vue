@@ -140,7 +140,7 @@ const setReady = async () => {
 
 </script>
 <template>
-  <div>
+  <div style="background:gray;">
     <l-map :maxBoundsViscosity="1.0"
       :worldCopyJump="true"
       style="width: 100%; height: 100%"
