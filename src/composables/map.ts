@@ -43,7 +43,12 @@ export function useMap() {
         if (!userDevice.online) {
             return alert("You must be online to get all maps.");
         }
-        const data = await cartes.maps().addParam('with[]', 'markers').addParam('withCount[]', 'markers').addParam('orderBy', 'markers_count').get();
+        const data = await cartes.maps()
+            .addParam('with[]', 'markers')
+            .addParam('with[]', 'user')
+            .addParam('withCount[]', 'markers')
+            .addParam('orderBy', 'markers_count')
+            .get();
         maps.value = data.data;
         totalMaps.value = data.meta.total;
     }
@@ -56,7 +61,12 @@ export function useMap() {
         if (mapExistsInMapsArray(mapId)) {
             return map.value;
         }
-        const data = await cartes.maps(mapId).addParam('with[]', 'markers').get();
+        const data = await cartes.maps(mapId)
+            .addParam('with[]', 'markers')
+            .addParam('with[]', 'user')
+            .addParam('with[]', 'publicContributors')
+            .addParam('with[]', 'categories')
+            .get();
         maps.value.push(data);
         return map.value;
     }
