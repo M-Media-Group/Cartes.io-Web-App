@@ -215,7 +215,7 @@ export function useMap() {
     };
 
     const canDeleteMap = (map: Map) => {
-        return getMapToken(map) || (user && map.user && user.value?.id === map.user.id);
+        return getMapToken(map) || (user && map.user && user.value?.username === map.user.username);
     };
 
     const canUpdateMap = (map: Map) => {
