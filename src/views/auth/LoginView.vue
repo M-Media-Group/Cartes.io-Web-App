@@ -4,7 +4,7 @@ import { useUser } from "@/composables/user";
 import { useRouter } from "vue-router";
 import $bus, { eventTypes } from "@/eventBus/events";
 
-const { userForm, login, isLoading } = useUser();
+const { userForm, login, isLoading, formErrors } = useUser();
 const router = useRouter();
 
 $bus.$on(eventTypes.logged_in, () => {
@@ -20,21 +20,24 @@ $bus.$on(eventTypes.logged_in, () => {
                         subtitle="Login to Cartes.io" />
                     <form @submit.prevent="login()"
                         :disabled="isLoading ? 'disabled' : null">
-                        <input type="email"
-                            name="email"
-                            placeholder="Email"
-                            aria-label="Email"
+
+                        <BaseInput type="email"
+                            label="Email"
                             autocomplete="email"
                             required
                             autofocus
-                            v-model="userForm.email">
-                        <input type="password"
-                            name="password"
-                            placeholder="Password"
-                            aria-label="Password"
+                            v-model="userForm.email"
+                            :showLabel="false"
+                            :errors="formErrors.email" />
+
+                        <BaseInput type="password"
+                            label="Password"
                             autocomplete="current-password"
                             required
-                            v-model="userForm.password">
+                            v-model="userForm.password"
+                            :errors="formErrors.password"
+                            :showLabel="false" />
+
                         <fieldset>
                             <label for="remember">
                                 <input type="checkbox"
