@@ -39,7 +39,7 @@ const generateUsernameFromEmail = () => {
                             autofocus
                             v-model="userForm.email"
                             @blur="generateUsernameFromEmail()"
-                            :aria-invalid="formErrors.email.length > 0">
+                            :aria-invalid="formErrors.email.length > 0 ? true : null">
                         <small v-if="formErrors.email.length > 0">{{ formErrors.email.join(' ') }}</small>
                         <small v-else>Your email address is private and never visible to anyone</small>
 
@@ -50,7 +50,7 @@ const generateUsernameFromEmail = () => {
                             autocomplete="nickname"
                             required
                             v-model="userForm.username"
-                            :aria-invalid="formErrors.username.length > 0">
+                            :aria-invalid="formErrors.username.length > 0 ? true : null">
                         <small v-if="formErrors.username">{{ formErrors.username.join(' ') }}</small>
 
                         <input type="password"
@@ -60,7 +60,7 @@ const generateUsernameFromEmail = () => {
                             autocomplete="current-password"
                             required
                             v-model="userForm.password"
-                            :aria-invalid="formErrors.password.length > 0">
+                            :aria-invalid="formErrors.password.length > 0 ? true : null">
                         <small v-if="formErrors.password">{{ formErrors.password.join(' ') }}</small>
 
                         <fieldset>
