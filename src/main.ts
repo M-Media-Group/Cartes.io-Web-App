@@ -11,6 +11,8 @@ import VueHotjar from 'vue-hotjar-next'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseHeading from '@/components/BaseHeading.vue'
 import BaseSection from '@/components/BaseSection.vue'
+import BaseInput from '@/components/BaseInput.vue'
+
 import "@picocss/pico";
 
 const progresses = [] as ProgressFinisher[];
@@ -89,5 +91,6 @@ app.use(Vue3ProgressPlugin)
 app.component('BaseButton', BaseButton);
 app.component('BaseHeading', BaseHeading);
 app.component('BaseSection', BaseSection);
+app.component('BaseInput', BaseInput);
 
 app.mount('#app')

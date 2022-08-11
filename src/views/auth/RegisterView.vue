@@ -30,38 +30,32 @@ const generateUsernameFromEmail = () => {
 
                     <form @submit.prevent="register()"
                         :disabled="isLoading ? 'disabled' : null">
-                        <input type="email"
-                            name="email"
-                            placeholder="Email"
-                            aria-label="Email"
+
+                        <BaseInput type="email"
+                            label="Email"
                             autocomplete="email"
                             required
                             autofocus
                             v-model="userForm.email"
                             @blur="generateUsernameFromEmail()"
-                            :aria-invalid="formErrors.email.length > 0 ? true : undefined">
-                        <small v-if="formErrors.email.length > 0">{{ formErrors.email.join(' ') }}</small>
-                        <small v-else>Your email address is private and never visible to anyone</small>
+                            :showLabel="false"
+                            :errors="formErrors.email"
+                            helpText="Your email address is private and never visible to anyone" />
 
-                        <input type="text"
-                            name="username"
-                            placeholder="Username"
-                            aria-label="Username"
+                        <BaseInput label="Username"
                             autocomplete="nickname"
                             required
                             v-model="userForm.username"
-                            :aria-invalid="formErrors.username.length > 0 ? true : undefined">
-                        <small v-if="formErrors.username">{{ formErrors.username.join(' ') }}</small>
+                            :showLabel="false"
+                            :errors="formErrors.username" />
 
-                        <input type="password"
-                            name="password"
-                            placeholder="New password"
-                            aria-label="New password"
-                            autocomplete="current-password"
+                        <BaseInput type="password"
+                            label="New password"
+                            autocomplete="password"
                             required
                             v-model="userForm.password"
-                            :aria-invalid="formErrors.password.length > 0 ? true : undefined">
-                        <small v-if="formErrors.password">{{ formErrors.password.join(' ') }}</small>
+                            :errors="formErrors.password"
+                            :showLabel="false" />
 
                         <fieldset>
                             <label for="remember">

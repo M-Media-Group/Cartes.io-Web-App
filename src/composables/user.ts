@@ -104,9 +104,9 @@ const register = async () => {
     ).catch((error) => {
         console.log("Register error", error);
         alert(error.response.data.message);
-        formErrors.email = error.response.data.errors.email;
-        formErrors.password = error.response.data.errors.password;
-        formErrors.username = error.response.data.errors.username;
+        formErrors.email = error.response.data?.errors?.email ?? [];
+        formErrors.password = error.response.data?.errors?.password ?? [];
+        formErrors.username = error.response.data?.errors?.username ?? [];
         isLoading.value = false;
     });
 }
