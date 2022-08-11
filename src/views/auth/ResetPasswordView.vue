@@ -4,7 +4,7 @@ import { useUser } from "@/composables/user";
 import { useRouter } from "vue-router";
 import $bus, { eventTypes } from "@/eventBus/events";
 
-const { userForm, sendPasswordReset, isLoading } = useUser();
+const { userForm, sendPasswordReset, isLoading, formErrors } = useUser();
 const router = useRouter();
 
 $bus.$on(eventTypes.sent_reset_password_email, () => {
@@ -20,14 +20,14 @@ $bus.$on(eventTypes.sent_reset_password_email, () => {
                         subtitle="Send yourself a password reset link" />
                     <form @submit.prevent="sendPasswordReset()"
                         :disabled="isLoading ? 'disabled' : null">
-                        <input type="email"
-                            name="email"
-                            placeholder="Email"
-                            aria-label="Email"
+                        <BaseInput type="email"
+                            label="Email"
                             autocomplete="email"
                             required
                             autofocus
-                            v-model="userForm.email">
+                            v-model="userForm.email"
+                            :showLabel="false"
+                            :errors="formErrors.email" />
                         <BaseButton type="submit"
                             :disabled="isLoading"
                             class="contrast">Send password reset link</BaseButton>
