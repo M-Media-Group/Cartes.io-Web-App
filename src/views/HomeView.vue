@@ -71,6 +71,7 @@ getUsers();
             </div>
             <aside>
                 <h4>Cartes.io.</h4>
+                <p>Privacy-first maps.</p>
                 <p>This is an open source project. Feel free to contribute to the development on <a
                         href="https://github.com/M-Media-Group/Cartes.io">GitHub</a></p>
                 <p>
