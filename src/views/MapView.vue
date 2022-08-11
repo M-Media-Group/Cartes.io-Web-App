@@ -281,6 +281,45 @@ $bus.$on(eventTypes.deleted_map, () => {
                             one of the existing
                             labels or create your own.</p>
 
+                        <!-- Developer -->
+                        <details v-if="Maps.map.value">
+                            <summary>About this maps privacy</summary>
+                            <div>
+                                <p v-if="Maps.map.value.privacy === 'public'">
+                                    Everyone can find and see this map. It also shows up in our public maps and in
+                                    Google search results.
+                                </p>
+                                <p v-else-if="Maps.map.value.privacy === 'unlisted'">
+                                    Only people with a direct link to this map can see it. It won't show up in our
+                                    public maps, and it won't show up in Google when people search for it.
+                                </p>
+                                <p v-else-if="Maps.map.value.privacy === 'private'">
+                                    Only you can see this map when you are logged in. Your map won't show up in our
+                                    public maps, and it won't show up in Google when people search for it.
+                                </p>
+
+                                <p v-if="Maps.map.value.user && Maps.map.value.user.is_public === false">
+                                    Your profile is set to private, which means that no one will be able to see you as
+                                    the author of this map. People will only be able to see that it has been created by
+                                    a Cartes.io user, but not any other information, and nothing specific to you.
+                                </p>
+                                <p v-else-if="Maps.map.value.user && Maps.map.value.user.is_public === true">
+                                    People on this map can see the username of the person that
+                                    created this map, and they can visit the public profile of the map author.
+                                </p>
+                                <p v-else-if="Maps.map.value.is_linked_to_user">
+                                    When someone opens this map, they will only be able to see a general notice that it
+                                    was created
+                                    by a Cartes.io user, but not any information about who it is specifically.
+                                </p>
+                                <p v-else>
+                                    Nobody can see any author information of this map because it was created by someone
+                                    without an account, a person that has not logged in, or someone who has not
+                                    connected this map to their account.
+                                </p>
+                            </div>
+                        </details>
+
                         <!-- Public contributors -->
                         <details
                             v-if="Maps.map.value?.public_contributors && Maps.map.value?.public_contributors.length > 0">
