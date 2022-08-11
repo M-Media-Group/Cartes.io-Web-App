@@ -15,6 +15,10 @@ $bus.$on(eventTypes.registered, async () => {
     router.push("/");
 });
 
+const generateUsernameFromEmail = () => {
+    userForm.username = userForm.email.split("@")[0];
+}
+
 </script>
 <template>
     <AppLayout>
@@ -26,23 +30,26 @@ $bus.$on(eventTypes.registered, async () => {
 
                     <form @submit.prevent="register()"
                         :disabled="isLoading ? 'disabled' : null">
-                        <input type="text"
-                            name="username"
-                            placeholder="Username"
-                            aria-label="Username"
-                            autocomplete="nickname"
-                            required
-                            autofocus
-                            v-model="userForm.username">
-                        <small v-if="formErrors.username">{{ formErrors.username.join(' ') }}</small>
                         <input type="email"
                             name="email"
                             placeholder="Email"
                             aria-label="Email"
                             autocomplete="email"
                             required
-                            v-model="userForm.email">
-                        <small v-if="formErrors.email">{{ formErrors.email.join(' ') }}</small>
+                            autofocus
+                            v-model="userForm.email"
+                            @blur="generateUsernameFromEmail()">
+                        <small v-if="formErrors.email.length > 0">{{ formErrors.email.join(' ') }}</small>
+                        <small v-else>Your email address is private and never visible to anyone</small>
+
+                        <input type="text"
+                            name="username"
+                            placeholder="Username"
+                            aria-label="Username"
+                            autocomplete="nickname"
+                            required
+                            v-model="userForm.username">
+                        <small v-if="formErrors.username">{{ formErrors.username.join(' ') }}</small>
 
                         <input type="password"
                             name="password"
