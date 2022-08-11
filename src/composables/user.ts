@@ -57,6 +57,7 @@ const login = async () => {
     }).catch((error) => {
         console.log("Login error", error);
         alert(error.response.data.message);
+        formErrors.email = error.response.data?.errors?.email ?? [];
         isLoading.value = false;
 
     });
