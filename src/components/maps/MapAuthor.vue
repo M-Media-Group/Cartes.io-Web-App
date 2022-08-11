@@ -15,7 +15,7 @@ defineProps({
 
 </script>
 <template>
-    <template v-if="map.user">
+    <template v-if="map.user && map.user.is_public">
         <template v-if="showPreText">
             Made by
         </template>
