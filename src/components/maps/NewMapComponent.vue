@@ -125,7 +125,7 @@ watch(ready, () => {
 const goToLocation = async (event: { location: any; }) => {
   const result = await event.location;
   console.log(result, 'loc');
-  center.value = { lat: result.latitude, lng: result.longitude };
+  center.value = { lat: result.y, lng: result.x };
   // Count how many decimal places there are in the lat/lng, and zoom in accordingly
   const latDecimalPlaces = result.y.toString().split('.')[1].length;
   const lngDecimalPlaces = result.x.toString().split('.')[1].length;
