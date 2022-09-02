@@ -159,9 +159,6 @@ const getUser = async () => {
 }
 
 const getUsers = async () => {
-
-    isLoading.value = true;
-
     // Check if axios has a laravel_token cookie
     const laravel_token = document.cookie.match(/laravel_token=([^;]+)/);
     if (!laravel_token) {
@@ -178,8 +175,6 @@ const getUsers = async () => {
 
     }).catch((error) => {
         console.log("User error", error);
-    }).finally(() => {
-        isLoading.value = false;
     });
 }
 
