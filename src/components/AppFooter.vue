@@ -2,9 +2,6 @@
 // const url = import.meta.env.VITE_API_URL;
 </script>
 <template>
-    <div>This is a beta version of Cartes.io v2
-    </div>
-    <hr />
     <div class="grid">
         <a href="https://cartes.io/terms-and-conditions"
             target="_blank">Terms and conditions</a>
