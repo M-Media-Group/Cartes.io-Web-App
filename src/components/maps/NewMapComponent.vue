@@ -176,7 +176,7 @@ const setReady = async () => {
         attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> &copy; <a href='https://carto.com/attributions'>CARTO</a>"
         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png"
         layer-type="base"
-        max-zoom="19">
+        :max-zoom="19">
       </l-tile-layer>
 
       <l-tile-layer name="Topology"
@@ -184,7 +184,7 @@ const setReady = async () => {
         attribution='&copy; <a href="https://opentopomap.org">OpenTopoMap</a> &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
         :visible="false"
         layer-type="base"
-        max-zoom="17">
+        :max-zoom="17">
       </l-tile-layer>
 
       <l-tile-layer name="Satellite"
@@ -193,7 +193,7 @@ const setReady = async () => {
       IGP, UPR-EGP, and the GIS User Community'
         :visible="false"
         layer-type="base"
-        max-zoom="19">
+        :max-zoom="19">
       </l-tile-layer>
 
       <!-- <l-locatecontrol /> -->
