@@ -32,7 +32,6 @@ $bus.$on(eventTypes.logged_out, async () => {
     <AppLayout>
         <div>
             <BaseSection title="Settings">
-
                 <article :aria-busy="isLoading">
                     <template v-if="user">
                         <header>{{ user.username }}</header>
@@ -88,7 +87,6 @@ $bus.$on(eventTypes.logged_out, async () => {
             </BaseSection>
 
             <BaseSection title="Your API access tokens">
-
                 <article :aria-busy="isLoading">
                     <template v-if="!isLoading && accessTokens.length > 0">
                         <ul>
@@ -117,6 +115,7 @@ $bus.$on(eventTypes.logged_out, async () => {
                     </footer>
                 </article>
             </BaseSection>
+
             <BaseSection title="Log out">
                 <article :aria-busy="isLoading">
                     <a v-if="user"
