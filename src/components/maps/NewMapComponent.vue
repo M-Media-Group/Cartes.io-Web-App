@@ -149,7 +149,7 @@ const setReady = async () => {
       v-model:max-bounds="maxBounds"
       :maxZoom="19"
       v-model:zoom="zoom"
-      v-model:center.sync="center"
+      v-model:center="center"
       @contextmenu="openAddMarkerPopup($event)"
       @ready="setReady"
       :options="{ attributionControl: false }"
