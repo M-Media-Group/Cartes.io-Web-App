@@ -1,9 +1,23 @@
+import { RouteLocationNormalized } from "vue-router";
+
 // Taken from https://www.digitalocean.com/community/tutorials/vuejs-vue-router-modify-head
-export const setMetaAttributes = (to: any, from: any) => {
-    setDescription(to.meta.description);
-    updateOrCreateMetaTag("og:image", to.meta.image);
+export const setMetaAttributes = (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+    if (typeof to.meta.description === "string") {
+        setDescription(to.meta.description);
+    }
+
+    if (typeof to.meta.image === "string") {
+        updateOrCreateMetaTag("og:image", to.meta.image);
+    }
+
     updateOrCreateMetaTag("og:site_name", "Cartes.io");
-    updateOrCreateMetaTag("og:locale", to.meta.locale ?? "en_US");
+
+    if (typeof to.meta.locale === "string") {
+        updateOrCreateMetaTag("og:locale", to.meta.locale ?? "en_US");
+    } else {
+        updateOrCreateMetaTag("og:locale", "en_US");
+    }
+
     setFollow(true);
     setCurrentUrl();
     updateOrCreateSchema();
@@ -11,27 +25,29 @@ export const setMetaAttributes = (to: any, from: any) => {
     // This goes through the matched routes from last to first, finding the closest route with a title.
     // e.g., if we have `/some/deep/nested/route` and `/some`, `/deep`, and `/nested` have titles,
     // `/nested`'s will be chosen.
-    const nearestWithTitle = to.matched.slice().reverse().find((r: { meta: { title: any; }; }) => r.meta && r.meta.title);
+    const nearestWithTitle = to.matched.slice().reverse().find((r) => r.meta && r.meta.title);
 
     // Find the nearest route element with meta tags.
-    const nearestWithMeta = to.matched.slice().reverse().find((r: { meta: { metaTags: any; }; }) => r.meta && r.meta.metaTags);
+    const nearestWithMeta = to.matched.slice().reverse().find((r) => r.meta && r.meta.metaTags);
 
-    const previousNearestWithMeta = from.matched.slice().reverse().find((r: { meta: { metaTags: any; }; }) => r.meta && r.meta.metaTags);
+    const previousNearestWithMeta = from.matched.slice().reverse().find((r) => r.meta && r.meta.metaTags);
 
     // If a route with a title was found, set the document (page) title to that value.
-    if (nearestWithTitle) {
+    if (nearestWithTitle && typeof nearestWithTitle.meta.title === "string") {
         setTitle(nearestWithTitle.meta.title);
-    } else if (previousNearestWithMeta) {
+    } else if (previousNearestWithMeta && typeof previousNearestWithMeta.meta.title === "string") {
         setTitle(previousNearestWithMeta.meta.title);
-    } else {
+    } else if (typeof to.name === "string") {
         setTitle((to.name + ' - Cartes.io') ?? "Cartes.io");
+    } else {
+        setTitle("Cartes.io");
     }
 
     // Remove any stale meta tags from the document using the key attribute we set below.
     Array.from(document.querySelectorAll('[data-vue-router-controlled]')).map(el => el.parentNode?.removeChild(el));
 
     // Skip rendering meta tags if there are none.
-    if (!nearestWithMeta) return;
+    if (!nearestWithMeta || !(nearestWithMeta.meta.metaTags instanceof Array)) return;
 
     // Turn the meta tag definitions into actual elements in the head.
     nearestWithMeta.meta.metaTags.map((tagDef: { [x: string]: string; }) => {
@@ -47,7 +63,7 @@ export const setMetaAttributes = (to: any, from: any) => {
         return tag;
     })
         // Add the meta tags to the document head.
-        .forEach((tag: any) => document.head.appendChild(tag));
+        .forEach((tag: HTMLMetaElement) => document.head.appendChild(tag));
 }
 
 export const setTitle = (title: string) => {
