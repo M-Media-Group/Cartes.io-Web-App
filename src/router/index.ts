@@ -35,6 +35,12 @@ const routes: Array<RouteRecordRaw> = [
         },
     },
     {
+        path: "/maps/create",
+        name: "Create Map",
+        component: () =>
+            import(/* webpackChunkName: "MapView" */ "@/views/CreateMapView.vue"),
+    },
+    {
         path: "/maps/:mapId",
         name: "Maps",
         component: () =>
