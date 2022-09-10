@@ -2,14 +2,20 @@
 import { useMap } from '@/composables/map';
 import AppLayout from "@/templates/AppLayout.vue";
 import { useUser } from '@/composables/user';
-import MapArticle from '@/components/MapArticle.vue';
 import CreateMapButton from '@/components/CreateMapButton.vue';
+import { defineAsyncComponent, onMounted } from 'vue';
 
-const Maps = useMap();
-Maps.getAllMaps();
+const { maps, getAllMaps } = useMap();
 const { users, getUsers, user } = useUser();
 
-getUsers();
+const MapArticle = defineAsyncComponent(() =>
+    import('@/components/MapArticle.vue')
+)
+
+onMounted(() => {
+    getAllMaps();
+    getUsers();
+});
 
 </script>
 <template>
@@ -41,21 +47,23 @@ getUsers();
             <div>
 
                 <BaseSection title="Public maps"
-                    subtitle="These maps are made by the community and shared with everyone.">
+                    subtitle="These maps are made by the community and shared with everyone."
+                    v-if="maps.length > 0">
 
-                    <MapArticle v-for="(map, i) in Maps.maps.value"
+                    <MapArticle v-for="(map, i) in maps"
                         :key="map.uuid"
                         :map="map"
                         :showDescription="true"
                         :showMap="i < 4"
                         :showFooter="true" />
 
-                    <div>Showing {{ Maps.maps.value.length }} out of hundreds of public and private maps
+                    <div>Showing {{ maps.length }} out of hundreds of public and private maps
                     </div>
                 </BaseSection>
 
                 <BaseSection title="Public profiles"
-                    subtitle="These profiles are public on Cartes.io">
+                    subtitle="These profiles are public on Cartes.io"
+                    v-if="users">
 
                     <article v-for="user in users">
                         <BaseHeading as="h3"
