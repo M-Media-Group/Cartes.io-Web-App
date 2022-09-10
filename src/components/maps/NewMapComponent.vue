@@ -51,7 +51,8 @@ const props = defineProps({
 const emit = defineEmits([
   "addedMarker",
   "deletedMarker",
-  "showAr"
+  "showAr",
+  "ready"
 ])
 
 const ready = ref(false);
@@ -135,6 +136,8 @@ const setReady = async () => {
   await nextTick();
   ready.value = true;
   leafletObject.value = mapElement.value.leafletObject;
+  // Emit
+  emit('ready', mapElement.value.leafletObject);
 };
 
 // Theres some problem with marker clustering when importing mapmarkers async
