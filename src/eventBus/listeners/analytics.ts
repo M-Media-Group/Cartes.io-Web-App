@@ -1,10 +1,18 @@
 import { Map } from '@/types/map';
 import { Marker } from '@/types/marker';
 import { User } from '@/types/user';
-import { event, pageview } from 'vue-gtag'
+import { event, pageview, setOptions, optIn, optOut } from 'vue-gtag'
 import { eventTypes } from '../events';
 
 export default {
+  enabled_analytics: () => {
+    optIn();
+    event('analytics_opt_in');
+  },
+  disabled_analytics: () => {
+    event('analytics_opt_out');
+    optOut();
+  },
   created_map: (e: Map) => {
     event('created_map', {
       map_id: e.uuid,
