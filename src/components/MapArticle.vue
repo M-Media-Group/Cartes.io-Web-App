@@ -2,8 +2,8 @@
 import { useMap } from '@/composables/map';
 import { useMapPosition } from '@/composables/mapPosition';
 import { Map } from '@/types/map';
-import { defineAsyncComponent, PropType } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { defineAsyncComponent, PropType, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import MapAuthor from './maps/MapAuthor.vue';
 
 const props = defineProps({
@@ -40,7 +40,6 @@ const NewMapComponent = defineAsyncComponent(() =>
 const MapInstance = useMap();
 
 const router = useRouter();
-const route = useRoute();
 
 const mapPosition = useMapPosition();
 
@@ -61,17 +60,24 @@ const goToMap = () => {
     });
 }
 
+const showLoader = ref(true)
+
 </script>
 <template>
     <article :key="map.uuid"
         @click="handleClick()">
+        <header v-if="showLoader"
+            class="full loader">
+        </header>
         <header class="full"
             v-if="map.markers_count && map.markers_count > 0">
             <NewMapComponent v-if="showMap"
+                v-show="!showLoader"
                 :mapId="map.uuid"
                 :map="map"
                 :markers="map.markers ?? []"
-                style="height: 400px" />
+                style="height: 400px"
+                @ready="showLoader = false" />
         </header>
         <BaseHeading as="h3"
             :title='map.title ?? "Untitled map"'>
@@ -116,5 +122,20 @@ h3 {
 /* If its the last element of the article except the footer, set margin 0 */
 article> :last-child:not(footer) {
     margin-bottom: 0;
+}
+
+.loader {
+    height: 400px;
+    animation: 1.5s shine linear infinite;
+    background: var(--background-color);
+    background: linear-gradient(110deg, var(--background-color) 8%, var(--card-background-color) 18%, var(--background-color) 33%);
+    background-size: 200% 100%;
+}
+
+/* Loader keyframes card loading */
+@keyframes shine {
+    to {
+        background-position-x: -200%;
+    }
 }
 </style>
