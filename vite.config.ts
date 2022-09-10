@@ -26,6 +26,7 @@ export default defineConfig({
       manifest: {
         "name": "Cartes.io",
         "short_name": "Cartes",
+        "description": "Create maps, add markers, and share anywhere without even having to sign up.",
         "icons": [
           {
             "src": "/android-chrome-192x192.png",
@@ -40,7 +41,9 @@ export default defineConfig({
         ],
         "theme_color": "#ffffff",
         "background_color": "#ffffff",
-        "display": "standalone"
+        "display": "standalone",
+        "start_url": "/",
+        "categories": ["Cartes.io", "maps", "mapping", "markers", "location"]
       }
     })
   ],
