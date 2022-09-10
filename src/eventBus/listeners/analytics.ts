@@ -1,7 +1,7 @@
 import { Map } from '@/types/map';
 import { Marker } from '@/types/marker';
 import { User } from '@/types/user';
-import { event, pageview, setOptions, optIn, optOut } from 'vue-gtag'
+import { event, pageview, optIn, optOut } from 'vue-gtag'
 import { eventTypes } from '../events';
 
 export default {
