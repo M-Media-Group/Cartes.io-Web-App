@@ -19,6 +19,9 @@ export default defineConfig({
       devOptions: {
         enabled: true
       },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+      },
       includeAssets: ['/android-chrome-192x192.png', '/android-chrome-512x512.png'],
       manifest: {
         "name": "Cartes.io",
