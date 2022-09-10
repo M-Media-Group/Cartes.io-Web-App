@@ -89,6 +89,9 @@ class userDevice {
     }
 
     getAllMediaDevices() {
+        if (!navigator.mediaDevices || !this.supportsMediaDevices) {
+            return;
+        }
         navigator.mediaDevices.enumerateDevices()
             .then((devices) => {
                 this.#deviceMediaDevices = devices;
