@@ -6,6 +6,7 @@ import { getCurrentInstance, ref, reactive } from "vue";
 import { useMap } from "./map";
 import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
+import { Channel } from "laravel-echo";
 
 const Map = useMap();
 
@@ -226,10 +227,17 @@ export function useMarker() {
         }
     };
 
+    const joinChannel = (mapId: string): Channel | void => {
+        if (!userDevice.online) {
+            return alert("You need to be online to see live data");
+        }
+        return window.Echo.channel("maps." + mapId).subscribed((e: any) => {
+            $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
+        });
+    }
 
-    const listenForNewMarkers = async (mapId: string) => {
-
-        window.Echo.channel("maps." + mapId).listen(
+    const listenForNewMarkers = async (channel: Channel, mapId: string) => {
+        channel.listen(
             "MarkerCreated",
             (e: { marker: Marker; }) => {
                 if (e.marker.category.icon && !e.marker.category.icon.startsWith("https")) {
@@ -248,8 +256,8 @@ export function useMarker() {
 
     }
 
-    const listenForDeletedMarkers = async (mapId: string) => {
-        window.Echo.channel("maps." + mapId).listen(
+    const listenForDeletedMarkers = async (channel: Channel, mapId: string) => {
+        channel.listen(
             "MarkerDeleted",
             (e: { marker: Marker; }) => {
                 removeMarkerFromMarkerArray(e.marker, mapId);
@@ -259,8 +267,12 @@ export function useMarker() {
     }
 
     const listenForMarkerChangesOnMap = async (mapId: string) => {
-        listenForDeletedMarkers(mapId);
-        listenForNewMarkers(mapId);
+        const channel = joinChannel(mapId);
+        if (!channel) {
+            return;
+        }
+        listenForDeletedMarkers(channel, mapId);
+        listenForNewMarkers(channel, mapId);
     }
 
     return {
