@@ -138,6 +138,12 @@ const setReady = async () => {
   leafletObject.value = mapElement.value.leafletObject;
   // Emit
   emit('ready', mapElement.value.leafletObject);
+
+  // Wait for next tick to make sure the map is ready and let v-show trigger to true
+  await nextTick();
+
+  // Recompute leaflet bounds
+  leafletObject.value.invalidateSize();
 };
 
 // Theres some problem with marker clustering when importing mapmarkers async
@@ -166,7 +172,9 @@ const AddMarkerForm = defineAsyncComponent(() =>
       :options="{ attributionControl: false }"
       :zoomAnimation="true"
       :fadeAnimation="true"
-      :markerZoomAnimation="true">
+      :markerZoomAnimation="true"
+      :noBlockingAnimations="true"
+      v-show="ready">
 
       <l-control-attribution position="bottomright"
         prefix='&copy; <a href="https://cartes.io">Cartes.io</a> &copy; <a href="https://icons8.com/attributions">Icons8</a>'>
