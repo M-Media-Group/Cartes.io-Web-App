@@ -1,5 +1,5 @@
 import { useMap } from "@/composables/map";
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHistory, RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { setMetaAttributes, setFollow, setTitle, setDescription } from "./metaTagsHandler";
 import axios from "axios";
@@ -7,7 +7,7 @@ import { useProgress } from "@marcoschulte/vue3-progress";
 
 const Maps = useMap();
 
-const pathStayedTheSame = (to: any, from: any) => {
+const pathStayedTheSame = (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
     if (from && Object.keys(to.query).length) {
         if (to.fullPath.split('?')[0] == from.fullPath.split('?')[0]) return true;
     }
