@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { Marker } from '@/types/marker';
-import { computed, PropType } from 'vue';
+import { computed, defineAsyncComponent, PropType } from 'vue';
 import {
     LLayerGroup,
 } from "@vue-leaflet/vue-leaflet";
 import MarkerCluster from "./MarkerCluster.vue";
-import MapMarker from './MapMarker.vue';
 
 const props = defineProps({
     mapId: {
@@ -39,10 +38,13 @@ const groupedMarkersByCategory = computed(() => {
 //     import('@/components/maps/MarkerCluster.vue')
 // )
 
+const MapMarker = defineAsyncComponent(() =>
+    import('@/components/maps/MapMarker.vue')
+)
 </script>
 
 <template>
-    <marker-cluster v-if="cluster"
+    <marker-cluster v-if="cluster && markers.length > 0">
         :options="{ showCoverageOnHover: true, chunkedLoading: true }">
 
         <map-marker v-for="marker in markers"
@@ -51,18 +53,18 @@ const groupedMarkersByCategory = computed(() => {
 
     </marker-cluster>
 
-    <!-- Keeping the layer but not showing it (using v-show instead of v-if) and then conditionally loading the map-markers prevents the layergroup from being added multiple times on each addition on the dom -->
-    <l-layer-group v-show="!cluster"
+    <!-- Keeping the layer but not showing it (using visible instead of v-if) and then conditionally loading the map-markers prevents the layergroup from being added multiple times on each addition on the dom -->
+    <l-layer-group :visible="!cluster"
         v-for="(category, index) in groupedMarkersByCategory"
         :key="index"
         ref="features"
         layer-type="overlay"
         :name="category[0].category.name">
 
-        <map-marker v-if="!cluster"
-            v-for="marker in category"
-            :mapId="mapId"
-            :marker="marker" />
-
+        <template v-if="!cluster">
+            <map-marker v-for="marker in category"
+                :mapId="mapId"
+                :marker="marker" />
+        </template>
     </l-layer-group>
 </template>
