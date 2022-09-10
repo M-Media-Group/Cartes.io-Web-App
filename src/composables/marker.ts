@@ -176,7 +176,7 @@ export function useMarker() {
         return canCreateMarkerForMap(Map.map.value);
     }
 
-    const addMarker = async (mapId: string, formData: any) => {
+    const addMarker = async (mapId: string, formData: MarkerForm) => {
         if (!canCreateMarkerForMapByMapId(mapId)) {
             return alert("You need to be logged in to add a marker");
         }
@@ -231,7 +231,7 @@ export function useMarker() {
         if (!userDevice.online) {
             return alert("You need to be online to see live data");
         }
-        return window.Echo.channel("maps." + mapId).subscribed((e: any) => {
+        return window.Echo.channel("maps." + mapId).subscribed(() => {
             $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
         });
     }

@@ -24,7 +24,7 @@ export interface PersonalAccessToken {
     user_id: number;
     client_id: number;
     name: string | null;
-    scopes: any[];
+    scopes: string[];
     revoked: boolean;
     created_at: Date;
     updated_at: Date;
