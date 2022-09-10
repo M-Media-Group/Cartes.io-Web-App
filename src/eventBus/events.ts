@@ -35,12 +35,12 @@ class Events {
     this.events = events;
   }
 
-  $on(eventName: eventTypes, fn: any) {
+  $on(eventName: eventTypes, fn: Function) {
     this.events[eventName] = this.events[eventName] || [];
     this.events[eventName].push(fn);
   }
 
-  $off(eventName: eventTypes, fn: any) {
+  $off(eventName: eventTypes, fn: Function) {
     if (this.events[eventName]) {
       for (let i = 0; i < this.events[eventName].length; i++) {
         if (this.events[eventName][i] === fn) {

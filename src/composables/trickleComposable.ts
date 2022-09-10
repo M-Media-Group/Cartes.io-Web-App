@@ -1,6 +1,6 @@
 import { onBeforeUnmount, ref, watch } from 'vue';
 
-export default function trickleComposable(state: any) {
+export default function trickleComposable(state: { active: any; }) {
     const intervalHolder = { interval: null as any };
     const value = ref(0);
 
