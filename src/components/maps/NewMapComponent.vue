@@ -172,8 +172,10 @@ const AddMarkerForm = defineAsyncComponent(() =>
       <l-control-layers />
 
       <l-control position="topleft"
-        class="leaflet-control-ar leaflet-bar leaflet-control">
+        class="leaflet-control-ar leaflet-bar leaflet-control"
+        v-if="userDevice.supportsGeolocation">
         <a href="#"
+          aria-label="Go to your current location"
           @click.prevent="goToDeviceLocation()">
           <BaseSvg icon="gps"
             style="padding:4px;" />
