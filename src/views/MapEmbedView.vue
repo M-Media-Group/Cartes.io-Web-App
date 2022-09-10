@@ -1,10 +1,10 @@
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import NewMapComponent from "@/components/maps/NewMapComponent.vue"
+import { defineAsyncComponent, onMounted, ref } from "vue";
 import { useMarker } from "@/composables/marker";
 import { useMap } from "@/composables/map";
 import { useRoute } from "vue-router";
+import MapLoader from "@/components/maps/MapLoader.vue";
 
 const route = useRoute();
 
@@ -28,16 +28,24 @@ onMounted(() => {
     }
 });
 
+const showLoader = ref(true);
+
+const NewMapComponent = defineAsyncComponent(() =>
+    import('@/components/maps/NewMapComponent.vue')
+)
 
 </script>
 
 <template>
-
-    <div v-if="mapId">
+    <MapLoader v-if="showLoader && mapId"
+        style="height: 100vh"></MapLoader>
+    <div v-if="mapId"
+        v-show="!showLoader">
         <NewMapComponent :mapId="mapId"
             :show-ar="false"
             :markers="displayableMarkers"
-            style="height: 100vh" />
+            style="height: 100vh"
+            @ready="showLoader = false" />
     </div>
     <div v-else>
         Map not found

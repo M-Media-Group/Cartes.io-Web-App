@@ -5,6 +5,7 @@ import { Map } from '@/types/map';
 import { defineAsyncComponent, PropType, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import MapAuthor from './maps/MapAuthor.vue';
+import MapLoader from "@/components/maps/MapLoader.vue";
 
 const props = defineProps({
     map: {
@@ -66,14 +67,15 @@ const showLoader = ref(true)
 <template>
     <article :key="map.uuid"
         @click="handleClick()">
-        <header v-if="showLoader"
-            class="full loader">
+        <header class="full"
+            v-if="showMap">
+            <MapLoader v-if="showLoader"
+                style="height: 400px"></MapLoader>
         </header>
         <header class="full"
-            v-if="map.markers_count && map.markers_count > 0">
-            <NewMapComponent v-if="showMap"
-                v-show="!showLoader"
-                :mapId="map.uuid"
+            v-if="showMap && map.markers_count && map.markers_count > 0"
+            v-show="!showLoader">
+            <NewMapComponent :mapId="map.uuid"
                 :map="map"
                 :markers="map.markers ?? []"
                 style="height: 400px"
@@ -122,20 +124,5 @@ h3 {
 /* If its the last element of the article except the footer, set margin 0 */
 article> :last-child:not(footer) {
     margin-bottom: 0;
-}
-
-.loader {
-    height: 400px;
-    animation: 1.5s shine linear infinite;
-    background: var(--background-color);
-    background: linear-gradient(110deg, var(--background-color) 8%, var(--card-background-color) 18%, var(--background-color) 33%);
-    background-size: 200% 100%;
-}
-
-/* Loader keyframes card loading */
-@keyframes shine {
-    to {
-        background-position-x: -200%;
-    }
 }
 </style>

@@ -22,7 +22,7 @@ import userDevice from "@/classes/userDevice";
 import { useMapPosition } from "@/composables/mapPosition";
 import { Map } from "@/types/map";
 import BaseSvg from "@/components/icons/BaseSvg.vue";
-
+import MapLoader from "@/components/maps/MapLoader.vue";
 
 const props = defineProps({
   showAr: {
@@ -158,6 +158,7 @@ const AddMarkerForm = defineAsyncComponent(() =>
 </script>
 <template>
   <div style="background:gray;">
+    <MapLoader v-if="!ready"></MapLoader>
     <l-map :maxBoundsViscosity="1.0"
       :worldCopyJump="true"
       style="width: 100%; height: 100%"
