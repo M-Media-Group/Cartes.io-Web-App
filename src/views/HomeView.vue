@@ -63,7 +63,7 @@ onMounted(() => {
 
                 <BaseSection title="Public profiles"
                     subtitle="These profiles are public on Cartes.io"
-                    v-if="users">
+                    v-if="users && users?.length > 0">
 
                     <article v-for="user in users">
                         <BaseHeading as="h3"
