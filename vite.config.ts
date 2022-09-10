@@ -39,7 +39,7 @@ export default defineConfig({
             "type": "image/png"
           }
         ],
-        "theme_color": "#ffffff",
+        "theme_color": "#1095c1",
         "background_color": "#ffffff",
         "display": "standalone",
         "start_url": "/",
