@@ -12,14 +12,13 @@ import {
 } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
 
-import AddMarkerForm from "@/components/AddMarkerForm.vue";
+import MapMarkers from "./MapMarkers.vue";
 
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
-import { nextTick, PropType, ref, watch } from "vue";
+import { defineAsyncComponent, nextTick, PropType, ref, watch } from "vue";
 import { useMarker } from "@/composables/marker";
 import userDevice from "@/classes/userDevice";
-import MapMarkers from "./MapMarkers.vue";
 import { useMapPosition } from "@/composables/mapPosition";
 import { Map } from "@/types/map";
 import BaseSvg from "@/components/icons/BaseSvg.vue";
@@ -137,6 +136,15 @@ const setReady = async () => {
   ready.value = true;
   leafletObject.value = mapElement.value.leafletObject;
 };
+
+// Theres some problem with marker clustering when importing mapmarkers async
+// const MapMarkers = defineAsyncComponent(() =>
+//   import('@/components/maps/MapMarkers.vue')
+// )
+
+const AddMarkerForm = defineAsyncComponent(() =>
+  import('@/components/AddMarkerForm.vue')
+)
 
 </script>
 <template>
