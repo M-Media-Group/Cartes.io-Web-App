@@ -300,6 +300,10 @@ const AddMarkerForm = defineAsyncComponent(() =>
   border: none;
 }
 
+.leaflet-control section {
+  margin-bottom: initial;
+}
+
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip,
 .leaflet-bar a,
