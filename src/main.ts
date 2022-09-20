@@ -12,6 +12,17 @@ import BaseButton from '@/components/BaseButton.vue'
 import BaseHeading from '@/components/BaseHeading.vue'
 import BaseSection from '@/components/BaseSection.vue'
 import BaseInput from '@/components/BaseInput.vue'
+import { registerSW } from 'virtual:pwa-register'
+
+const updateSW = registerSW({
+    onNeedRefresh() {
+        if (confirm('New content is available. Please refresh.')) {
+            updateSW()
+        }
+    },
+    onOfflineReady() { },
+})
+
 
 import "@picocss/pico";
 
