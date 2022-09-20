@@ -33,7 +33,9 @@ const url = import.meta.env.VITE_API_URL;
                 <pre><code>GET {{ url }}/api/maps/{{ map.uuid }}
 GET {{ url }}/api/maps/{{ map.uuid }}/markers</code></pre>
             </li>
-            <li>Embed as iFrame
+            <li>Embed as <a href="https://github.com/M-Media-Group/Cartes.io/wiki/iFrame"
+                    rel="noopener"
+                    target="_BLANK">iFrame</a>
                 <!-- Code block showing API call -->
                 <pre><code>&lt;iframe src="https://app.cartes.io/maps/{{ map.uuid }}/embed?type=map"
   width="100%"
