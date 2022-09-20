@@ -2,7 +2,7 @@ import userDevice from "@/classes/userDevice";
 import { Map } from "@/types/map";
 import { Marker, MarkerForm } from "@/types/marker";
 import { computed } from "@vue/reactivity";
-import { getCurrentInstance, ref, reactive } from "vue";
+import { getCurrentInstance, ref, reactive, toRaw } from "vue";
 import { useMap } from "./map";
 import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
@@ -220,7 +220,7 @@ export function useMarker() {
             await cartes.maps(mapId).markers(marker.id, (marker.token || localStorage.getItem("post_" + marker.id))).delete();
             removeMarkerFromMarkerArray(marker, mapId);
             localStorage.removeItem("post_" + marker.id);
-            $bus.$emit(eventTypes.deleted_marker, marker);
+            $bus.$emit(eventTypes.deleted_marker, toRaw(marker));
             if (emit) {
                 emit('deletedMarker', marker);
             }
