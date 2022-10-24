@@ -166,6 +166,25 @@ $bus.$on(eventTypes.deleted_map, () => {
     router.push("/");
 })
 
+const hasOpenedContextMenu = ref(false);
+
+// A computed value to determine if the basic create-marker tutorial should be shown. It should only show if 1. the user can create markers on the given map and 2. there were never any previous markers
+const showCreateMarkerTutorial = computed(() => {
+    if (hasOpenedContextMenu.value) {
+        return false;
+    }
+
+    if (!canCreateMarkers) {
+        return false;
+    }
+
+    if (markers.value.length > 0) {
+        return false;
+    }
+
+    return true;
+})
+
 </script>
 
 <template>
@@ -178,21 +197,19 @@ $bus.$on(eventTypes.deleted_map, () => {
                 style="height: 70vh"
                 :autoCenterOnLoad="true"
                 :map="Maps.map.value"
-                :cluster="cluster" />
+                :cluster="cluster"
+                @openedContextMenu="hasOpenedContextMenu = true" />
+            <kbd v-if="showCreateMarkerTutorial"
+                style="z-index: 1000;position: absolute;bottom: var(--spacing);left: var(--spacing);text-align: center;">Right
+                click on
+                the map to
+                create a marker</kbd>
         </template>
 
         <template v-if="Maps.map">
             <div style="margin-top:var(--nav-element-spacing-vertical);">
                 <section class="grid">
                     <div>
-
-                        <div style="display: none;">
-                            <img height="16"
-                                width="16"
-                                src="https://via.placeholder.com/16"
-                                alt="Cartes.io logo" />
-                            Anonymous
-                        </div>
                         <BaseHeading :title='Maps.map.value?.title ?? "Untitled map"'
                             class="headings">
                             <template #subtitle>

@@ -9,6 +9,7 @@ import AppFooter from "@/components/AppFooter.vue";
     </slot>
     <Transition appear>
         <header key="header"
+            style="position:relative;"
             v-if="$slots.header">
 
             <slot name="header"></slot>

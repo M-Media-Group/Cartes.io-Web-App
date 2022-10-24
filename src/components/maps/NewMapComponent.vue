@@ -52,7 +52,8 @@ const emit = defineEmits([
   "addedMarker",
   "deletedMarker",
   "showAr",
-  "ready"
+  "ready",
+  'openedContextMenu'
 ])
 
 const ready = ref(false);
@@ -73,6 +74,7 @@ const openAddMarkerPopup = (event: { latlng: any; }) => {
   if (addMarkerPopup.value && event.latlng) {
     contextMenuPosition.value = event.latlng;
     addMarkerPopup.value.leafletObject.openPopup(contextMenuPosition.value);
+    emit('openedContextMenu');
     if (canCreateMarkerForMapByMapId(props.mapId)) {
       addMarkerForm.value.focusMultiselect();
     }
