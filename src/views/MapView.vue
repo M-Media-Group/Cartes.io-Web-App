@@ -200,7 +200,7 @@ const showCreateMarkerTutorial = computed(() => {
                 :cluster="cluster"
                 @openedContextMenu="hasOpenedContextMenu = true" />
             <kbd v-if="showCreateMarkerTutorial"
-                style="z-index: 1000;position: absolute;bottom: var(--spacing);left: var(--spacing);text-align: center;">Right
+                style="z-index: 1000;position: absolute;text-align: center;bottom: var(--spacing);left: 50%;right: 50%;width: max-content;transform: translate(-50%, -50%);">Right
                 click on
                 the map to
                 create a marker</kbd>
