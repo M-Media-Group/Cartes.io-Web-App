@@ -4,10 +4,10 @@ import { eventTypes } from '../events';
 
 export default {
 
-  created_map: (e: Map) => {
+  loaded_map: (e: Map) => {
     // Send a postMessage event
     window.parent.postMessage({
-      type: eventTypes.created_map,
+      type: eventTypes.loaded_map,
       data: e,
     }, '*');
   },
@@ -20,9 +20,10 @@ export default {
   },
   deleted_map: (e: Map) => {
     // Send a postMessage event
+    // @todo investigate why in this specific case we need to do the JSON.parse hack - taken from https://stackoverflow.com/a/42376465
     window.parent.postMessage({
       type: eventTypes.deleted_map,
-      data: e,
+      data: JSON.parse(JSON.stringify(e)),
     }, '*');
   },
   created_marker: (e: Marker) => {

@@ -5,6 +5,7 @@ export enum eventTypes {
   updated_map = "updated_map",
   deleted_map = "deleted_map",
   shared_map = "shared_map",
+  loaded_map = "loaded_map",
   enabled_analytics = "enabled_analytics",
   disabled_analytics = "disabled_analytics",
   created_marker = "created_marker",
