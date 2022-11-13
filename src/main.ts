@@ -102,7 +102,7 @@ app.use(Vue3ProgressPlugin)
 
 app.use(metaTagPlugin,
     {
-    defaultName: import.meta.env.VITE_APP_NAME,
+    defaultName: import.meta.env.VITE_APP_NAME ?? 'Cartes.io',
     preconnect: [
       import.meta.env.VITE_API_URL,
     ],
