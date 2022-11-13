@@ -12,6 +12,7 @@
   "dependencies": {
     "@ar-js-org/ar.js": "^3.4.0",
     "@m-media/npm-cartes-io": "^0.1.2",
+    "@m-media/vue3-meta-tags": "^0.0.4",
     "@marcoschulte/vue3-progress": "^0.0.6",
     "@picocss/pico": "^1.5.3",
     "@vueform/multiselect": "^2.4.2",

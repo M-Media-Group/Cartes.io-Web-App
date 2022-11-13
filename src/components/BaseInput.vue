@@ -47,7 +47,7 @@ const handleInput = (event: Event) => {
             :aria-label="label"
             required
             autofocus
-            v-model="modelValue"
+            :value="modelValue"
             @input="handleInput($event)"
             :aria-invalid="errors.length > 0 ? true : undefined"
             v-bind="$attrs">

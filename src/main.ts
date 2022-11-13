@@ -13,6 +13,7 @@ import BaseHeading from '@/components/BaseHeading.vue'
 import BaseSection from '@/components/BaseSection.vue'
 import BaseInput from '@/components/BaseInput.vue'
 import { registerSW } from 'virtual:pwa-register'
+import { metaTagPlugin } from '@m-media/vue3-meta-tags';
 
 const updateSW = registerSW({
     onNeedRefresh() {
@@ -98,6 +99,14 @@ app.use(VueHotjar, {
 });
 
 app.use(Vue3ProgressPlugin)
+
+app.use(metaTagPlugin,
+    {
+    defaultName: import.meta.env.VITE_APP_NAME,
+    preconnect: [
+      import.meta.env.VITE_API_URL,
+    ],
+  }, router);
 
 app.component('BaseButton', BaseButton);
 app.component('BaseHeading', BaseHeading);

@@ -16,7 +16,7 @@ import { usePusher } from "@/composables/pusher";
 
 import $bus, { eventTypes } from "@/eventBus/events";
 
-import { updateOrCreateSchema } from "@/router/metaTagsHandler";
+import { updateOrCreateSchema } from "@m-media/vue3-meta-tags";
 import MapAuthor from "@/components/maps/MapAuthor.vue";
 
 const router = useRouter();

@@ -1,7 +1,7 @@
 import { useMap } from "@/composables/map";
 import { createRouter, createWebHistory, RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 import $bus, { eventTypes } from "@/eventBus/events";
-import { setMetaAttributes, setFollow, setTitle, setDescription } from "./metaTagsHandler";
+import { setMetaAttributes, setFollow, setTitle, setDescription } from "@m-media/vue3-meta-tags";
 import axios from "axios";
 import { useProgress } from "@marcoschulte/vue3-progress";
 
@@ -43,18 +43,27 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/maps/:mapId",
         name: "Maps",
+        meta: {
+            skipMetaTagsHandler: true,
+        },
         component: () =>
             import(/* webpackChunkName: "MapView" */ "@/views/MapView.vue"),
     },
     {
         path: "/maps/:mapId/embed",
         name: "Maps/Embed",
+        meta: {
+            skipMetaTagsHandler: true,
+        },
         component: () =>
             import(/* webpackChunkName: "EmbedView" */ "@/views/MapEmbedView.vue"),
     },
     {
         path: "/maps/:mapId/ar",
         name: "Maps/AR",
+        meta: {
+            skipMetaTagsHandler: true,
+        },
         component: () =>
             import(/* webpackChunkName: "ar" */ "@/views/ARView.vue"),
     },
@@ -93,6 +102,9 @@ const routes: Array<RouteRecordRaw> = [
         path: "/users/:username",
         name: "User",
         props: true,
+        meta: {
+            skipMetaTagsHandler: true,
+        },
         component: () =>
             import(/* webpackChunkName: "ar" */ "@/views/UserProfileView.vue"),
     },
@@ -126,9 +138,10 @@ router.beforeEach(async (to, from, next) => {
     }
     const progress = useProgress().start();
 
-    setMetaAttributes(to, from);
     // We are using beforeEach instead of beforeEnter on the individual route because beforeEach is also called when the view/component updates (when going from one mapId to another)
     if (to.params.mapId) {
+        setMetaAttributes(to, from);
+
         await Maps.getMap(to.params.mapId as string).then((map) => {
             // pass the map to the view
             if (map) {
@@ -147,6 +160,8 @@ router.beforeEach(async (to, from, next) => {
     }
 
     if (to.params.username) {
+        setMetaAttributes(to, from);
+
         await axios.get(`/api/users/${to.params.username}?with[]=maps&with[]=contributions`).then((res) => {
             if (res.data) {
                 to.params.user = res.data;
