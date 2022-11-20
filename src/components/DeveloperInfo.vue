@@ -14,6 +14,17 @@ defineProps({
 
 const url = import.meta.env.VITE_API_URL;
 
+const copyCode = async (e: MouseEvent) => {
+    const code = e.target as HTMLElement;
+    const range = document.createRange();
+    range.selectNode(code);
+    window.getSelection()?.removeAllRanges();
+    window.getSelection()?.addRange(range);
+    if (navigator.clipboard) {
+        await navigator.clipboard.writeText(code.innerText);
+    }
+}
+
 </script>
 
 <template>
@@ -30,14 +41,14 @@ const url = import.meta.env.VITE_API_URL;
                     rel="noopener"
                     target="_BLANK">the API</a> to get this map and its markers
                 <!-- Code block showing API call -->
-                <pre><code>GET {{ url }}/api/maps/{{ map.uuid }}
+                <pre><code @click="copyCode">GET {{ url }}/api/maps/{{ map.uuid }}
 GET {{ url }}/api/maps/{{ map.uuid }}/markers</code></pre>
             </li>
             <li>Embed as <a href="https://github.com/M-Media-Group/Cartes.io/wiki/iFrame"
                     rel="noopener"
                     target="_BLANK">iFrame</a>
                 <!-- Code block showing API call -->
-                <pre><code>&lt;iframe src="https://app.cartes.io/maps/{{ map.uuid }}/embed?type=map"
+                <pre><code @click="copyCode">&lt;iframe src="https://app.cartes.io/maps/{{ map.uuid }}/embed?type=map"
   width="100%"
   height="400"
   frameborder="0"&gt;&lt;/iframe&gt;</code></pre>
@@ -45,17 +56,17 @@ GET {{ url }}/api/maps/{{ map.uuid }}/markers</code></pre>
             <li>Shortcode using our <a target="_BLANK"
                     href="https://wordpress.org/plugins/cartes/">WordPress plugin</a>
                 <!-- Code block showing API call -->
-                <pre><code>[cartes_map uuid="{{ map.uuid }}"]</code></pre>
+                <pre><code @click="copyCode">[cartes_map uuid="{{ map.uuid }}"]</code></pre>
             </li>
             <li>Python using our <a target="_BLANK"
                     href="https://pypi.org/project/py-cartes-io/">Python package</a>
                 <!-- Code block showing API call -->
-                <pre><code>cartes.Maps('{{ map.uuid }}', '{{ getMapToken(map) ?? 'optional_map_token' }}').get()</code></pre>
+                <pre><code @click="copyCode">cartes.Maps('{{ map.uuid }}', '{{ getMapToken(map) ?? 'optional_map_token' }}').get()</code></pre>
             </li>
             <li>JS using our <a target="_BLANK"
                     href="https://www.npmjs.com/package/@m-media/npm-cartes-io/">NPM package</a>
                 <!-- Code block showing API call -->
-                <pre><code>cartes.maps('{{ map.uuid }}', '{{ getMapToken(map) ?? 'optional_map_token' }}').get()</code></pre>
+                <pre><code @click="copyCode">cartes.maps('{{ map.uuid }}', '{{ getMapToken(map) ?? 'optional_map_token' }}').get()</code></pre>
             </li>
         </ul>
         <p>When using the API or embedding the map, you must attribute this website on your front-end.</p>
