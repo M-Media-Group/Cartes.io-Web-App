@@ -82,7 +82,7 @@ const triggerBlur = () => {
             <li class="search">
                 <input ref="searchInput"
                     type="search"
-                    placeholder="search"
+                    placeholder="Find a map"
                     @focus="searchIsFocused = true"
                     @blur="triggerBlur"
                     @input="debounceSearch(($event.target as any)?.value)"
