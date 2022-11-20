@@ -16,9 +16,33 @@ const router = useRouter();
 
 const searchIsFocused = ref(false);
 
+const searchTimeout = ref(null as any);
+
+const hasSearched = ref(false);
+
+const searchInput = ref() as Ref<HTMLInputElement>;
+
+// Set a 500ms timeout to prevent the search from running on every keystroke
+const debounceSearch = (query: string) => {
+    hasSearched.value = false;
+
+    if (query.length < 3) {
+        return;
+    }
+
+    if (searchTimeout.value) {
+        clearTimeout(searchTimeout.value);
+    }
+
+    searchTimeout.value = setTimeout(() => {
+        search(query);
+    }, 400);
+
+};
+
 const search = async (query: string) => {
-    console.log(query);
     const results = await searchForMap(query);
+    hasSearched.value = true;
     if (!results) {
         return;
     }
@@ -26,10 +50,23 @@ const search = async (query: string) => {
 
     // If there is only one result, navigate to it
     if (results.data.length === 1) {
-        router.push({
-            path: '/maps/' + results.data[0].uuid,
-        });
+        navigateToMap(results.data[0].uuid);
     }
+}
+
+const navigateToMap = (mapId: string) => {
+    router.push({
+        path: '/maps/' + mapId,
+    });
+    hasSearched.value = false;
+    searchInput.value.value = '';
+    searchInput.value.blur();
+}
+
+const triggerBlur = () => {
+    setTimeout(() => {
+        searchIsFocused.value = false;
+    }, 200);
 }
 
 </script>
@@ -42,19 +79,33 @@ const search = async (query: string) => {
                     <strong>Cartes.io</strong>
                 </router-link>
             </li>
-            <li style="display:none;">
-                <input type="search"
+            <li class="search">
+                <input ref="searchInput"
+                    type="search"
                     placeholder="search"
                     @focus="searchIsFocused = true"
-                    @blur="searchIsFocused = false"
-                    @keyup="search(($event.target as any)?.value)"
-                    list="search-results" />
+                    @blur="triggerBlur"
+                    @input="debounceSearch(($event.target as any)?.value)"
+                    list="search-results"
+                    :aria-invalid="hasSearched ? false : undefined" />
 
                 <datalist id="search-results">
                     <option v-for="result in searchResults"
                         :value="result.title"
-                        @click="$router.push(`/maps/${result.uuid}`)" />
+                        @click="navigateToMap(result.uuid)" />
                 </datalist>
+
+                <!-- Also show a ul -->
+                <ul class="search-results"
+                    v-if="searchIsFocused && searchResults.length > 0 && hasSearched">
+                    <li v-for="result in searchResults"
+                        :key="result.uuid"
+                        @click.prevent="navigateToMap(result.uuid)">
+                        <router-link :to="'/maps/' + result.uuid">
+                            {{ result.title }}
+                        </router-link>
+                    </li>
+                </ul>
             </li>
         </ul>
         <ul v-if="!searchIsFocused">
@@ -89,3 +140,40 @@ const search = async (query: string) => {
         </ul>
     </nav>
 </template>
+
+<style scoped>
+/* If the input is not focused, make it small */
+input[type="search"] {
+    width: var(--form-element-spacing-horizontal) !important;
+    padding: 0;
+    border: none;
+    background: none;
+    transition: width 0.2s ease-in-out;
+    margin: 0;
+}
+
+/* If the input is focused, make it big */
+input[type="search"]:focus {
+    width: 100% !important;
+}
+
+li.search {
+    position: relative;
+    width: max-content;
+}
+
+.search-results {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 10000;
+    background: var(--card-background-color);
+    left: var(--form-element-spacing-horizontal);
+    padding: var(--form-element-spacing-vertical) var(--form-element-spacing-horizontal);
+    min-width: 200px;
+}
+
+.search-results li {
+    width: 100%;
+}
+</style>
