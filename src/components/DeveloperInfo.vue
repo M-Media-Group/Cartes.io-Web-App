@@ -41,8 +41,8 @@ const copyCode = async (e: MouseEvent) => {
                     rel="noopener"
                     target="_BLANK">the API</a> to get this map and its markers
                 <!-- Code block showing API call -->
-                <pre><code @click="copyCode">GET {{ url }}/api/maps/{{ map.uuid }}
-GET {{ url }}/api/maps/{{ map.uuid }}/markers</code></pre>
+                <pre><code @click="copyCode">GET {{ url }}/api/maps/{{ map.uuid }}</code></pre>
+                <pre><code @click="copyCode">GET {{ url }}/api/maps/{{ map.uuid }}/markers</code></pre>
             </li>
             <li>Embed as <a href="https://github.com/M-Media-Group/Cartes.io/wiki/iFrame"
                     rel="noopener"
