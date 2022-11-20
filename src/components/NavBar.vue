@@ -102,9 +102,13 @@ const triggerBlur = () => {
                         :key="result.uuid"
                         @click.prevent="navigateToMap(result.uuid)">
                         <router-link :to="'/maps/' + result.uuid">
-                            {{ result.title }}
+                            {{ result.title ?? "Untitled map" }}
                         </router-link>
                     </li>
+                </ul>
+                <ul class="search-results"
+                    v-else-if="searchIsFocused && searchResults.length === 0 && hasSearched">
+                    <li>There's no public maps by this name right now</li>
                 </ul>
             </li>
         </ul>
@@ -171,6 +175,8 @@ li.search {
     left: var(--form-element-spacing-horizontal);
     padding: var(--form-element-spacing-vertical) var(--form-element-spacing-horizontal);
     min-width: 200px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-box-shadow);
 }
 
 .search-results li {
