@@ -57,7 +57,7 @@ onMounted(() => {
                         :showMap="i < 4"
                         :showFooter="true" />
 
-                    <div>Showing {{ maps.length }} out of hundreds of public and private maps
+                    <div>Showing {{ maps.length }} out of thousands of public and private maps
                     </div>
                 </BaseSection>
 
