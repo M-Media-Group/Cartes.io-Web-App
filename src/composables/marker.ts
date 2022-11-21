@@ -26,7 +26,7 @@ const nonExpiredMarkers = computed(() => {
     if (!markers.value) {
         return [];
     }
-    return markers.value.filter((m) => !m.expires_at || m.expires_at > new Date());
+    return markers.value.filter((m) => !m.expires_at || new Date(m.expires_at) > new Date());
 })
 
 // const markersInTimeframe = computed(() => {
