@@ -172,7 +172,7 @@ const AddMarkerForm = defineAsyncComponent(() =>
       v-model:center="center"
       @contextmenu="openAddMarkerPopup($event)"
       @ready="setReady"
-      :options="{ attributionControl: false }"
+      :options="{ attributionControl: false, preferCanvas: true }"
       :zoomAnimation="true"
       :fadeAnimation="true"
       :markerZoomAnimation="true"
