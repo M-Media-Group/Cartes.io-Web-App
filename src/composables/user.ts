@@ -124,14 +124,8 @@ const logout = () => {
 
 const getCsrfToken = () => {
 
-    // Remove XSRF-TOKEN cookie and header
-    axios.defaults.headers.common["X-CSRF-TOKEN"] = "";
-    document.cookie = "XSRF-TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
     return axios.get("/csrf-token").then((response) => {
-        // Set the incoming cookies to the cookie jar
-        axios.defaults.headers.common["X-XSRF-TOKEN"] = response.data;
-        return response.data;
+        return;
     }).catch((error) => {
         console.log("CSRF token error", error);
         alert(error.response.data.message);
