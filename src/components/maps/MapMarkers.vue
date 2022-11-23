@@ -58,6 +58,13 @@ const handleMarkerClick = (marker: Marker) => {
     });
 }
 
+const handleMarkerDelete = (marker: Marker) => {
+    if (marker !== null && canDeleteMarker(marker)) {
+        deleteMarker(props.mapId, marker);
+        markerPopup.value.leafletObject.closePopup();
+    }
+}
+
 </script>
 
 <template>
@@ -121,7 +128,7 @@ const handleMarkerClick = (marker: Marker) => {
             <a href="#"
                 role="button"
                 v-if="selectedMarker !== null && canDeleteMarker(selectedMarker)"
-                @click.prevent="deleteMarker(mapId, selectedMarker)">Delete</a>
+                @click.prevent="handleMarkerDelete(selectedMarker)">Delete</a>
 
             <hr v-if="selectedMarker && canDeleteMarker(selectedMarker)" />
 
