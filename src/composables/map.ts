@@ -64,7 +64,7 @@ export function useMap() {
         const data = await cartes.maps(mapId)
             .with(['markers', 'user', 'publicContributors'])
             .get();
-        maps.value.push(data);
+        maps.value.push({ users_currently_connected: 1, ...data });
         return map.value;
     }
 
@@ -299,6 +299,12 @@ export function useMap() {
         }
     };
 
+    const setAmountOfUsersCurrentlyConnectedToMap = (mapId: string, amount: number) => {
+        if (mapExistsInMapsArray(mapId)) {
+            updateMapInMapArray(mapId, { users_currently_connected: amount });
+        }
+    }
+
     return {
         canDeleteMap,
         canUpdateMap,
@@ -317,6 +323,7 @@ export function useMap() {
         getMapToken,
         wouldLinkToCurrentUser,
         searchForMap,
+        setAmountOfUsersCurrentlyConnectedToMap,
         isLoading,
         formErrors,
         hasErrors,

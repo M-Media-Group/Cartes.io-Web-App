@@ -26,6 +26,7 @@ export interface Map {
     public_contributors?: User[];
     is_linked_to_user?: boolean;
     user?: User | null;
+    users_currently_connected?: number;
 }
 
 export interface Options {

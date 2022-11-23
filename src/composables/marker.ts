@@ -2,7 +2,7 @@ import userDevice from "@/classes/userDevice";
 import { Map } from "@/types/map";
 import { Marker, MarkerForm } from "@/types/marker";
 import { computed } from "@vue/reactivity";
-import { getCurrentInstance, ref, reactive, toRaw } from "vue";
+import { getCurrentInstance, ref, reactive, toRaw, onUnmounted } from "vue";
 import { useMap } from "./map";
 import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
@@ -231,6 +231,9 @@ export function useMarker() {
         if (!userDevice.online) {
             return alert("You need to be online to see live data");
         }
+        onUnmounted(() => {
+            window.Echo.leave("maps." + mapId);
+        });
         return window.Echo.channel("maps." + mapId).subscribed(() => {
             $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
         });
@@ -266,6 +269,13 @@ export function useMarker() {
         );
     }
 
+    const listenForAmountOfUsers = async (channel: Channel, mapId: string) => {
+        // @ts-ignore on() does actually exist
+        channel.on("pusher:subscription_count", function (count) {
+            Map.setAmountOfUsersCurrentlyConnectedToMap(mapId, count.subscription_count);
+        });
+    }
+
     const listenForMarkerChangesOnMap = async (mapId: string) => {
         const channel = joinChannel(mapId);
         if (!channel) {
@@ -273,6 +283,7 @@ export function useMarker() {
         }
         listenForDeletedMarkers(channel, mapId);
         listenForNewMarkers(channel, mapId);
+        listenForAmountOfUsers(channel, mapId);
     }
 
     return {

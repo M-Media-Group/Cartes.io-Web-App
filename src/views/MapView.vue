@@ -235,6 +235,10 @@ const showCreateMarkerTutorial = computed(() => {
                                 class="secondary">
                                 <div v-if="isLive"
                                     class="blink"></div> {{ isLive ? 'Live feed' : 'Feed' }}
+                                <span
+                                    v-if="isLive && Maps.map.value?.users_currently_connected && Maps.map.value?.users_currently_connected > 1">
+                                    - {{ Maps.map.value.users_currently_connected }} people connected
+                                </span>
                             </summary>
                             <div
                                 v-if="!showExpired && (!displayableMarkers || displayableMarkers.length === 0) && markers && markers.length > 0">
