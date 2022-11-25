@@ -162,7 +162,7 @@ router.beforeEach(async (to, from, next) => {
     if (to.params.username) {
         setMetaAttributes(to, from);
 
-        await axios.get(`/api/users/${to.params.username}?with[]=maps&with[]=contributions`).then((res) => {
+        await axios.get(`/api/users/${to.params.username}?with[]=maps.markers&with[]=contributions`).then((res) => {
             if (res.data) {
                 to.params.user = res.data;
                 setTitle(res.data.username + " - Cartes.io");
