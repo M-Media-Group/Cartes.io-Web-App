@@ -2,8 +2,8 @@ import { useMap } from "@/composables/map";
 import { createRouter, createWebHistory, RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { setMetaAttributes, setFollow, setTitle, setDescription } from "@m-media/vue3-meta-tags";
-import axios from "axios";
 import { useProgress } from "@marcoschulte/vue3-progress";
+import cartes from "@m-media/npm-cartes-io";
 
 const Maps = useMap();
 
@@ -161,16 +161,17 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.params.username) {
         setMetaAttributes(to, from);
-
-        await axios.get(`/api/users/${to.params.username}?with[]=maps.markers&with[]=contributions`).then((res) => {
-            if (res.data) {
-                to.params.user = res.data;
-                setTitle(res.data.username + " - Cartes.io");
-                setDescription(res.data.description);
-                setFollow(res.data.is_public);
+        await cartes.users(String(to.params.username)).with(['maps.markers', 'contributions']).get().then((data) => {
+            if (data) {
+                to.params.user = data;
+                setTitle(data.username + " - Cartes.io");
+                setDescription(data.description);
+                setFollow(data.is_public);
+            } else {
+                throw new Error("User not found");
             }
         }).catch((e) => {
-            alert(e.response.data.message);
+            alert(e.response?.data?.message ?? e.message);
             router.push("/");
             return false
         });
