@@ -50,6 +50,12 @@ const routes: Array<RouteRecordRaw> = [
             import(/* webpackChunkName: "MapView" */ "@/views/MapView.vue"),
     },
     {
+        path: "/embeds/maps/:mapId",
+        redirect: (to) => {
+            return { name: "Maps/Embed", params: to.params, query: to.query };
+        }
+    },
+    {
         path: "/maps/:mapId/embed",
         name: "Maps/Embed",
         meta: {
