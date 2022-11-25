@@ -10,8 +10,8 @@ import { useUser } from "@/composables/user";
 
 import $bus, { eventTypes } from "@/eventBus/events";
 import { Map } from "@/types/map";
-import axios from "axios";
 import CreateMapButton from '@/components/CreateMapButton.vue';
+import cartes from "@m-media/npm-cartes-io";
 
 const props = defineProps({
     user: {
@@ -78,18 +78,15 @@ Object.keys(localStorage).forEach(function (key) {
 });
 
 const getMyMaps = () => {
-    axios
-        .get("/api/maps", {
-            params: {
-                ids: ids ?? [],
-                orderBy: "updated_at",
-                withMine: userInstance.user.value ? 1 : 0,
-                query: "privacy!=public",
-                with: ['markers']
-            },
-        })
-        .then((response: { data: { data: Map[]; }; }) => {
-            privateMaps.value = response.data.data;
+    cartes.maps()
+        .addParam("ids", ids ?? [])
+        .addParam("orderBy", "updated_at")
+        .addParam('withMine', userInstance.user.value ? "1" : "0")
+        .addParam("query", "privacy!=public")
+        .with(['markers'])
+        .get()
+        .then((data: { data: Map[]; }) => {
+            privateMaps.value = data.data;
         });
 }
 
