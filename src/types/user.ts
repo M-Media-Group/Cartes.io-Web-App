@@ -17,6 +17,38 @@ export interface User {
     public_maps?: Map[];
     public_maps_count?: number;
     public_maps_contributed_to?: Map[];
+    roles?: Role[];
+    permissions?: Permission[];
+}
+
+export interface Role {
+    id: number;
+    name: string;
+    guard_name: string;
+    created_at: Date;
+    updated_at: Date;
+    pivot: RolePivot;
+    permissions: Permission[];
+}
+
+export interface Permission {
+    id: number;
+    name: string;
+    guard_name: string;
+    created_at: Date;
+    updated_at: Date;
+    pivot: PermissionPivot;
+}
+
+export interface PermissionPivot {
+    role_id: number;
+    permission_id: number;
+}
+
+export interface RolePivot {
+    model_id: number;
+    role_id: number;
+    model_type: string;
 }
 
 export interface PersonalAccessToken {

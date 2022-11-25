@@ -119,6 +119,30 @@ $bus.$on(eventTypes.logged_out, async () => {
                 </article>
             </BaseSection>
 
+            <BaseSection title="Your account permissions">
+                <article :aria-busy="isLoading">
+                    <template v-if="!user?.email_verified_at && !isLoading">
+                        You need to verify your email address to be granted permissions.
+                    </template>
+                    <template v-else-if="!isLoading && user?.roles && user?.roles.length > 0">
+                        <p>You've been granted the following permissions:</p>
+                        <ul>
+                            <template v-for="role in user?.roles"
+                                :key="role.id">
+                                <li v-for="permission in role.permissions"
+                                    :key="permission.id">
+                                    {{ permission.name }}
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
+                    <template v-else-if="!isLoading">There's no permissions associated with your account right
+                        now.</template>
+                    <footer>
+                        To request further permissions, please contact us.
+                    </footer>
+                </article>
+            </BaseSection>
             <BaseSection title="Log out">
                 <article :aria-busy="isLoading">
                     <a v-if="user"
