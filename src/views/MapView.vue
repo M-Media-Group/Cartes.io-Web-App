@@ -257,6 +257,17 @@ const showCreateMarkerTutorial = computed(() => {
                                 :markers="displayableMarkers" />
                         </details>
 
+                        <!-- Settings -->
+                        <details v-if="Maps.map.value && Maps.canUpdateMap(Maps.map.value)">
+                            <summary aria-haspopup="listbox"
+                                role="button"
+                                class="secondary">
+                                Map settings
+                            </summary>
+                            <EditMapForm role="listbox"
+                                :map="Maps.map.value" />
+                        </details>
+
                         <!-- Map display options -->
                         <details>
                             <summary role="button"
@@ -283,17 +294,6 @@ const showCreateMarkerTutorial = computed(() => {
                                     v-model="cluster" />
                                 Cluster markers
                             </label>
-                        </details>
-
-                        <!-- Settings -->
-                        <details v-if="Maps.map.value && Maps.canUpdateMap(Maps.map.value)">
-                            <summary aria-haspopup="listbox"
-                                role="button"
-                                class="secondary">
-                                Map settings
-                            </summary>
-                            <EditMapForm role="listbox"
-                                :map="Maps.map.value" />
                         </details>
 
                         <p v-if="canCreateMarkers">Right click (or long-tap on mobile) on the map to create a
