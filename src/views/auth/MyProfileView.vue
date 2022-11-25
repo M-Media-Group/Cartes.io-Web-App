@@ -88,7 +88,7 @@ $bus.$on(eventTypes.logged_out, async () => {
 
             <BaseSection title="Your API access tokens">
                 <article :aria-busy="isLoading">
-                    <template v-if="!isLoading && accessTokens.length > 0">
+                    <template v-if="!isLoading && accessTokens.length > 0 && user?.email_verified_at">
                         <ul>
                             <li v-for="token in accessTokens">
                                 <strong>{{ token.name ?? "Untitled token" }}: </strong>
@@ -96,10 +96,13 @@ $bus.$on(eventTypes.logged_out, async () => {
                             </li>
                         </ul>
                     </template>
+                    <template v-else-if="!user?.email_verified_at && !isLoading">
+                        You need to verify your email address before you can create API access tokens.
+                    </template>
                     <template v-else-if="!isLoading">
                         You have no API access tokens.
                     </template>
-                    <footer>
+                    <footer v-if="user?.email_verified_at">
                         <form @submit.prevent="isLoadingToken = true; createPersonalAccessToken(tokenName)"
                             class="grid"
                             :disabled="isLoadingToken ? 'disabled' : null">
