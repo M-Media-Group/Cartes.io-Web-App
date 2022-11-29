@@ -20,7 +20,7 @@ const sortedMarkers = computed(() => {
 
 const filteredMarkers = computed(() => {
     return sortedMarkers.value.filter(marker => {
-        return marker.description.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+        return marker.description?.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
             marker.category.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
             marker.address?.toLowerCase().includes(searchTerm.value.toLowerCase());
     });
