@@ -123,6 +123,7 @@ const handleMarkerDelete = (marker: Marker) => {
                 <small>Coordinates: {{ selectedMarker?.location.coordinates[1] }} {{
                         selectedMarker?.location.coordinates[0]
                 }}</small>
+                <small v-if="selectedMarker?.address">Address: {{ selectedMarker?.address }}</small>
             </details>
 
             <a href="#"

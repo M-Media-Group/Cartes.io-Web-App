@@ -15,6 +15,7 @@ export interface Marker {
     elevation: number | null;
     category: Category;
     token?: string;
+    address?: string | null;
 }
 
 export interface Location {
