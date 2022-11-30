@@ -32,7 +32,7 @@ const filteredMarkers = computed(() => {
         v-if="sortedMarkers.length > 0">
         <input type="search"
             v-model="searchTerm"
-            placeholder="Find markers"
+            :placeholder="'Search ' + sortedMarkers.length + ' markers'"
             v-if="sortedMarkers.length > 9" />
         <MapCard v-for="marker in filteredMarkers"
             :key="marker.id"
