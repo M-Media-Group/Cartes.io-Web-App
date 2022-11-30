@@ -10,6 +10,7 @@ export enum eventTypes {
   disabled_analytics = "disabled_analytics",
   created_marker = "created_marker",
   created_marker_via_websocket = "created_marker_via_websocket",
+  updated_marker_via_websocket = "updated_marker_via_websocket",
   updated_marker = "updated_marker",
   deleted_marker = "deleted_marker",
   deleted_marker_via_websocket = "deleted_marker_via_websocket",

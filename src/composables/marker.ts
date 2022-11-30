@@ -259,6 +259,20 @@ export function useMarker() {
 
     }
 
+    const listenForUpdatedMarker = async (channel: Channel, mapId: string) => {
+        channel.listen(
+            "MarkerUpdated",
+            (e: { marker: Marker; }) => {
+                if (e.marker.category.icon && !e.marker.category.icon.startsWith("https")) {
+                    e.marker.category.icon = "/marker.svg";
+                }
+                $bus.$emit(eventTypes.updated_marker_via_websocket, e.marker);
+                if (emit) {
+                    emit("updatedMarker", e.marker);
+                }
+            });
+    }
+
     const listenForDeletedMarkers = async (channel: Channel, mapId: string) => {
         channel.listen(
             "MarkerDeleted",
@@ -283,6 +297,7 @@ export function useMarker() {
         }
         listenForDeletedMarkers(channel, mapId);
         listenForNewMarkers(channel, mapId);
+        listenForUpdatedMarker(channel, mapId);
         listenForAmountOfUsers(channel, mapId);
     }
 

@@ -218,6 +218,13 @@ export default {
       ["browser"]
     ).show();
   },
+  updated_marker_via_websocket: (event: Marker) => {
+    new CustomNotification(
+      "success",
+      event.category.name + " marker updated!",
+      ["browser"]
+    ).show();
+  },
   deleted_marker_via_websocket: (event: Marker) => {
     new CustomNotification(
       "success",
