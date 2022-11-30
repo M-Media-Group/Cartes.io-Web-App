@@ -317,6 +317,7 @@ export function useMap() {
         canCreateMarkers,
         updateMap,
         addMarkersToMapInArray,
+        updateMarkerInMarkerArray,
         removeMarkerFromMarkerArray,
         canCreateMarkersByMapId,
         markerExistsInMapArray,

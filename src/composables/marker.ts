@@ -74,18 +74,11 @@ export function useMarker() {
         // }
     }
 
-    // const updateMarkerInMarkerArray = (marker: Marker) => {
-    //     const index = markers.value?.findIndex((m) => m.id === marker.id);
-    //     if (index !== -1 && markers.value && index) {
-    //         // Get all the current marker values
-    //         const currentMarker = markers.value[index];
-    //         // Update only the changed values
-    //         markers.value[index] = {
-    //             ...currentMarker,
-    //             ...marker,
-    //         };
-    //     }
-    // }
+    const updateMarkerInMarkerArray = (marker: Marker, mapId = null as string | null) => {
+        if (mapId) {
+            Map.updateMarkerInMarkerArray(mapId, marker.id, marker);
+        }
+    }
 
     // const markerExistsInArray = (marker: Marker) => {
     //     return !!markers.value?.find(m => m.id === marker.id);
@@ -266,6 +259,7 @@ export function useMarker() {
                 if (e.marker.category.icon && !e.marker.category.icon.startsWith("https")) {
                     e.marker.category.icon = "/marker.svg";
                 }
+                updateMarkerInMarkerArray(e.marker, mapId);
                 $bus.$emit(eventTypes.updated_marker_via_websocket, e.marker);
                 if (emit) {
                     emit("updatedMarker", e.marker);
