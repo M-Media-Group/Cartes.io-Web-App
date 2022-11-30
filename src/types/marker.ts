@@ -16,6 +16,7 @@ export interface Marker {
     category: Category;
     token?: string;
     address?: string | null;
+    locations_count?: number;
 }
 
 export interface Location {

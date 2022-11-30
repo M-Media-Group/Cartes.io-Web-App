@@ -220,6 +220,25 @@ export function useMarker() {
         }
     };
 
+    const updateMarker = async (mapId: string, marker: Marker) => {
+        if (!userDevice.online) {
+            return alert("You need to be online to update a marker");
+        }
+        if (canDeleteMarker(marker)) {
+            const data = await cartes.maps(mapId).markers(marker.id, (marker.token || localStorage.getItem("post_" + marker.id))).update({
+                lat: marker.location.coordinates[1],
+                lng: marker.location.coordinates[0],
+                description: marker.description,
+            });
+            updateMarkerInMarkerArray(data, mapId);
+
+            $bus.$emit(eventTypes.updated_marker, data);
+            if (emit) {
+                emit('updatedMarker', data);
+            }
+        }
+    }
+
     const joinChannel = (mapId: string): Channel | void => {
         if (!userDevice.online) {
             return alert("You need to be online to see live data");
@@ -307,6 +326,7 @@ export function useMarker() {
         listenForMarkerChangesOnMap,
         canCreateMarkerForMap,
         canCreateMarkerForMapByMapId,
+        updateMarker,
         nonExpiredMarkers,
         displayableMarkers,
         isLoading,

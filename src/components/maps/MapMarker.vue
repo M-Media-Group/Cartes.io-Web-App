@@ -7,8 +7,11 @@ import {
     LCircleMarker,
 } from "@vue-leaflet/vue-leaflet";
 import $bus, { eventTypes } from "@/eventBus/events";
+import { useMarker } from '@/composables/marker';
 
-defineProps({
+const { canDeleteMarker, updateMarker } = useMarker();
+
+const props = defineProps({
     mapId: {
         type: String,
         required: true,
@@ -26,6 +29,13 @@ const handleMarkerClick = (marker: Marker) => {
     emit('clicked', marker);
 }
 
+const handleMarkerDragEnd = (event: any, marker: Marker) => {
+    const newPosition = event.target.getLatLng();
+    marker.location.coordinates = [newPosition.lng, newPosition.lat];
+    updateMarker(props.mapId, marker);
+    $bus.$emit(eventTypes.dragged_marker, marker);
+}
+
 const preferCanvas = false; // inject('preferCanvas', false);
 
 const componentToUse = preferCanvas ? LCircleMarker : LMarker;
@@ -37,6 +47,8 @@ const componentToUse = preferCanvas ? LCircleMarker : LMarker;
         :radius="7"
         :lat-lng="[marker.location.coordinates[1], marker.location.coordinates[0]]"
         :key="'map-' + mapId + '|' + marker.id + '-marker'"
+        :draggable="!!canDeleteMarker(marker)"
+        @dragend="handleMarkerDragEnd($event, marker)"
         @click="handleMarkerClick(marker)">
         <l-icon :icon-url="marker.category?.icon ?? '/images/marker-01.svg'"
             :icon-size="[30, 30]"

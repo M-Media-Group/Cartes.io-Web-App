@@ -13,6 +13,7 @@ export enum eventTypes {
   updated_marker_via_websocket = "updated_marker_via_websocket",
   updated_marker = "updated_marker",
   deleted_marker = "deleted_marker",
+  dragged_marker = "dragged_marker",
   deleted_marker_via_websocket = "deleted_marker_via_websocket",
   connected_to_websocket_channel = "connected_to_websocket_channel",
   opened_marker_popup = "opened_marker_popup",
