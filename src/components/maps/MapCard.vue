@@ -50,6 +50,8 @@ const handleClick = (marker: Marker) => {
     border-radius: var(--border-radius);
     background: var(--card-background-color);
     box-shadow: var(--card-box-shadow);
+
+    cursor: pointer;
 }
 
 .card>header>h3 {
