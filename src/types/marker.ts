@@ -7,7 +7,7 @@ export interface Marker {
     location: Location;
     category_id: number;
     created_at: Date;
-    updated_at: Date;
+    updated_at: Date | string;
     description: string | null;
     expires_at: Date | null;
     is_spam: boolean;

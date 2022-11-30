@@ -35,7 +35,7 @@ const handleClick = (marker: Marker) => {
         </header>
         <template v-if="marker.description">{{ marker.description }}</template>
         <footer>
-            <time :datetime="marker.created_at.toString()">{{ new Date(marker.created_at).toLocaleString() }}</time>
+            <time :datetime="marker.updated_at.toString()">{{ new Date(marker.updated_at).toLocaleString() }}</time>
         </footer>
     </div>
 </template>

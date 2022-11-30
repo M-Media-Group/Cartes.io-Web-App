@@ -52,6 +52,7 @@ const { canDeleteMarker, deleteMarker } = useMarker();
 
 const handleMarkerClick = (marker: Marker) => {
     selectedMarker.value = marker;
+    selectedMarker.value.updated_at = new Date(marker.updated_at).toLocaleString();
     markerPopup.value.leafletObject.openPopup({
         lat: marker.location.coordinates[1],
         lng: marker.location.coordinates[0],
@@ -136,7 +137,9 @@ const handleMarkerDelete = (marker: Marker) => {
             <small>Last update:
                 <span :datetime="selectedMarker?.updated_at">{{
                         selectedMarker?.updated_at
-                }}</span>.
+                }}</span>
+                <span v-if="selectedMarker?.locations_count && selectedMarker?.locations_count > 1"> | moved
+                    {{ selectedMarker?.locations_count }} times</span>
             </small>
             <!--
                   <a  v-if="canMarkAsSpamPost(marker)" @click="markAsSpam(selectedMarker.id)"

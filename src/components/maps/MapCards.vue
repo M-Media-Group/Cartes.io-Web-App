@@ -14,7 +14,7 @@ const searchTerm = ref("");
 
 const sortedMarkers = computed(() => {
     return props.markers.sort((a, b) => {
-        return a.created_at < b.created_at ? 1 : -1;
+        return a.updated_at < b.updated_at ? 1 : -1;
     });
 });
 
