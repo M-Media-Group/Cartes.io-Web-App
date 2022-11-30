@@ -30,9 +30,10 @@ const handleClick = (marker: Marker) => {
 <template>
     <div class="card"
         @click="handleClick(marker)">
-        <header>
+        <hgroup>
             <h3>{{ marker.category.name }}</h3>
-        </header>
+            <p v-if="marker.address">{{ marker.address }}</p>
+        </hgroup>
         <template v-if="marker.description">{{ marker.description }}</template>
         <footer>
             <time :datetime="marker.updated_at.toString()">{{ new Date(marker.updated_at).toLocaleString() }}</time>
