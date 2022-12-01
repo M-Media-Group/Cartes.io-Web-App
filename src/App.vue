@@ -42,4 +42,12 @@ summary {
   color: var(--primary-inverse);
   padding: var(--nav-element-spacing-vertical) var(--nav-element-spacing-horizontal);
 }
+
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  margin-bottom: 0;
+}
 </style>

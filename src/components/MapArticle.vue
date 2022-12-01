@@ -100,7 +100,8 @@ const showLoader = ref(true)
         </BaseHeading>
         <Markdown v-if="showDescription"
             :source="map.description"
-            :linkify="true" />
+            :linkify="true"
+            class="markdown" />
         <BaseButton v-if="showAction"
             @click="goToMap()">Open map</BaseButton>
         <small v-if="MapInstance.wouldLinkToCurrentUser(map)">{{ "This map is linked to you only through this device."

@@ -222,7 +222,8 @@ const showCreateMarkerTutorial = computed(() => {
                             </template>
                         </BaseHeading>
                         <Markdown :source="Maps.map.value?.description"
-                            :linkify="true" />
+                            :linkify="true"
+                            class="markdown" />
                     </div>
                     <div>
 
