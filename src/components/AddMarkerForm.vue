@@ -5,6 +5,7 @@ import { MarkerForm } from "@/types/marker";
 import { Category } from "@/types/category";
 import { useMarker } from "@/composables/marker";
 import userDevice from "@/classes/userDevice";
+import { useMapPosition } from "@/composables/mapPosition";
 
 const props = defineProps({
   showLinkInput: {
@@ -38,6 +39,9 @@ const props = defineProps({
 })
 
 const { addMarker, isLoading, formErrors, hasErrors, validateMarkerForm, minCategoryNameLength, canCreateMarkerForMapByMapId } = useMarker();
+
+// @todo - refactor, quick dirty way to get it to work but should probably be passed via attributes like the rest
+const { zoom } = useMapPosition();
 
 const multiselect = ref<HTMLInputElement | null>(null);
 
@@ -166,7 +170,7 @@ defineExpose({
 <template>
   <form method="POST"
     action="/markers"
-    @submit.prevent="addMarker(mapId, submitData)"
+    @submit.prevent="addMarker(mapId, { ...submitData, zoom: zoom })"
     :disabled="!canSubmit">
 
     <slot name="form-top"></slot>
@@ -296,6 +300,7 @@ defineExpose({
 </template>
 
 <style src="@vueform/multiselect/themes/default.css">
+
 </style>
 <style scoped>
 form {

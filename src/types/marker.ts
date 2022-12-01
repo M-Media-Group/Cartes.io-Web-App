@@ -17,6 +17,7 @@ export interface Marker {
     token?: string;
     address?: string | null;
     locations_count?: number;
+    zoom?: number;
 }
 
 export interface Location {
@@ -31,4 +32,5 @@ export interface MarkerForm {
     category_name: string;
     description: string;
     link: string | null;
+    zoom?: number;
 }
