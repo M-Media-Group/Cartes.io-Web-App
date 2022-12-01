@@ -19,6 +19,8 @@ import $bus, { eventTypes } from "@/eventBus/events";
 import { updateOrCreateSchema } from "@m-media/vue3-meta-tags";
 import MapAuthor from "@/components/maps/MapAuthor.vue";
 
+import Markdown from 'vue3-markdown-it';
+
 const router = useRouter();
 const route = useRoute();
 
@@ -219,7 +221,8 @@ const showCreateMarkerTutorial = computed(() => {
                                 </p>
                             </template>
                         </BaseHeading>
-                        <p style="white-space: pre-wrap;">{{ Maps.map.value?.description }}</p>
+                        <Markdown :source="Maps.map.value?.description"
+                            :linkify="true" />
                     </div>
                     <div>
 

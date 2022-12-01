@@ -7,6 +7,8 @@ import { useRouter } from 'vue-router';
 import MapAuthor from './maps/MapAuthor.vue';
 import MapLoader from "@/components/maps/MapLoader.vue";
 
+import Markdown from 'vue3-markdown-it';
+
 const props = defineProps({
     map: {
         type: Object as PropType<Map>,
@@ -96,7 +98,9 @@ const showLoader = ref(true)
                 </p>
             </template>
         </BaseHeading>
-        <p v-if="showDescription">{{ map.description }}</p>
+        <Markdown v-if="showDescription"
+            :source="map.description"
+            :linkify="true" />
         <BaseButton v-if="showAction"
             @click="goToMap()">Open map</BaseButton>
         <small v-if="MapInstance.wouldLinkToCurrentUser(map)">{{ "This map is linked to you only through this device."
