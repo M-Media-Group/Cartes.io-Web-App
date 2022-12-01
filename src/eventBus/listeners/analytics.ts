@@ -33,6 +33,11 @@ export default {
       category_id: e.category.id,
     });
   },
+  updated_marker: (e: Marker) => {
+    event('updated_marker', {
+      category_id: e.category.id,
+    });
+  },
   deleted_marker: (e: Marker) => {
     event('deleted_marker', {
       category_id: e.category.id,
