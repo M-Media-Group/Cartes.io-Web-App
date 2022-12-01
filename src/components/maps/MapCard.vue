@@ -23,7 +23,7 @@ const handleClick = (marker: Marker) => {
         lng: marker.location.coordinates[0],
     }
 
-    zoom.value = 16;
+    zoom.value = marker.zoom ?? 16;
 }
 </script>
 
