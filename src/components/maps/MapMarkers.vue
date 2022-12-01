@@ -140,7 +140,7 @@ const handleMarkerDelete = (marker: Marker) => {
             </small>
             <small v-if="selectedMarker?.locations_count && selectedMarker?.locations_count > 1">
                 <span>Moved
-                    {{ selectedMarker?.locations_count }} times</span>
+                    {{ selectedMarker?.locations_count - 1 }} times</span>
             </small>
             <!--
                   <a  v-if="canMarkAsSpamPost(marker)" @click="markAsSpam(selectedMarker.id)"
