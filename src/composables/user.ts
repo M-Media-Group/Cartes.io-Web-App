@@ -37,6 +37,41 @@ const authenticateUser = (authenticableUser: User) => {
 
 const isLoading = ref(false);
 
+const currentLocation = ref(null) as Ref<GeolocationCoordinates | null>;
+const locationWatcherId = ref(null) as Ref<number | null>;
+
+const watchUserLocation = () => {
+    if (locationWatcherId.value !== null) {
+        return;
+    }
+
+    function success(pos: GeolocationPosition) {
+        currentLocation.value = pos.coords;
+    }
+
+    function error(err: any) {
+        console.error(`ERROR(${err.code}): ${err.message}`);
+    }
+
+    const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+    };
+
+    locationWatcherId.value = navigator.geolocation.watchPosition(success, error, options);
+}
+
+const stopWatchingUserLocation = () => {
+    if (locationWatcherId.value === null) {
+        return
+    }
+
+    navigator.geolocation.clearWatch(locationWatcherId.value);
+    locationWatcherId.value = null;
+    currentLocation.value = null;
+}
+
 const login = async () => {
     resetFormErrors();
 
@@ -227,6 +262,9 @@ export function useUser() {
         logout,
         register,
         sendPasswordReset,
+        watchUserLocation,
+        stopWatchingUserLocation,
+        locationWatcherId,
         isLoading,
         user,
         userForm,
@@ -234,5 +272,6 @@ export function useUser() {
         users,
         updateUser,
         getUsers,
+        currentLocation,
     };
 }
