@@ -82,32 +82,22 @@ watch(submitData, () => {
 }
 );
 
-watch(
-  () => props.markerLat,
-  (newValue) => {
-    submitData.lat = newValue.toString();
+// Watch the props for changes
+watch(props, (newValue) => {
+  // If the markerLat has changed
+  if (newValue.markerLat !== submitData.lat) {
+    submitData.lat = newValue.markerLat.toString();
     formErrors.lat = "";
-  },
-  { immediate: true }
-);
-
-watch(
-  () => props.markerLng,
-  (newValue) => {
-    submitData.lng = newValue.toString();
+  }
+  if (newValue.markerLng !== submitData.lng) {
+    submitData.lng = newValue.markerLng.toString();
     formErrors.lng = "";
-  },
-  { immediate: true }
-);
-
-watch(
-  () => props.markerElevation,
-  (newValue) => {
-    submitData.elevation = newValue?.toString() ?? null;
+  }
+  if (newValue.markerElevation !== submitData.elevation) {
+    submitData.elevation = newValue.markerElevation;
     formErrors.elevation = "";
-  },
-  { immediate: true }
-);
+  }
+}, { deep: true, immediate: true });
 
 const getCategories = async (query = null as string | null) => {
   if (!userDevice.online) {
