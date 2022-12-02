@@ -51,8 +51,7 @@ const watchUserLocation = () => {
 
     function error(err: any) {
         console.error(`ERROR(${err.code}): ${err.message}`);
-        locationWatcherId.value = null;
-        currentLocation.value = null;
+        stopWatchingUserLocation();
     }
 
     const options = {
@@ -73,6 +72,14 @@ const stopWatchingUserLocation = () => {
     locationWatcherId.value = null;
     currentLocation.value = null;
 }
+
+const toggleLocationTracking = () => {
+    if (locationWatcherId.value !== null) {
+        return stopWatchingUserLocation();
+    }
+    return watchUserLocation();
+}
+
 
 const login = async () => {
     resetFormErrors();
@@ -266,6 +273,7 @@ export function useUser() {
         sendPasswordReset,
         watchUserLocation,
         stopWatchingUserLocation,
+        toggleLocationTracking,
         locationWatcherId,
         isLoading,
         user,
