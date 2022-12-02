@@ -23,6 +23,7 @@ import { useMapPosition } from "@/composables/mapPosition";
 import { Map } from "@/types/map";
 import BaseSvg from "@/components/icons/BaseSvg.vue";
 import MapLoader from "@/components/maps/MapLoader.vue";
+import { useUser } from "@/composables/user";
 
 const props = defineProps({
   showAr: {
@@ -55,6 +56,8 @@ const emit = defineEmits([
   "ready",
   'openedContextMenu'
 ])
+
+const user = useUser();
 
 const ready = ref(false);
 
@@ -189,7 +192,8 @@ const AddMarkerForm = defineAsyncComponent(() =>
         v-if="userDevice.supportsGeolocation">
         <a href="#"
           aria-label="Go to your current location"
-          @click.prevent="goToDeviceLocation()">
+          @click.prevent="user.toggleLocationTracking()"
+          :style="'background-color:' + (user.locationWatcherId.value ? 'var(--primary)' : '')">
           <BaseSvg icon="gps"
             style="padding:4px;" />
         </a>

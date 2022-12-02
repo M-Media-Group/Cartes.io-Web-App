@@ -292,7 +292,7 @@ const showCreateMarkerTutorial = computed(() => {
                             </label>
                             <label v-if="userDevice.supportsGeolocation">
                                 <input type="checkbox"
-                                    :value="!!user.locationWatcherId"
+                                    :checked="!!user.locationWatcherId.value"
                                     @click="user.toggleLocationTracking()" />
                                 Show your distance to each marker
                             </label>
