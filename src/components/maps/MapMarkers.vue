@@ -99,7 +99,7 @@ const handleMarkerDelete = (marker: Marker) => {
     </l-layer-group>
 
     <l-layer-group ref="markerPopup">
-        <l-popup>
+        <LPopup>
             <p style="min-width: 200px">
                 <b>{{ selectedMarker?.category.name }}</b>
             </p>
@@ -149,7 +149,7 @@ const handleMarkerDelete = (marker: Marker) => {
             <!--
                   <a  v-if="canMarkAsSpamPost(marker)" @click="markAsSpam(selectedMarker.id)"
                     :disabled="submit_data.loading">Report as spam</a> -->
-        </l-popup>
+        </LPopup>
     </l-layer-group>
     <l-layer-group v-if="user.currentLocation.value && user.locationWatcherId">
         <LCircleMarker :radius="5"
