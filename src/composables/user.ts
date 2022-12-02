@@ -49,8 +49,9 @@ const watchUserLocation = () => {
         currentLocation.value = pos.coords;
     }
 
-    function error(err: any) {
+    function error(err: GeolocationPositionError) {
         console.error(`ERROR(${err.code}): ${err.message}`);
+        $bus.$emit(eventTypes.failed_to_enable_location, err);
         stopWatchingUserLocation();
     }
 
@@ -61,6 +62,8 @@ const watchUserLocation = () => {
     };
 
     locationWatcherId.value = navigator.geolocation.watchPosition(success, error, options);
+
+    $bus.$emit(eventTypes.enabled_location);
 }
 
 const stopWatchingUserLocation = () => {
@@ -71,6 +74,7 @@ const stopWatchingUserLocation = () => {
     navigator.geolocation.clearWatch(locationWatcherId.value);
     locationWatcherId.value = null;
     currentLocation.value = null;
+    $bus.$emit(eventTypes.disabled_location);
 }
 
 const toggleLocationTracking = () => {

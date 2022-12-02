@@ -314,7 +314,7 @@ export function useMarker() {
         listenForAmountOfUsers(channel, mapId);
     }
 
-    // Use the Havrsine formula to calculate the distance between two points
+    // Use the Haversine formula to calculate the distance between two points
     // https://en.wikipedia.org/wiki/Haversine_formula
     const computeDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
         const R = 6371e3; // metres

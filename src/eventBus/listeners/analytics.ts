@@ -81,5 +81,17 @@ export default {
   },
   created_personal_access_token: () => {
     event('created_personal_access_token');
+  },
+  enabled_location: () => {
+    event('enabled_location');
+  },
+  failed_to_enable_location: (error: GeolocationPositionError) => {
+    event('failed_to_enable_location', {
+      code: error.code,
+      message: error.message,
+    });
+  },
+  disabled_location: () => {
+    event('disabled_location');
   }
 } as Record<eventTypes, any>;

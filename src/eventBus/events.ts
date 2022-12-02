@@ -29,6 +29,9 @@ export enum eventTypes {
   searched = "searched",
   created_personal_access_token = "created_personal_access_token",
   deleted_personal_access_token = "deleted_personal_access_token",
+  enabled_location = "enabled_location",
+  failed_to_enable_location = "failed_to_enable_location",
+  disabled_location = "disabled_location",
 }
 
 type EventsObject = { [P in eventTypes]?: any };
