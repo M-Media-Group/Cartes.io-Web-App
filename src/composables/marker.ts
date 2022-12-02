@@ -333,12 +333,55 @@ export function useMarker() {
         return d;
     }
 
+    const computeBearing = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+        const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+        const φ2 = lat2 * Math.PI / 180;
+        const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+        const y = Math.sin(Δλ) * Math.cos(φ2);
+
+        const x = Math.cos(φ1) * Math.sin(φ2) -
+            Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+
+        const θ = Math.atan2(y, x);
+
+        return (θ * 180 / Math.PI + 360) % 360;
+    }
+
     // Format the distance in meters or kilometers depending on the distance
     const formatDistance = (distance: number) => {
         if (distance < 1000) {
             return distance.toFixed(0) + " meters";
         }
         return (distance / 1000).toFixed(1) + " kilometers";
+    }
+
+    const formatBearing = (bearing: number) => {
+        if (bearing < 22.5) {
+            return "North";
+        }
+        if (bearing < 67.5) {
+            return "North-East";
+        }
+        if (bearing < 112.5) {
+            return "East";
+        }
+        if (bearing < 157.5) {
+            return "South-East";
+        }
+        if (bearing < 202.5) {
+            return "South";
+        }
+        if (bearing < 247.5) {
+            return "South-West";
+        }
+        if (bearing < 292.5) {
+            return "West";
+        }
+        if (bearing < 337.5) {
+            return "North-West";
+        }
+        return "North";
     }
 
     return {
@@ -356,6 +399,8 @@ export function useMarker() {
         updateMarker,
         computeDistance,
         formatDistance,
+        computeBearing,
+        formatBearing,
         nonExpiredMarkers,
         displayableMarkers,
         isLoading,

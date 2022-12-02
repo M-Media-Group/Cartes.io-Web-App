@@ -33,7 +33,11 @@ const markerComposable = useMarker();
 
 const distance = ref(null) as Ref<number | null>;
 
+const bearing = ref(null) as Ref<number | null>;
+
 const formattedDistance = ref("");
+
+const formattedBearing = ref("");
 
 // Compute the distance from user using d=√((x2 – x1)² + (y2 – y1)²)
 const computeDistance = (currentLocation: GeolocationCoordinates) => {
@@ -44,16 +48,30 @@ const computeDistance = (currentLocation: GeolocationCoordinates) => {
     return null;
 };
 
+const computeBearing = (currentLocation: GeolocationCoordinates) => {
+    const marker = props.marker;
+    if (currentLocation) {
+        return markerComposable.computeBearing(currentLocation.latitude, currentLocation.longitude, marker.location.coordinates[1], marker.location.coordinates[0]);
+    }
+    return null;
+};
+
 watch(user.currentLocation, (currentLocation) => {
     if (currentLocation) {
         distance.value = computeDistance(currentLocation);
+        bearing.value = computeBearing(currentLocation);
     } else {
         distance.value = null;
+        bearing.value = null;
         formattedDistance.value = "";
     }
 
     if (distance.value) {
         formattedDistance.value = markerComposable.formatDistance(distance.value);
+    }
+
+    if (bearing.value) {
+        formattedBearing.value = markerComposable.formatBearing(bearing.value);
     }
 });
 </script>
@@ -69,7 +87,7 @@ watch(user.currentLocation, (currentLocation) => {
         <template v-if="marker.description">{{ marker.description }}</template>
         <footer>
             <time :datetime="marker.updated_at.toString()">{{ new Date(marker.updated_at).toLocaleString() }}</time>
-            <div v-if="distance">{{ formattedDistance }} away</div>
+            <div v-if="distance">{{ formattedDistance }} {{ formattedBearing }} of you</div>
         </footer>
     </div>
 </template>
