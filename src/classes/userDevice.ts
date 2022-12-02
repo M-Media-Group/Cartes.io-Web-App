@@ -48,9 +48,9 @@ class userDevice {
             "geolocation" in navigator
     }
 
-    getLongAndLat() {
+    getLongAndLat(options = undefined as PositionOptions | undefined) {
         return new Promise((resolve, reject) =>
-            navigator.geolocation.getCurrentPosition(resolve, reject)
+            navigator.geolocation.getCurrentPosition(resolve, reject, options)
         );
     }
 
@@ -76,7 +76,7 @@ class userDevice {
             return this.#currentPosition;
         }
 
-        return await this.getLongAndLat().then(success, error);
+        return await this.getLongAndLat(options).then(success, error);
     }
 
     get location() {
