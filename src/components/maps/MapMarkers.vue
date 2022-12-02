@@ -155,7 +155,7 @@ const handleMarkerDelete = (marker: Marker) => {
         <LCircleMarker :radius="5"
             :lat-lng="[user.currentLocation.value?.latitude, user.currentLocation.value?.longitude]">
             <LPopup>
-                <p><b>Your location</b></p>
+                <p><b>Your location</b><small>Only you can see this</small></p>
                 <p>Accuracy: ± {{ user.currentLocation.value.accuracy.toFixed(2) }} meters</p>
                 <p v-if="user.currentLocation.value.altitude">Altitude: {{
                         user.currentLocation.value.altitude.toFixed(2)
