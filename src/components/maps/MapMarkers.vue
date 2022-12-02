@@ -4,9 +4,13 @@ import { computed, defineAsyncComponent, PropType, ref } from 'vue';
 import {
     LLayerGroup,
     LPopup,
+    LCircleMarker,
 } from "@vue-leaflet/vue-leaflet";
 import MarkerCluster from "./MarkerCluster.vue";
 import { useMarker } from '@/composables/marker';
+import { useUser } from '@/composables/user';
+
+const user = useUser();
 
 const props = defineProps({
     mapId: {
@@ -146,6 +150,25 @@ const handleMarkerDelete = (marker: Marker) => {
                   <a  v-if="canMarkAsSpamPost(marker)" @click="markAsSpam(selectedMarker.id)"
                     :disabled="submit_data.loading">Report as spam</a> -->
         </l-popup>
+    </l-layer-group>
+    <l-layer-group v-if="user.currentLocation.value && user.locationWatcherId">
+        <LCircleMarker :radius="5"
+            :lat-lng="[user.currentLocation.value?.latitude, user.currentLocation.value?.longitude]">
+            <LPopup>
+                <p><b>Your location</b></p>
+                <p>Accuracy: ± {{ user.currentLocation.value.accuracy.toFixed(2) }} meters</p>
+                <p v-if="user.currentLocation.value.altitude">Altitude: {{
+                        user.currentLocation.value.altitude.toFixed(2)
+                }} meters</p>
+                <p v-if="user.currentLocation.value.altitudeAccuracy">Altitude accuracy: ± {{
+                        user.currentLocation.value.altitudeAccuracy.toFixed(2)
+                }} meters</p>
+                <p v-if="user.currentLocation.value.speed">Speed: {{ user.currentLocation.value.speed.toFixed(2) }}
+                    kilometers per hour</p>
+                <p v-if="user.currentLocation.value.heading">Heading: {{ user.currentLocation.value.heading.toFixed(2)
+                }} degrees</p>
+            </LPopup>
+        </LCircleMarker>
     </l-layer-group>
 </template>
 <style scoped>
