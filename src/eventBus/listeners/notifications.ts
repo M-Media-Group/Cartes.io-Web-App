@@ -261,5 +261,12 @@ export default {
       ["browser"],
       5000
     ).show();
+  },
+  failed_to_enable_location: (error: GeolocationPositionError) => {
+    new CustomNotification(
+      "error",
+      "Failed to get your location: " + error.message,
+      ["browser"]
+    ).show();
   }
 } as Record<eventTypes, any>;
