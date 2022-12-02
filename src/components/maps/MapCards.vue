@@ -18,7 +18,7 @@ const user = useUser();
 
 const marker = useMarker();
 
-const orderBy = ref("updated_at" as "updated_at" | "created_at" | "distance");
+const orderBy = ref("created_at" as "updated_at" | "created_at" | "distance");
 
 // @todo - potentially refactor, this could be inefficient to compute each marker distance - need to performance test
 const sortedMarkers = computed(() => {
@@ -69,6 +69,7 @@ const filteredMarkers = computed(() => {
 .inputs {
     display: inline-flex;
     gap: var(--spacing);
+    overflow: hidden;
 }
 
 .inputs input {
