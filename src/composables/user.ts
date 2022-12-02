@@ -51,6 +51,8 @@ const watchUserLocation = () => {
 
     function error(err: any) {
         console.error(`ERROR(${err.code}): ${err.message}`);
+        locationWatcherId.value = null;
+        currentLocation.value = null;
     }
 
     const options = {
