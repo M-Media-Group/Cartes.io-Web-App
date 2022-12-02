@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useMapPosition } from '@/composables/mapPosition';
 import { Marker } from '@/types/marker';
-import { PropType } from 'vue';
+import { PropType, Ref, ref, watch } from 'vue';
+import { useUser } from '@/composables/user';
+import { useMarker } from '@/composables/marker';
 
-defineProps({
+const props = defineProps({
     marker: {
         type: Object as PropType<Marker>,
         required: true,
@@ -25,6 +27,35 @@ const handleClick = (marker: Marker) => {
 
     zoom.value = marker.zoom ?? 16;
 }
+
+const user = useUser();
+const markerComposable = useMarker();
+
+const distance = ref(null) as Ref<number | null>;
+
+const formattedDistance = ref("");
+
+// Compute the distance from user using d=√((x2 – x1)² + (y2 – y1)²)
+const computeDistance = (currentLocation: GeolocationCoordinates) => {
+    const marker = props.marker;
+    if (currentLocation) {
+        return markerComposable.computeDistance(currentLocation.latitude, currentLocation.longitude, marker.location.coordinates[1], marker.location.coordinates[0]);
+    }
+    return null;
+};
+
+watch(user.currentLocation, (currentLocation) => {
+    if (currentLocation) {
+        distance.value = computeDistance(currentLocation);
+    } else {
+        distance.value = null;
+        formattedDistance.value = "";
+    }
+
+    if (distance.value) {
+        formattedDistance.value = markerComposable.formatDistance(distance.value);
+    }
+});
 </script>
 
 <template>
@@ -38,6 +69,7 @@ const handleClick = (marker: Marker) => {
         <template v-if="marker.description">{{ marker.description }}</template>
         <footer>
             <time :datetime="marker.updated_at.toString()">{{ new Date(marker.updated_at).toLocaleString() }}</time>
+            <div v-if="distance">{{ formattedDistance }} away</div>
         </footer>
     </div>
 </template>

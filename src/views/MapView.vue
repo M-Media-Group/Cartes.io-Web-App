@@ -20,11 +20,15 @@ import { updateOrCreateSchema } from "@m-media/vue3-meta-tags";
 import MapAuthor from "@/components/maps/MapAuthor.vue";
 
 import Markdown from 'vue3-markdown-it';
+import { useUser } from "@/composables/user";
+
+import userDevice from "@/classes/userDevice";
 
 const router = useRouter();
 const route = useRoute();
+const user = useUser();
 
-const { markers, displayableMarkers, getAllMarkersForMap, listenForMarkerChangesOnMap, showExpired } = useMarker();
+const { markers, displayableMarkers, listenForMarkerChangesOnMap, showExpired } = useMarker();
 
 const Maps = useMap();
 
@@ -187,6 +191,13 @@ const showCreateMarkerTutorial = computed(() => {
     return true;
 })
 
+const toggleLocationTracking = () => {
+    if (user.locationWatcherId.value !== null) {
+        user.stopWatchingUserLocation();
+    }
+    user.watchUserLocation();
+}
+
 </script>
 
 <template>
@@ -286,6 +297,12 @@ const showCreateMarkerTutorial = computed(() => {
                                 <input type="checkbox"
                                     v-model="cluster" />
                                 Cluster markers
+                            </label>
+                            <label v-if="userDevice.supportsGeolocation">
+                                <input type="checkbox"
+                                    :value="!!user.locationWatcherId"
+                                    @click="toggleLocationTracking()" />
+                                Show your distance to each marker
                             </label>
                         </details>
 
