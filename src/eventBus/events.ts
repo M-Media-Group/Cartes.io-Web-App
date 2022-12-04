@@ -32,6 +32,7 @@ export enum eventTypes {
   enabled_location = "enabled_location",
   failed_to_enable_location = "failed_to_enable_location",
   disabled_location = "disabled_location",
+  changed_marker_order = "changed_marker_order",
 }
 
 type EventsObject = { [P in eventTypes]?: any };

@@ -93,5 +93,10 @@ export default {
   },
   disabled_location: () => {
     event('disabled_location');
+  },
+  changed_marker_order: (order: string) => {
+    event('changed_marker_order', {
+      order_by: order,
+    });
   }
 } as Record<eventTypes, any>;

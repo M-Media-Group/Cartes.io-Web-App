@@ -4,6 +4,7 @@ import { useUser } from '@/composables/user';
 import { Marker } from '@/types/marker';
 import { computed, PropType, ref } from 'vue';
 import MapCard from './MapCard.vue';
+import $bus, { eventTypes } from "@/eventBus/events";
 
 const props = defineProps({
     markers: {
@@ -39,6 +40,31 @@ const filteredMarkers = computed(() => {
             marker.address?.toLowerCase().includes(searchTerm.value.toLowerCase());
     });
 })
+
+const emitOrderByChange = (orderBy: string) => {
+    $bus.$emit(eventTypes.changed_marker_order, orderBy);
+}
+
+const searchTimeout = ref(null as NodeJS.Timeout | null);
+
+const debounceSearch = (query: string) => {
+    if (searchTimeout.value) {
+        clearTimeout(searchTimeout.value);
+    }
+
+    searchTimeout.value = setTimeout(() => {
+        emitSearchTermChange(query);
+    }, 400);
+
+};
+
+const emitSearchTermChange = (searchTerm: string) => {
+    alert(searchTerm);
+    $bus.$emit(eventTypes.searched, {
+        resource: 'markers',
+        query: searchTerm,
+    });
+}
 </script>
 
 <template>
@@ -48,9 +74,11 @@ const filteredMarkers = computed(() => {
             v-if="sortedMarkers.length > 9">
             <input type="search"
                 v-model="searchTerm"
+                @input.lazy="debounceSearch(searchTerm)"
                 :placeholder="'Search ' + sortedMarkers.length + ' markers'" />
             <select v-model="orderBy"
-                placeholder="Order by">
+                placeholder="Order by"
+                @change.lazy="emitOrderByChange(orderBy)">
                 <optgroup label="Order by">
                     <option value="created_at">Created at</option>
                     <option value="updated_at">Updated at</option>
