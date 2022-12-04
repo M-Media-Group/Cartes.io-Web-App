@@ -52,8 +52,8 @@ const filteredMarkers = computed(() => {
             <select v-model="orderBy"
                 placeholder="Order by">
                 <optgroup label="Order by">
-                    <option value="updated_at">Updated at</option>
                     <option value="created_at">Created at</option>
+                    <option value="updated_at">Updated at</option>
                     <option :disabled="!user.currentLocation.value"
                         value="distance">Distance from you</option>
                 </optgroup>
