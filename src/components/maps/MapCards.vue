@@ -21,9 +21,17 @@ const marker = useMarker();
 
 const orderBy = ref("created_at" as "updated_at" | "created_at" | "distance");
 
+const filteredMarkers = computed(() => {
+    return props.markers.filter(marker => {
+        return marker.description?.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+            marker.category.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+            marker.address?.toLowerCase().includes(searchTerm.value.toLowerCase());
+    });
+})
+
 // @todo - potentially refactor, this could be inefficient to compute each marker distance - need to performance test
 const sortedMarkers = computed(() => {
-    return props.markers.sort((a, b) => {
+    return filteredMarkers.value.sort((a, b) => {
         if (orderBy.value === 'distance' && user.currentLocation.value) {
             return marker.computeDistance(user.currentLocation.value?.latitude, user.currentLocation.value?.longitude, a.location.coordinates[1], a.location.coordinates[0]) - marker.computeDistance(user.currentLocation.value?.latitude, user.currentLocation.value?.longitude, b.location.coordinates[1], b.location.coordinates[0]);
         } else if (orderBy.value !== 'distance') {
@@ -32,14 +40,6 @@ const sortedMarkers = computed(() => {
         return 0;
     });
 });
-
-const filteredMarkers = computed(() => {
-    return sortedMarkers.value.filter(marker => {
-        return marker.description?.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-            marker.category.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-            marker.address?.toLowerCase().includes(searchTerm.value.toLowerCase());
-    });
-})
 
 const emitOrderByChange = (orderBy: string) => {
     $bus.$emit(eventTypes.changed_marker_order, orderBy);
@@ -72,13 +72,14 @@ const emitSearchTermChange = (searchTerm: string) => {
 
 <template>
     <div style="max-height: 57vh;overflow-y: scroll;"
-        v-if="sortedMarkers.length > 0">
+        v-if="markers.length > 0">
+
         <div class="inputs"
-            v-if="sortedMarkers.length > 9">
+            v-if="markers.length > 9">
             <input type="search"
                 v-model="searchTerm"
                 @input.lazy="debounceSearch(searchTerm)"
-                :placeholder="'Search ' + sortedMarkers.length + ' markers'" />
+                :placeholder="'Search ' + markers.length + ' markers'" />
             <select v-model="orderBy"
                 placeholder="Order by"
                 @change.lazy="emitOrderByChange(orderBy)">
@@ -90,7 +91,8 @@ const emitSearchTermChange = (searchTerm: string) => {
                 </optgroup>
             </select>
         </div>
-        <MapCard v-for="marker in filteredMarkers"
+
+        <MapCard v-for="marker in sortedMarkers"
             :key="marker.id"
             :marker="marker" />
     </div>
