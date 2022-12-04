@@ -52,6 +52,10 @@ const debounceSearch = (query: string) => {
         clearTimeout(searchTimeout.value);
     }
 
+    if (query.length === 0) {
+        return;
+    }
+
     searchTimeout.value = setTimeout(() => {
         emitSearchTermChange(query);
     }, 400);
@@ -59,7 +63,6 @@ const debounceSearch = (query: string) => {
 };
 
 const emitSearchTermChange = (searchTerm: string) => {
-    alert(searchTerm);
     $bus.$emit(eventTypes.searched, {
         resource: 'markers',
         query: searchTerm,
