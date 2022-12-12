@@ -86,6 +86,10 @@ watch(user.currentLocation, (currentLocation) => {
         </header>
         <template v-if="marker.description">{{ marker.description }}</template>
         <footer>
+            <div><a :href="marker.link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    v-if="marker.link">{{ marker.link.split("/")[2] }}</a></div>
             <time :datetime="marker.updated_at.toString()">{{ new Date(marker.updated_at).toLocaleString() }}</time>
             <div v-if="distance">{{ formattedDistance }} {{ formattedBearing }} of you</div>
         </footer>
