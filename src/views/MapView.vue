@@ -294,7 +294,7 @@ const showCreateMarkerTutorial = computed(() => {
                                 <input type="checkbox"
                                     :checked="!!user.locationWatcherId.value"
                                     @click="user.toggleLocationTracking()" />
-                                Show your distance to each marker
+                                Enable location based services
                             </label>
                         </details>
 
