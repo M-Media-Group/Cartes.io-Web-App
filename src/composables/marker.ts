@@ -198,7 +198,6 @@ export function useMarker() {
                 }
             }
         } catch (error) {
-            console.error(error);
             alert("We could not add your marker at this time. Make sure it does not conflict with an existing marker and has no profanities in its description and category.");
         } finally {
             isLoading.value = false;
