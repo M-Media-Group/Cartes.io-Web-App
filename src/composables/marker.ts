@@ -183,21 +183,26 @@ export function useMarker() {
         };
 
         isLoading.value = true;
-        const data = await cartes.maps(mapId, localStorage.getItem("map_" + mapId)).markers().create(formData);
-        if (data.id) {
-            if (data.category.icon && !data.category.icon.startsWith("https")) {
-                data.category.icon = "/marker.svg";
+
+        try {
+            const data = await cartes.maps(mapId, localStorage.getItem("map_" + mapId)).markers().create(formData);
+            if (data.id) {
+                if (data.category.icon && !data.category.icon.startsWith("https")) {
+                    data.category.icon = "/marker.svg";
+                }
+                addMarkerToMarkerArray(data, mapId);
+                localStorage["post_" + data.id] = data.token;
+                $bus.$emit(eventTypes.created_marker, data);
+                if (emit) {
+                    emit("addedMarker", data);
+                }
             }
-            addMarkerToMarkerArray(data, mapId);
-            localStorage["post_" + data.id] = data.token;
-            $bus.$emit(eventTypes.created_marker, data);
-            if (emit) {
-                emit("addedMarker", data);
-            }
+        } catch (error) {
+            console.error(error);
+            alert("We could not add your marker at this time. Make sure it does not conflict with an existing marker and has no profanities in its description and category.");
+        } finally {
+            isLoading.value = false;
         }
-
-        isLoading.value = false;
-
     };
 
     const canDeleteMarker = (marker: Marker) => {
