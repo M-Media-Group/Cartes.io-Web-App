@@ -18,6 +18,7 @@ export interface Marker {
     address?: string | null;
     locations_count?: number;
     zoom?: number;
+    meta?: JSON;
 }
 
 export interface Location {

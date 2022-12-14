@@ -49,6 +49,7 @@ const MapMarker = defineAsyncComponent(() =>
 )
 
 const selectedMarker = ref(null as Marker | null);
+const parsedMetadata = ref(null as null | string);
 
 const markerPopup = ref();
 
@@ -60,12 +61,31 @@ const handleMarkerClick = (marker: Marker) => {
         lat: marker.location.coordinates[1],
         lng: marker.location.coordinates[0],
     });
+
+    if (marker.meta) {
+        parsedMetadata.value = parseMetadata(marker.meta);
+    } else {
+        parsedMetadata.value = null;
+    }
 }
 
 const handleMarkerDelete = (marker: Marker) => {
     if (marker !== null && canDeleteMarker(marker)) {
         deleteMarker(props.mapId, marker);
         markerPopup.value.leafletObject.closePopup();
+        selectedMarker.value = null;
+        parsedMetadata.value = null;
+    }
+}
+
+// Metadata can be either an array, or a key value pair of items
+const parseMetadata = (meta: JSON) => {
+    // @todo - Need to also handle recursive data
+
+    if (Array.isArray(meta)) {
+        return meta.join(", ");
+    } else {
+        return Object.entries(meta).map(([key, value]) => `${key}: ${value}`).join(", ");
     }
 }
 
@@ -128,6 +148,11 @@ const handleMarkerDelete = (marker: Marker) => {
                         selectedMarker?.location.coordinates[0]
                 }}</small>
                 <small v-if="selectedMarker?.address">Address: {{ selectedMarker?.address }}</small>
+            </details>
+
+            <details v-if="parsedMetadata">
+                <summary>Metadata</summary>
+                <small>{{ parsedMetadata }}</small>
             </details>
 
             <a href="#"
