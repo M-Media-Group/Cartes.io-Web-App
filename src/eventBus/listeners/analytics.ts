@@ -98,5 +98,15 @@ export default {
     event('changed_marker_order', {
       order_by: order,
     });
+  },
+  started_sharing_location: (mapId: string) => {
+    event('started_sharing_location', {
+      map_id: mapId,
+    });
+  },
+  stopped_sharing_location: (mapId: string) => {
+    event('stopped_sharing_location', {
+      map_id: mapId,
+    });
   }
 } as Record<eventTypes, any>;

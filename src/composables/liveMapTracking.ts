@@ -72,15 +72,16 @@ export function useLiveMapTracking() {
 
         if (isSharingLocation.value) {
             shareUsersLocation();
+            $bus.$emit(eventTypes.started_sharing_location, toRaw(Map.map.value?.uuid));
         } else {
             stopSharingLocation();
+            $bus.$emit(eventTypes.stopped_sharing_location, toRaw(Map.map.value?.uuid));
         }
     }
 
     $bus.$on(eventTypes.disabled_location, () => {
         if (isSharingLocation.value) {
-            isSharingLocation.value = false;
-            stopSharingLocation();
+            toggleShareLocation();
         }
     });
 

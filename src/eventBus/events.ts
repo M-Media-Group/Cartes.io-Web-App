@@ -33,6 +33,8 @@ export enum eventTypes {
   failed_to_enable_location = "failed_to_enable_location",
   disabled_location = "disabled_location",
   changed_marker_order = "changed_marker_order",
+  started_sharing_location = "started_sharing_location",
+  stopped_sharing_location = "stopped_sharing_location",
 }
 
 type EventsObject = { [P in eventTypes]?: any };
