@@ -66,9 +66,9 @@ window.Pusher = Pusher;
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_KEY,
-    wsHost: import.meta.env.VITE_PUSHER_HOST,
-    wsPort: import.meta.env.VITE_PUSHER_PORT,
-    wssPort: import.meta.env.VITE_PUSHER_PORT,
+    wsHost: import.meta.env.VITE_PUSHER_HOST ?? import.meta.env.VITE_API_URL,
+    wsPort: import.meta.env.VITE_PUSHER_PORT ?? 6001,
+    wssPort: import.meta.env.VITE_PUSHER_PORT ?? 6001,
     forceTLS: false,
     encrypted: true,
     disableStats: true,
