@@ -6,7 +6,7 @@ import { getCurrentInstance, ref, reactive, toRaw, onUnmounted } from "vue";
 import { useMap } from "./map";
 import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
-import { Channel } from "laravel-echo";
+import { usePusher } from "./pusher";
 
 const Map = useMap();
 
@@ -47,6 +47,8 @@ const displayableMarkers = computed(() => {
 })
 
 const minCategoryNameLength = 3;
+
+const { joinChannel, channel } = usePusher();
 
 export function useMarker() {
 
@@ -243,20 +245,11 @@ export function useMarker() {
         }
     }
 
-    const joinChannel = (mapId: string): Channel | void => {
-        if (!userDevice.online) {
-            return alert("You need to be online to see live data");
+    const listenForNewMarkers = async (mapId: string) => {
+        if (!channel.value) {
+            return;
         }
-        onUnmounted(() => {
-            window.Echo.leave("maps." + mapId);
-        });
-        return window.Echo.channel("maps." + mapId).subscribed(() => {
-            $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
-        });
-    }
-
-    const listenForNewMarkers = async (channel: Channel, mapId: string) => {
-        channel.listen(
+        channel.value.listen(
             "MarkerCreated",
             (e: { marker: Marker; }) => {
                 if (e.marker.category.icon && !e.marker.category.icon.startsWith("https")) {
@@ -275,8 +268,11 @@ export function useMarker() {
 
     }
 
-    const listenForUpdatedMarker = async (channel: Channel, mapId: string) => {
-        channel.listen(
+    const listenForUpdatedMarker = async (mapId: string) => {
+        if (!channel.value) {
+            return;
+        }
+        channel.value.listen(
             "MarkerUpdated",
             (e: { marker: Marker; }) => {
                 if (e.marker.category.icon && !e.marker.category.icon.startsWith("https")) {
@@ -290,8 +286,11 @@ export function useMarker() {
             });
     }
 
-    const listenForDeletedMarkers = async (channel: Channel, mapId: string) => {
-        channel.listen(
+    const listenForDeletedMarkers = async (mapId: string) => {
+        if (!channel.value) {
+            return;
+        }
+        channel.value.listen(
             "MarkerDeleted",
             (e: { marker: Marker; }) => {
                 removeMarkerFromMarkerArray(e.marker, mapId);
@@ -300,22 +299,25 @@ export function useMarker() {
         );
     }
 
-    const listenForAmountOfUsers = async (channel: Channel, mapId: string) => {
+    const listenForAmountOfUsers = async (mapId: string) => {
+        if (!channel.value) {
+            return;
+        }
         // @ts-ignore on() does actually exist
-        channel.on("pusher:subscription_count", function (count) {
+        channel.value.on("pusher:subscription_count", function (count) {
             Map.setAmountOfUsersCurrentlyConnectedToMap(mapId, count.subscription_count);
         });
     }
 
     const listenForMarkerChangesOnMap = async (mapId: string) => {
-        const channel = joinChannel(mapId);
-        if (!channel) {
+        joinChannel(mapId);
+        if (!channel.value) {
             return;
         }
-        listenForDeletedMarkers(channel, mapId);
-        listenForNewMarkers(channel, mapId);
-        listenForUpdatedMarker(channel, mapId);
-        listenForAmountOfUsers(channel, mapId);
+        listenForDeletedMarkers(mapId);
+        listenForNewMarkers(mapId);
+        listenForUpdatedMarker(mapId);
+        listenForAmountOfUsers(mapId);
     }
 
     // Use the Haversine formula to calculate the distance between two points
