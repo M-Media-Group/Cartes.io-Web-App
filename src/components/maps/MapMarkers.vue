@@ -181,7 +181,8 @@ const parseMetadata = (meta: JSON) => {
     </l-layer-group>
     <l-layer-group v-if="user.currentLocation.value && user.locationWatcherId">
         <LCircleMarker :radius="5"
-            :lat-lng="[user.currentLocation.value?.latitude, user.currentLocation.value?.longitude]">
+            :lat-lng="[user.currentLocation.value?.latitude, user.currentLocation.value?.longitude]"
+            color='#03A678'>
             <LPopup>
                 <p>
                     <b>Your location</b>
