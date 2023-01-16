@@ -4,6 +4,7 @@ import { useMap } from "./map";
 import { useMapPosition } from "./mapPosition";
 import { usePusher } from "./pusher";
 import { useUser } from "./user";
+import $bus, { eventTypes } from "@/eventBus/events";
 
 const Map = useMap();
 
@@ -45,10 +46,6 @@ export function useLiveMapTracking() {
     }
 
     const stopSharingLocation = () => {
-        if (!user.locationWatcherId.value) {
-            return;
-        }
-
         if (!channel.value) {
             return;
         }
@@ -59,8 +56,7 @@ export function useLiveMapTracking() {
 
         pusher.channel("maps." + Map.map.value?.uuid).trigger("client-user-location-removed", {
             socketId: pusher.connection.socket_id,
-        }
-        );
+        });
     };
 
     // In order to share the users location on the websocket, we need to listen for currentLocation changes and emit them to the websocket if the user is sharing their location
@@ -80,6 +76,13 @@ export function useLiveMapTracking() {
             stopSharingLocation();
         }
     }
+
+    $bus.$on(eventTypes.disabled_location, () => {
+        if (isSharingLocation.value) {
+            isSharingLocation.value = false;
+            stopSharingLocation();
+        }
+    });
 
     return {
         isSharingLocation,
