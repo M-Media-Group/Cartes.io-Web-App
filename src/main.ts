@@ -66,8 +66,13 @@ window.Pusher = Pusher;
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_KEY,
-    cluster: 'eu',
-    forceTLS: true
+    wsHost: import.meta.env.VITE_PUSHER_HOST,
+    wsPort: import.meta.env.VITE_PUSHER_PORT,
+    wssPort: import.meta.env.VITE_PUSHER_PORT,
+    forceTLS: false,
+    encrypted: true,
+    disableStats: true,
+    enabledTransports: ['ws', 'wss'],
 });
 
 const isConnectedToPusher = ref(false);
@@ -102,11 +107,11 @@ app.use(Vue3ProgressPlugin)
 
 app.use(metaTagPlugin,
     {
-    defaultName: import.meta.env.VITE_APP_NAME ?? 'Cartes.io',
-    preconnect: [
-      import.meta.env.VITE_API_URL,
-    ],
-  }, router);
+        defaultName: import.meta.env.VITE_APP_NAME ?? 'Cartes.io',
+        preconnect: [
+            import.meta.env.VITE_API_URL,
+        ],
+    }, router);
 
 app.component('BaseButton', BaseButton);
 app.component('BaseHeading', BaseHeading);
