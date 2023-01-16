@@ -23,10 +23,12 @@ import Markdown from 'vue3-markdown-it';
 import { useUser } from "@/composables/user";
 
 import userDevice from "@/classes/userDevice";
+import { useLiveMapTracking } from "@/composables/liveMapTracking";
 
 const router = useRouter();
 const route = useRoute();
 const user = useUser();
+const liveMapTracking = useLiveMapTracking();
 
 const { markers, displayableMarkers, listenForMarkerChangesOnMap, showExpired } = useMarker();
 
@@ -295,6 +297,13 @@ const showCreateMarkerTutorial = computed(() => {
                                     :checked="!!user.locationWatcherId.value"
                                     @click="user.toggleLocationTracking()" />
                                 Enable location based services
+                            </label>
+                            <label v-if="userDevice.supportsGeolocation && !!user.locationWatcherId.value">
+                                <input type="checkbox"
+                                    :checked="liveMapTracking.isSharingLocation.value && !!user.locationWatcherId.value"
+                                    :disabled="!!!user.locationWatcherId.value"
+                                    @click="liveMapTracking.toggleShareLocation()" />
+                                <span data-tooltip="Your location will be visible to anyone currently looking at this map">Share your location with others</span>
                             </label>
                         </details>
 

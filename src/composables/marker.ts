@@ -50,6 +50,8 @@ const minCategoryNameLength = 3;
 
 const { joinChannel, channel } = usePusher();
 
+const trackedUserLocations = ref<Record<string, any>>({});
+
 export function useMarker() {
 
     const emit = getCurrentInstance()?.emit;
@@ -309,6 +311,21 @@ export function useMarker() {
         });
     }
 
+    const listenForLiveUserLocations = async (mapId: string) => {
+        if (!channel.value) {
+            return;
+        }
+        // We need to send it using Pusher's client event system. For that, we need to get and use the pusher instance from the Echo channel
+        // @ts-ignore
+        const pusher = channel.value.pusher as Pusher;
+
+        pusher.channel("maps." + mapId).bind("client-user-location-updated", (data: any) => {
+            trackedUserLocations.value[data.socketId] = data.location;
+
+            console.log("Received location update from user", data.socketId, data.location, trackedUserLocations.value);
+        });
+    }
+
     const listenForMarkerChangesOnMap = async (mapId: string) => {
         joinChannel(mapId);
         if (!channel.value) {
@@ -318,6 +335,7 @@ export function useMarker() {
         listenForNewMarkers(mapId);
         listenForUpdatedMarker(mapId);
         listenForAmountOfUsers(mapId);
+        listenForLiveUserLocations(mapId);
     }
 
     // Use the Haversine formula to calculate the distance between two points
@@ -407,6 +425,7 @@ export function useMarker() {
         formatDistance,
         computeBearing,
         formatBearing,
+        trackedUserLocations,
         nonExpiredMarkers,
         displayableMarkers,
         isLoading,

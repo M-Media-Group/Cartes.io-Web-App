@@ -9,6 +9,7 @@ import {
 import MarkerCluster from "./MarkerCluster.vue";
 import { useMarker } from '@/composables/marker';
 import { useUser } from '@/composables/user';
+import { useLiveMapTracking } from '@/composables/liveMapTracking';
 
 const user = useUser();
 
@@ -53,7 +54,9 @@ const parsedMetadata = ref(null as null | string);
 
 const markerPopup = ref();
 
-const { canDeleteMarker, deleteMarker } = useMarker();
+const { canDeleteMarker, deleteMarker, trackedUserLocations } = useMarker();
+
+const { isSharingLocation } = useLiveMapTracking();
 
 const handleMarkerClick = (marker: Marker) => {
     selectedMarker.value = marker;
@@ -180,7 +183,11 @@ const parseMetadata = (meta: JSON) => {
         <LCircleMarker :radius="5"
             :lat-lng="[user.currentLocation.value?.latitude, user.currentLocation.value?.longitude]">
             <LPopup>
-                <p><b>Your location</b><small>Only you can see this</small></p>
+                <p>
+                    <b>Your location</b>
+                    <small v-if="!isSharingLocation">Only you can see this</small>
+                    <b v-else> - Everyone can see this</b>
+                </p>
                 <p>Accuracy: ± {{ user.currentLocation.value.accuracy.toFixed(2) }} meters</p>
                 <p v-if="user.currentLocation.value.altitude">Altitude: {{
                         user.currentLocation.value.altitude.toFixed(2)
@@ -192,6 +199,18 @@ const parseMetadata = (meta: JSON) => {
                     kilometers per hour</p>
                 <p v-if="user.currentLocation.value.heading">Heading: {{ user.currentLocation.value.heading.toFixed(2)
                 }} degrees</p>
+            </LPopup>
+        </LCircleMarker>
+    </l-layer-group>
+
+    <l-layer-group v-if="trackedUserLocations">
+       <!-- Create a circle marker for each tracked user location -->
+        <LCircleMarker v-for="(location, index) in trackedUserLocations"
+            :key="index"
+            :radius="5"
+            :lat-lng="[location.latitude, location.longitude]">
+            <LPopup>
+                <p>A Cartes.io user</p>
             </LPopup>
         </LCircleMarker>
     </l-layer-group>
