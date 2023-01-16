@@ -63,10 +63,12 @@ declare global {
 
 window.Pusher = Pusher;
 
+const fallbackWsHost = import.meta.env.VITE_API_URL.replace('https://', '').replace('http://', '');
+
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_KEY,
-    wsHost: import.meta.env.VITE_PUSHER_HOST ?? import.meta.env.VITE_API_URL,
+    wsHost: import.meta.env.VITE_PUSHER_HOST ?? fallbackWsHost,
     wsPort: import.meta.env.VITE_PUSHER_PORT ?? 6001,
     wssPort: import.meta.env.VITE_PUSHER_PORT ?? 6001,
     forceTLS: false,
