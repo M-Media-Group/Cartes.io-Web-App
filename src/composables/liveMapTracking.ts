@@ -42,10 +42,26 @@ export function useLiveMapTracking() {
                 },
             }
         );
-
-        console.log("Shared location", user.currentLocation.value)
-
     }
+
+    const stopSharingLocation = () => {
+        if (!user.locationWatcherId.value) {
+            return;
+        }
+
+        if (!channel.value) {
+            return;
+        }
+
+        // We need to send it using Pusher's client event system. For that, we need to get and use the pusher instance from the Echo channel
+        // @ts-ignore
+        const pusher = channel.value.pusher as Pusher;
+
+        pusher.channel("maps." + Map.map.value?.uuid).trigger("client-user-location-removed", {
+            socketId: pusher.connection.socket_id,
+        }
+        );
+    };
 
     // In order to share the users location on the websocket, we need to listen for currentLocation changes and emit them to the websocket if the user is sharing their location
     watch(user.currentLocation, () => {
@@ -60,6 +76,8 @@ export function useLiveMapTracking() {
 
         if (isSharingLocation.value) {
             shareUsersLocation();
+        } else {
+            stopSharingLocation();
         }
     }
 

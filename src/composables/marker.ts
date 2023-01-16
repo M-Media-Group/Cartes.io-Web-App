@@ -319,11 +319,13 @@ export function useMarker() {
         // @ts-ignore
         const pusher = channel.value.pusher as Pusher;
 
-        pusher.channel("maps." + mapId).bind("client-user-location-updated", (data: any) => {
-            trackedUserLocations.value[data.socketId] = data.location;
-
-            console.log("Received location update from user", data.socketId, data.location, trackedUserLocations.value);
-        });
+        pusher.channel("maps." + mapId)
+            .bind("client-user-location-updated", (data: any) => {
+                trackedUserLocations.value[data.socketId] = data.location;
+            })
+            .bind("client-user-location-removed", (data: any) => {
+                delete trackedUserLocations.value[data.socketId];
+            });
     }
 
     const listenForMarkerChangesOnMap = async (mapId: string) => {
