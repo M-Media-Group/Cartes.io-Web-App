@@ -60,7 +60,7 @@ import AppLayout from "@/templates/AppLayout.vue";
                 <h3>General</h3>
                 <details>
                     <summary>What country does Cartes.io store data in?</summary>
-                    <p>Cartes.io uses Amazon Web Services (AWS) with servers in Paris.</p>
+                    <p>Cartes.io uses Amazon Web Services (AWS) with servers in Paris, France.</p>
                 </details>
 
                 <details>
