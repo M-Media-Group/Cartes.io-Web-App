@@ -8,7 +8,9 @@ const channel = ref(null as Channel | null);
 
 const { user } = useUser();
 
-const usernameToUse = () => {
+const usernameToUse = ref("Unknown user");
+
+const computeUsernameToUse = () => {
     if (user.value?.is_public && user.value?.username) {
         return user.value.username;
     }
@@ -29,11 +31,13 @@ export function usePusher() {
         }
 
         channel.value = await window.Echo.channel("maps." + mapId).subscribed(() => {
+            usernameToUse.value = computeUsernameToUse();
+
             $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
 
             window.Echo.connector.pusher.channel("maps." + mapId).trigger("client-joined-channel", {
                 socketId: window.Echo.socketId(),
-                username: usernameToUse(),
+                username: usernameToUse.value,
             });
         });
 
@@ -54,6 +58,7 @@ export function usePusher() {
     }
 
     return {
+        usernameToUse,
         joinChannel,
         leaveChannel,
         channel

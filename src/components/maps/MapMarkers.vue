@@ -10,6 +10,7 @@ import MarkerCluster from "./MarkerCluster.vue";
 import { useMarker } from '@/composables/marker';
 import { useUser } from '@/composables/user';
 import { useLiveMapTracking } from '@/composables/liveMapTracking';
+import { usePusher } from '@/composables/pusher';
 
 const user = useUser();
 
@@ -57,6 +58,8 @@ const markerPopup = ref();
 const { canDeleteMarker, deleteMarker, trackedUsers } = useMarker();
 
 const { isSharingLocation } = useLiveMapTracking();
+
+const { usernameToUse } = usePusher();
 
 const handleMarkerClick = (marker: Marker) => {
     selectedMarker.value = marker;
@@ -185,7 +188,7 @@ const parseMetadata = (meta: JSON) => {
             color='#03A678'>
             <LPopup>
                 <p>
-                    <b>Your location</b>
+                    <b>{{ usernameToUse }} (you)</b>
                     <small v-if="!isSharingLocation">Only you can see this</small>
                     <b v-else> - Everyone can see this</b>
                 </p>
