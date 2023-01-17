@@ -114,6 +114,13 @@ const routes: Array<RouteRecordRaw> = [
         component: () =>
             import(/* webpackChunkName: "ar" */ "@/views/UserProfileView.vue"),
     },
+    {
+        path: "/about/privacy",
+        name: "Privacy",
+        props: true,
+        component: () =>
+            import(/* webpackChunkName: "ar" */ "@/views/about/PrivacyView.vue"),
+    },
     // 404 page
     {
         path: "/:pathMatch(.*)*",

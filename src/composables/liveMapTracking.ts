@@ -72,6 +72,12 @@ export function useLiveMapTracking() {
     });
 
     const toggleShareLocation = () => {
+
+        // @TODO Confirm the user action
+        // if (!isSharingLocation.value && !confirm("Anyone looking at this map will be able to see your location. Are you sure you want to share your location?")) {
+        //     return false;
+        // }
+
         isSharingLocation.value = !isSharingLocation.value;
 
         if (isSharingLocation.value) {

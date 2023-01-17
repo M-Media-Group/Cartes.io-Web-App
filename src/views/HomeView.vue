@@ -3,7 +3,7 @@ import { useMap } from '@/composables/map';
 import AppLayout from "@/templates/AppLayout.vue";
 import { useUser } from '@/composables/user';
 import CreateMapButton from '@/components/CreateMapButton.vue';
-import { defineAsyncComponent, onMounted } from 'vue';
+import { defineAsyncComponent, onMounted, provide } from 'vue';
 
 const { maps, getAllMaps } = useMap();
 const { users, getUsers, user } = useUser();
@@ -16,6 +16,9 @@ onMounted(() => {
     getAllMaps();
     getUsers();
 });
+
+// Provide a preferCanvas option
+// provide('preferCanvas', true);
 
 </script>
 <template>
@@ -79,7 +82,7 @@ onMounted(() => {
             </div>
             <aside>
                 <h4>Cartes.io.</h4>
-                <p>Privacy-first maps.</p>
+                <p><router-link to="/about/privacy">Privacy-first</router-link> maps.</p>
                 <p>This is an open source project. Feel free to contribute to the development on <a
                         href="https://github.com/M-Media-Group/Cartes.io">GitHub</a></p>
                 <p>
