@@ -91,6 +91,9 @@ export function usePusher() {
             })
             .bind("client-user-view-removed", (data: any) => {
                 delete trackedUsers.value[data.socketId].view;
+                if (data.socketId == trackSocketIdView.value) {
+                    trackSocketIdView.value = '';
+                }
             })
             .bind("client-in-channel", (data: any) => {
                 trackedUsers.value[data.socketId] = { ...trackedUsers.value[data.socketId], username: data.username };
