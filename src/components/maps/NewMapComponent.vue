@@ -343,4 +343,8 @@ const AddMarkerForm = defineAsyncComponent(() =>
 .leaflet-control-geosearch a.leaflet-bar-part:before {
   border-color: inherit;
 }
+
+.leaflet-control-geosearch .reset {
+  max-width: 2rem;
+}
 </style>

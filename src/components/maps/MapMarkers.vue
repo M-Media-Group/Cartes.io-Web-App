@@ -55,11 +55,11 @@ const parsedMetadata = ref(null as null | string);
 
 const markerPopup = ref();
 
-const { canDeleteMarker, deleteMarker, trackedUsers } = useMarker();
+const { canDeleteMarker, deleteMarker } = useMarker();
 
 const { isSharingLocation } = useLiveMapTracking();
 
-const { usernameToUse } = usePusher();
+const { usernameToUse, trackedUsers } = usePusher();
 
 const handleMarkerClick = (marker: Marker) => {
     selectedMarker.value = marker;

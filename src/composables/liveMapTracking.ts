@@ -21,6 +21,10 @@ const { channel } = usePusher();
 export function useLiveMapTracking() {
 
     const shareUsersLocation = () => {
+        if (!isSharingLocation.value) {
+            return;
+        }
+
         if (!user.currentLocation.value || !user.locationWatcherId.value) {
             return;
         }
