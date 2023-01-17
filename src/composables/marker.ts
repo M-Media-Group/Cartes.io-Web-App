@@ -325,6 +325,9 @@ export function useMarker() {
             })
             .bind("client-user-location-removed", (data: any) => {
                 delete trackedUserLocations.value[data.socketId];
+            })
+            .bind("client-left-channel", (data: any) => {
+                delete trackedUserLocations.value[data.socketId];
             });
     }
 
