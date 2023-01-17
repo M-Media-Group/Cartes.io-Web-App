@@ -79,6 +79,11 @@ const goToDeviceLocation = async () => {
     }
 }
 
+const setMapPosition = (lat: number, lng: number, zoomPassed: number) => {
+    center.value = { lat, lng };
+    zoom.value = zoomPassed;
+}
+
 export function useMapPosition() {
 
     // Provide a flyTo method
@@ -99,7 +104,8 @@ export function useMapPosition() {
         zoom,
         contextMenuPosition,
         maxBounds,
-        averageCenter
+        averageCenter,
+        setMapPosition
     }
 
 }
