@@ -16,6 +16,7 @@ export enum eventTypes {
   dragged_marker = "dragged_marker",
   deleted_marker_via_websocket = "deleted_marker_via_websocket",
   connected_to_websocket_channel = "connected_to_websocket_channel",
+  left_websocket_channel = "left_websocket_channel",
   opened_marker_popup = "opened_marker_popup",
   went_offline = "went_offline",
   came_online = "came_online",

@@ -8,7 +8,7 @@ const channel = ref(null as Channel | null);
 export function usePusher() {
     const isLive = inject('isConnectedToPusher');
 
-    const joinChannel = (mapId: string): Channel | void => {
+    const joinChannel = async (mapId: string): Promise<Channel | void> => {
         if (!userDevice.online) {
             return alert("You need to be online to see live data");
         }
@@ -17,7 +17,7 @@ export function usePusher() {
             window.Echo.leave("maps." + mapId);
         });
 
-        channel.value = window.Echo.channel("maps." + mapId).subscribed(() => {
+        channel.value = await window.Echo.channel("maps." + mapId).subscribed(() => {
             $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
         });
 
@@ -26,9 +26,10 @@ export function usePusher() {
         }
     }
 
-    const leaveChannel = (mapId: string) => {
+    const leaveChannel = async (mapId: string) => {
         if (channel.value) {
-            window.Echo.leave("maps." + mapId);
+            channel.value = await window.Echo.leave("maps." + mapId) ?? null;
+            $bus.$emit(eventTypes.left_websocket_channel, "maps." + mapId);
         }
     }
 

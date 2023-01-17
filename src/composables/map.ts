@@ -6,6 +6,7 @@ import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { Marker } from "@/types/marker";
 import { useUser } from "./user";
+import { usePusher } from "./pusher";
 
 const { user } = useUser();
 
@@ -20,6 +21,8 @@ const map = computed(() => {
 });
 
 const isLoading = ref(false);
+
+const { joinChannel, leaveChannel } = usePusher();
 
 // reactive maps
 // const maps = reactive<Map[]>([]);
@@ -43,12 +46,14 @@ export function useMap() {
         if (!userDevice.online) {
             return alert("You must be online to get all maps.");
         }
+
         const data = await cartes.maps()
             .with(['markers', 'user', 'publicContributors'])
             .addParam('withCount[]', 'activeMarkers')
             .addParam('orderBy', 'active_markers_count')
             .addParam('query', 'description!= AND active_markers_count > 10')
             .get();
+
         maps.value = data.data;
         totalMaps.value = data.meta.total;
     }
@@ -57,7 +62,19 @@ export function useMap() {
         if (!userDevice.online) {
             return alert("You must be online to get a map.");
         }
+
+        if (mapId === selectedMapUuid.value) {
+            return map.value;
+        }
+
+        if (selectedMapUuid.value) {
+            await leaveChannel(selectedMapUuid.value);
+        }
+
         selectedMapUuid.value = mapId;
+
+        joinChannel(mapId);
+
         if (mapExistsInMapsArray(mapId)) {
             return map.value;
         }

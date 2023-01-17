@@ -85,6 +85,13 @@ export function useLiveMapTracking() {
         }
     });
 
+    // @todo - this won't work because by this time the channel.value will be null
+    $bus.$on(eventTypes.left_websocket_channel, () => {
+        if (isSharingLocation.value) {
+            toggleShareLocation();
+        }
+    });
+
     return {
         isSharingLocation,
         followSocketId,

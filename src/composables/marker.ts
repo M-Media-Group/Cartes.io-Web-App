@@ -48,7 +48,7 @@ const displayableMarkers = computed(() => {
 
 const minCategoryNameLength = 3;
 
-const { joinChannel, channel } = usePusher();
+const { channel } = usePusher();
 
 const trackedUserLocations = ref<Record<string, any>>({});
 
@@ -329,10 +329,10 @@ export function useMarker() {
     }
 
     const listenForMarkerChangesOnMap = async (mapId: string) => {
-        joinChannel(mapId);
         if (!channel.value) {
             return;
         }
+
         listenForDeletedMarkers(mapId);
         listenForNewMarkers(mapId);
         listenForUpdatedMarker(mapId);
