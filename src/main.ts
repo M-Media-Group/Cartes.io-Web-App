@@ -78,21 +78,16 @@ window.Echo = new Echo({
 });
 
 const isConnectedToPusher = ref(false);
-const socketId = ref('');
-
 
 window.Echo.connector.pusher.connection.bind("connected", (data: { socket_id: string }) => {
-    socketId.value = data.socket_id;
     isConnectedToPusher.value = true;
 });
 
 window.Echo.connector.pusher.connection.bind("disconnected", () => {
-    socketId.value = '';
     isConnectedToPusher.value = false;
 });
 
 app.provide('isConnectedToPusher', isConnectedToPusher)
-app.provide('socketId', socketId)
 
 app.use(router);
 

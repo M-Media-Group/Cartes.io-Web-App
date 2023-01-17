@@ -35,7 +35,7 @@ export function useLiveMapTracking() {
 
         pusher.channel("maps." + Map.map.value?.uuid).trigger("client-user-location-updated",
             {
-                socketId: pusher.connection.socket_id,
+                socketId: window.Echo.socketId(),
                 location: {
                     latitude: user.currentLocation.value.latitude,
                     longitude: user.currentLocation.value.longitude,
@@ -55,7 +55,7 @@ export function useLiveMapTracking() {
         const pusher = channel.value.pusher as Pusher;
 
         pusher.channel("maps." + Map.map.value?.uuid).trigger("client-user-location-removed", {
-            socketId: pusher.connection.socket_id,
+            socketId: window.Echo.socketId(),
         });
     };
 

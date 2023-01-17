@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import { ref, computed, watch, Ref } from "vue";
+import { ref, computed, watch, Ref, onUnmounted, inject } from "vue";
 import NewMapComponent from "@/components/maps/NewMapComponent.vue"
 import { useMarker } from "@/composables/marker";
 import { useMap } from "@/composables/map";
@@ -81,7 +81,9 @@ const share = async () => {
     }
 }
 
-const { isLive } = usePusher();
+const { leaveChannel } = usePusher();
+
+const isLive = inject('isConnectedToPusher');
 
 const mapAgeInMinutes = computed(() => {
     if (Maps.map.value) {
@@ -192,6 +194,10 @@ const showCreateMarkerTutorial = computed(() => {
 
     return true;
 })
+
+onUnmounted(() => {
+    leaveChannel(mapId.value);
+});
 </script>
 
 <template>
@@ -243,7 +249,7 @@ const showCreateMarkerTutorial = computed(() => {
                                 role="button"
                                 class="secondary">
                                 <div v-if="isLive"
-                                    class="blink"></div> {{ isLive ? 'Live feed' : 'Feed' }}
+                                    class="blink"></div> {{ isLive? 'Live feed': 'Feed' }}
                                 <span
                                     v-if="isLive && Maps.map.value?.users_currently_connected && Maps.map.value?.users_currently_connected > 1">
                                     - {{ Maps.map.value.users_currently_connected }} people connected
@@ -303,7 +309,9 @@ const showCreateMarkerTutorial = computed(() => {
                                     :checked="liveMapTracking.isSharingLocation.value && !!user.locationWatcherId.value"
                                     :disabled="!!!user.locationWatcherId.value"
                                     @click="liveMapTracking.toggleShareLocation()" />
-                                <span data-tooltip="Your location will be visible to anyone currently looking at this map">Share your location with others</span>
+                                <span
+                                    data-tooltip="Your location will be visible to anyone currently looking at this map">Share
+                                    your location with others</span>
                             </label>
                         </details>
 
