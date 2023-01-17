@@ -50,7 +50,7 @@ const minCategoryNameLength = 3;
 
 const { channel } = usePusher();
 
-const trackedUserLocations = ref<Record<string, any>>({});
+const trackedUsers = ref<Record<string, any>>({});
 
 export function useMarker() {
 
@@ -320,14 +320,17 @@ export function useMarker() {
         const pusher = channel.value.pusher as Pusher;
 
         pusher.channel("maps." + mapId)
+            .bind("client-joined-channel", (data: any) => {
+                trackedUsers.value[data.socketId] = { username: data.username };
+            })
             .bind("client-user-location-updated", (data: any) => {
-                trackedUserLocations.value[data.socketId] = data.location;
+                trackedUsers.value[data.socketId] = { ...trackedUsers.value[data.socketId], location: data.location };
             })
             .bind("client-user-location-removed", (data: any) => {
-                delete trackedUserLocations.value[data.socketId];
+                delete trackedUsers.value[data.socketId];
             })
             .bind("client-left-channel", (data: any) => {
-                delete trackedUserLocations.value[data.socketId];
+                delete trackedUsers.value[data.socketId];
             });
     }
 
@@ -430,7 +433,7 @@ export function useMarker() {
         formatDistance,
         computeBearing,
         formatBearing,
-        trackedUserLocations,
+        trackedUsers,
         nonExpiredMarkers,
         displayableMarkers,
         isLoading,

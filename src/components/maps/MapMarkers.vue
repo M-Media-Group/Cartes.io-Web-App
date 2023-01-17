@@ -54,7 +54,7 @@ const parsedMetadata = ref(null as null | string);
 
 const markerPopup = ref();
 
-const { canDeleteMarker, deleteMarker, trackedUserLocations } = useMarker();
+const { canDeleteMarker, deleteMarker, trackedUsers } = useMarker();
 
 const { isSharingLocation } = useLiveMapTracking();
 
@@ -130,7 +130,7 @@ const parseMetadata = (meta: JSON) => {
                 v-html="selectedMarker.description"></p>
             <small v-if="selectedMarker?.link"><a :href="selectedMarker.link"
                     target="blank">{{
-                            selectedMarker.link.split("/")[2]
+                        selectedMarker.link.split("/")[2]
                     }}</a>
             </small>
 
@@ -148,7 +148,7 @@ const parseMetadata = (meta: JSON) => {
                     {{ selectedMarker.elevation }} meters
                 </small>
                 <small>Coordinates: {{ selectedMarker?.location.coordinates[1] }} {{
-                        selectedMarker?.location.coordinates[0]
+                    selectedMarker?.location.coordinates[0]
                 }}</small>
                 <small v-if="selectedMarker?.address">Address: {{ selectedMarker?.address }}</small>
             </details>
@@ -166,8 +166,8 @@ const parseMetadata = (meta: JSON) => {
             <hr v-if="selectedMarker && canDeleteMarker(selectedMarker)" />
 
             <small v-if="selectedMarker?.updated_at">Last update:
-                <time :datetime="String(selectedMarker?.updated_at)">{{ new
-                        Date(selectedMarker?.updated_at).toLocaleString()
+                <time :datetime="String(selectedMarker?.updated_at)">{{
+                    new Date(selectedMarker?.updated_at).toLocaleString()
                 }}</time>
             </small>
             <small v-if="selectedMarker?.locations_count && selectedMarker?.locations_count > 1">
@@ -191,29 +191,32 @@ const parseMetadata = (meta: JSON) => {
                 </p>
                 <p>Accuracy: ± {{ user.currentLocation.value.accuracy.toFixed(2) }} meters</p>
                 <p v-if="user.currentLocation.value.altitude">Altitude: {{
-                        user.currentLocation.value.altitude.toFixed(2)
+                    user.currentLocation.value.altitude.toFixed(2)
                 }} meters</p>
                 <p v-if="user.currentLocation.value.altitudeAccuracy">Altitude accuracy: ± {{
-                        user.currentLocation.value.altitudeAccuracy.toFixed(2)
+                    user.currentLocation.value.altitudeAccuracy.toFixed(2)
                 }} meters</p>
                 <p v-if="user.currentLocation.value.speed">Speed: {{ user.currentLocation.value.speed.toFixed(2) }}
                     kilometers per hour</p>
-                <p v-if="user.currentLocation.value.heading">Heading: {{ user.currentLocation.value.heading.toFixed(2)
+                <p v-if="user.currentLocation.value.heading">Heading: {{
+                    user.currentLocation.value.heading.toFixed(2)
                 }} degrees</p>
             </LPopup>
         </LCircleMarker>
     </l-layer-group>
 
-    <l-layer-group v-if="trackedUserLocations">
-       <!-- Create a circle marker for each tracked user location -->
-        <LCircleMarker v-for="(location, index) in trackedUserLocations"
-            :key="index"
-            :radius="5"
-            :lat-lng="[location.latitude, location.longitude]">
-            <LPopup>
-                <p>A Cartes.io user</p>
-            </LPopup>
-        </LCircleMarker>
+    <l-layer-group v-if="trackedUsers">
+        <!-- Create a circle marker for each tracked user location -->
+        <template v-for="(data, index) in trackedUsers"
+            :key="index">
+            <LCircleMarker v-if="data.location?.latitude && data.location?.longitude"
+                :radius="5"
+                :lat-lng="[data.location.latitude, data.location.longitude]">
+                <LPopup>
+                    <p>{{ data.username ?? "Unknown" }}</p>
+                </LPopup>
+            </LCircleMarker>
+        </template>
     </l-layer-group>
 </template>
 <style scoped>

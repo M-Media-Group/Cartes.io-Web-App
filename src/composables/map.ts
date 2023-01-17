@@ -22,7 +22,7 @@ const map = computed(() => {
 
 const isLoading = ref(false);
 
-const { joinChannel, leaveChannel } = usePusher();
+const { joinChannel, leaveChannel, channel } = usePusher();
 
 // reactive maps
 // const maps = reactive<Map[]>([]);
@@ -64,6 +64,9 @@ export function useMap() {
         }
 
         if (mapId === selectedMapUuid.value) {
+            if (!channel.value) {
+                joinChannel(mapId);
+            }
             return map.value;
         }
 

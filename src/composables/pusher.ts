@@ -2,8 +2,24 @@ import { Channel } from "laravel-echo";
 import { inject, ref } from "vue";
 import $bus, { eventTypes } from "@/eventBus/events";
 import userDevice from "@/classes/userDevice";
+import { useUser } from "./user";
 
 const channel = ref(null as Channel | null);
+
+const { user } = useUser();
+
+const usernameToUse = () => {
+    if (user.value?.is_public && user.value?.username) {
+        return user.value.username;
+    }
+
+    const randomName = Math.floor(Math.random() * 10000);
+
+    if (!user.value?.is_public && user.value?.username) {
+        return "Cartes.io user " + randomName;
+    }
+    return "Anonymous " + randomName;
+}
 
 export function usePusher() {
 
@@ -17,6 +33,7 @@ export function usePusher() {
 
             window.Echo.connector.pusher.channel("maps." + mapId).trigger("client-joined-channel", {
                 socketId: window.Echo.socketId(),
+                username: usernameToUse(),
             });
         });
 
