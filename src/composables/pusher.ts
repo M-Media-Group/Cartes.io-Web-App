@@ -1,8 +1,9 @@
 import { Channel } from "laravel-echo";
-import { inject, ref } from "vue";
+import { ref } from "vue";
 import $bus, { eventTypes } from "@/eventBus/events";
 import userDevice from "@/classes/userDevice";
 import { useUser } from "./user";
+import router from "@/router";
 
 const channel = ref(null as Channel | null);
 
@@ -11,6 +12,8 @@ const { user } = useUser();
 const usernameToUse = ref("Unknown user");
 
 const trackedUsers = ref<Record<string, any>>({});
+
+const trackSocketIdView = ref('');
 
 const computeUsernameToUse = () => {
     if (user.value?.is_public && user.value?.username) {
@@ -65,6 +68,7 @@ export function usePusher() {
         if (!channel.value) {
             return;
         }
+        await router.isReady();
         // We need to send it using Pusher's client event system. For that, we need to get and use the pusher instance from the Echo channel
         // @ts-ignore
         const pusher = channel.value.pusher as Pusher;
@@ -79,6 +83,16 @@ export function usePusher() {
                     username: usernameToUse.value,
                 });
             })
+            // trackSocketIdView
+            .bind("client-user-view-updated", (data: any) => {
+                trackedUsers.value[data.socketId] = { ...trackedUsers.value[data.socketId], view: data.view };
+                if (data.socketId == trackSocketIdView.value) {
+                    $bus.$emit(eventTypes.updated_tracked_view, data.view);
+                }
+            })
+            .bind("client-user-view-removed", (data: any) => {
+                delete trackedUsers.value[data.socketId].view;
+            })
             .bind("client-in-channel", (data: any) => {
                 trackedUsers.value[data.socketId] = { ...trackedUsers.value[data.socketId], username: data.username };
             })
@@ -86,7 +100,7 @@ export function usePusher() {
                 trackedUsers.value[data.socketId] = { ...trackedUsers.value[data.socketId], location: data.location };
             })
             .bind("client-user-location-removed", (data: any) => {
-                delete trackedUsers.value[data.socketId];
+                delete trackedUsers.value[data.socketId].location;
             })
             .bind("client-left-channel", (data: any) => {
                 delete trackedUsers.value[data.socketId];
@@ -99,6 +113,7 @@ export function usePusher() {
         leaveChannel,
         listenForLiveUserLocations,
         trackedUsers,
-        channel
+        channel,
+        trackSocketIdView
     }
 }

@@ -5,6 +5,7 @@ import { useMapPosition } from "./mapPosition";
 import { usePusher } from "./pusher";
 import { useUser } from "./user";
 import $bus, { eventTypes } from "@/eventBus/events";
+import { useMarker } from "./marker";
 
 const Map = useMap();
 
@@ -18,6 +19,8 @@ const mapPosition = useMapPosition();
 const user = useUser();
 
 const { channel } = usePusher();
+
+const { computeDistance } = useMarker();
 
 let locationWatcher: WatchStopHandle, viewWatcher: WatchStopHandle;
 
@@ -121,12 +124,27 @@ export function useLiveMapTracking() {
         });
     };
 
+    const lastTimeViewWasUpdated = ref(0);
+
     const toggleShareView = () => {
         isSharingView.value = !isSharingView.value;
 
         if (isSharingView.value) {
-            viewWatcher = watch(mapPosition.center, () => {
+            viewWatcher = watch(() => mapPosition.center.value, (oldVal, newVal) => {
+
+                // These two next if statements are to prevent the view from being updated too often and sending too many events
+                // If the last event was less than 0.5 second ago, don't send another one
+                if (Date.now() - lastTimeViewWasUpdated.value < 500) {
+                    return;
+                }
+                console.log("newVal", newVal, "oldVal", oldVal);
+                if (newVal && oldVal && computeDistance(oldVal.lat, oldVal.lng, newVal.lat, newVal.lng) < 3) {
+                    return;
+                }
+
                 shareUsersView();
+
+                lastTimeViewWasUpdated.value = Date.now();
             }, { immediate: true });
 
             // $bus.$emit(eventTypes.started_sharing_view, toRaw(Map.map.value?.uuid));

@@ -36,6 +36,7 @@ export enum eventTypes {
   changed_marker_order = "changed_marker_order",
   started_sharing_location = "started_sharing_location",
   stopped_sharing_location = "stopped_sharing_location",
+  updated_tracked_view = "updated_tracked_view",
 }
 
 type EventsObject = { [P in eventTypes]?: any };
