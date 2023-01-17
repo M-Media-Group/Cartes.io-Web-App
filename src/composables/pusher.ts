@@ -3,7 +3,6 @@ import { ref } from "vue";
 import $bus, { eventTypes } from "@/eventBus/events";
 import userDevice from "@/classes/userDevice";
 import { useUser } from "./user";
-import router from "@/router";
 
 const channel = ref(null as Channel | null);
 
@@ -64,11 +63,11 @@ export function usePusher() {
         }
     }
 
-    const listenForLiveUserLocations = async (mapId: string) => {
+    const listenForLiveUserLocations = (mapId: string) => {
         if (!channel.value) {
             return;
         }
-        await router.isReady();
+
         // We need to send it using Pusher's client event system. For that, we need to get and use the pusher instance from the Echo channel
         // @ts-ignore
         const pusher = channel.value.pusher as Pusher;
