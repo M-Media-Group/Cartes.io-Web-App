@@ -48,10 +48,6 @@ export function usePusher() {
                 if (user.socket_id == trackSocketIdView.value) {
                     trackSocketIdView.value = '';
                 }
-
-                if (user.socket_id == window.Echo.socketId()) {
-                    $bus.$emit(eventTypes.left_websocket_channel, "maps." + mapId);
-                }
             })
             .on("pusher:subscription_succeeded", (subscription: any) => {
                 usernameToUse.value = subscription.me.user.username;
