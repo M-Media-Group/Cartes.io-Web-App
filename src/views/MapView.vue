@@ -81,7 +81,7 @@ const share = async () => {
     }
 }
 
-const { leaveChannel } = usePusher();
+const { leaveChannel, usernameToUse, trackedUsers, trackSocketIdView } = usePusher();
 
 const isLive = inject('isConnectedToPusher');
 
@@ -198,6 +198,22 @@ const showCreateMarkerTutorial = computed(() => {
 onUnmounted(() => {
     leaveChannel(mapId.value);
 });
+
+const handleClick = (lat: number, lng: number, zoomPassed: number) => {
+    window.scrollTo(0, 0);
+
+    center.value = { lat, lng };
+    zoom.value = zoomPassed ?? 16;
+
+}
+
+$bus.$on(eventTypes.updated_tracked_view, (data: any) => {
+    handleClick(data.lat, data.lng, data.zoom);
+})
+
+const setTrackSocketIdView = (id: string) => {
+    trackSocketIdView.value = id;
+}
 </script>
 
 <template>
@@ -272,9 +288,55 @@ onUnmounted(() => {
                                 :markers="displayableMarkers" />
                         </details>
 
+                        <!-- People -->
+                        <details v-if="trackedUsers && Object.keys(trackedUsers).length > 0"
+                            style="padding-bottom: 0;">
+                            <summary aria-haspopup="listbox"
+                                role="button"
+                                class="secondary">
+                                {{ Object.keys(trackedUsers).length }} people connected
+                            </summary>
+                            <div style="max-height: 54vh; overflow-y: scroll;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Sharing location</th>
+                                            <th scope="
+                                                col">Presenting</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="user, key in trackedUsers"
+                                            :key="user.socketId">
+                                            <th scope="row">{{ user.username ?? user.socketId }}</th>
+                                            <td v-if="user.location"><a href="#"
+                                                    @click.prevent="handleClick(user.location.latitude, user.location.longitude, user.location.zoom)">Go
+                                                    to current location</a>
+                                            </td>
+                                            <td v-else>No</td>
+                                            <td v-if="trackSocketIdView === key"><a href="#"
+                                                    @click.prevent="setTrackSocketIdView('')">Stop following</a></td>
+                                            <td v-else-if="user.view">
+                                                <a href="#"
+                                                    @click.prevent="setTrackSocketIdView(key)">Start following
+                                                    presentation</a>
+                                            </td>
+                                            <td v-else>No</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </details>
+
+                        <p v-if="isLive && Object.keys(trackedUsers).length > 0">You're visible to others as <strong>{{
+                            usernameToUse
+                        }}</strong>. Read our <a href="/about/privacy">privacy FAQ</a> for more info.</p>
+
                         <!-- Map display options -->
                         <details>
-                            <summary role="button"
+                            <summary aria-haspopup="listbox"
+                                role="button"
                                 class="secondary">Map display options</summary>
                             <label style="display: none;"
                                 v-if="0 && !showExpired"
@@ -298,21 +360,31 @@ onUnmounted(() => {
                                     v-model="cluster" />
                                 Cluster markers
                             </label>
-                            <label v-if="userDevice.supportsGeolocation">
+                            <label>
                                 <input type="checkbox"
-                                    :checked="!!user.locationWatcherId.value"
-                                    @click="user.toggleLocationTracking()" />
-                                Enable location based services
+                                    :checked="liveMapTracking.isSharingView.value && !!user.locationWatcherId.value"
+                                    @change.prevent="liveMapTracking.toggleShareView()" />
+                                <span data-tooltip="People will be able to follow you around the map">Share
+                                    your view with others</span>
                             </label>
-                            <label v-if="userDevice.supportsGeolocation && !!user.locationWatcherId.value">
-                                <input type="checkbox"
-                                    :checked="liveMapTracking.isSharingLocation.value && !!user.locationWatcherId.value"
-                                    :disabled="!!!user.locationWatcherId.value"
-                                    @click="liveMapTracking.toggleShareLocation()" />
-                                <span
-                                    data-tooltip="Your location will be visible to anyone currently looking at this map">Share
-                                    your location with others</span>
-                            </label>
+                            <template v-if="userDevice.supportsGeolocation">
+                                <label>
+                                    <input type="checkbox"
+                                        :checked="!!user.locationWatcherId.value"
+                                        @click="user.toggleLocationTracking()" />
+                                    Enable location based services
+                                </label>
+
+                                <label v-if="!!user.locationWatcherId.value">
+                                    <input type="checkbox"
+                                        :checked="liveMapTracking.isSharingLocation.value && !!user.locationWatcherId.value"
+                                        :disabled="!!!user.locationWatcherId.value"
+                                        @change.prevent="liveMapTracking.toggleShareLocation()" />
+                                    <span
+                                        data-tooltip="Your location will be visible to anyone currently looking at this map">Share
+                                        your location with others</span>
+                                </label>
+                            </template>
                         </details>
 
                         <!-- Settings -->
@@ -367,6 +439,10 @@ onUnmounted(() => {
                                     Nobody can see any author information of this map because it was created by someone
                                     without an account, a person that has not logged in, or someone who has not
                                     connected this map to their account.
+                                </p>
+
+                                <p>
+                                    Consult the <a href="/about/privacy">privacy FAQ</a> for more info.
                                 </p>
                             </div>
                         </details>
