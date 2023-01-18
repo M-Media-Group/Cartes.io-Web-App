@@ -309,7 +309,7 @@ const setTrackSocketIdView = (id: string) => {
                                     <tbody>
                                         <tr v-for="user, key in trackedUsers"
                                             :key="user.socketId">
-                                            <th scope="row">{{ user.username ?? user.socketId }}</th>
+                                            <th scope="row">{{ user.username || "Unknown user" }}</th>
                                             <td v-if="user.location"><a href="#"
                                                     @click.prevent="handleClick(user.location.latitude, user.location.longitude, user.location.zoom)">Go
                                                     to current location</a>

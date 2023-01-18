@@ -59,6 +59,11 @@ import AppLayout from "@/templates/AppLayout.vue";
 
                 <h3>General</h3>
                 <details>
+                    <summary>Do I need to provide any personal information to use Cartes.io?</summary>
+                    <p>No. Most of the Cartes.io features work equally well when you're logged in or not.</p>
+                </details>
+
+                <details>
                     <summary>What country does Cartes.io store data in?</summary>
                     <p>Cartes.io uses Amazon Web Services (AWS) with servers in Paris, France.</p>
                 </details>
