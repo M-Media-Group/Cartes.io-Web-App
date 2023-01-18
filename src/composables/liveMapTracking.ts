@@ -39,11 +39,7 @@ export function useLiveMapTracking() {
             return;
         }
 
-        // We need to send it using Pusher's client event system. For that, we need to get and use the pusher instance from the Echo channel
-        // @ts-ignore
-        const pusher = channel.value.pusher as Pusher;
-
-        pusher.channel("maps." + Map.map.value?.uuid).trigger("client-user-location-updated",
+        channel.value.whisper("user-location-updated",
             {
                 socketId: window.Echo.socketId(),
                 location: {
@@ -60,11 +56,7 @@ export function useLiveMapTracking() {
             return;
         }
 
-        // We need to send it using Pusher's client event system. For that, we need to get and use the pusher instance from the Echo channel
-        // @ts-ignore
-        const pusher = channel.value.pusher as Pusher;
-
-        pusher.channel("maps." + Map.map.value?.uuid).trigger("client-user-location-removed", {
+        channel.value.whisper("user-location-removed", {
             socketId: window.Echo.socketId(),
         });
     };
@@ -95,11 +87,7 @@ export function useLiveMapTracking() {
             return;
         }
 
-        // We need to send it using Pusher's client event system. For that, we need to get and use the pusher instance from the Echo channel
-        // @ts-ignore
-        const pusher = channel.value.pusher as Pusher;
-
-        pusher.channel("maps." + Map.map.value?.uuid).trigger("client-user-view-updated",
+        channel.value.whisper("user-view-updated",
             {
                 socketId: window.Echo.socketId(),
                 view: {
@@ -115,11 +103,7 @@ export function useLiveMapTracking() {
             return;
         }
 
-        // We need to send it using Pusher's client event system. For that, we need to get and use the pusher instance from the Echo channel
-        // @ts-ignore
-        const pusher = channel.value.pusher as Pusher;
-
-        pusher.channel("maps." + Map.map.value?.uuid).trigger("client-user-view-removed", {
+        channel.value.whisper("user-view-removed", {
             socketId: window.Echo.socketId(),
         });
     };

@@ -203,9 +203,9 @@ import AppLayout from "@/templates/AppLayout.vue";
                 <details>
                     <summary>If I choose to share my location on the map, what will others see me as?</summary>
                     <ul>
-                        <li><b>"Anonymous 1234", if</b> you're not logged in. A random new number is generated each time
+                        <li><b>"Anonymous X12X", if</b> you're not logged in. A random new number is generated each time
                             you open a map.</li>
-                        <li><b>"Cartes.io user 1234", if</b> you are currently logged in but don't have your profile
+                        <li><b>"Cartes.io user X12X", if</b> you are currently logged in but don't have your profile
                             set to "public". This lets others see that the marker was created by a "valid" person
                             (someone who verified
                             their email address with us), but not who that person is. A random new number is also
@@ -223,6 +223,57 @@ import AppLayout from "@/templates/AppLayout.vue";
                     <summary>How do I stop sharing my location?</summary>
                     <p>Uncheck "Share your location with others" under "Map display options" or disable "Location
                         services" entirely.</p>
+                </details>
+
+                <h3>Live features</h3>
+                <details>
+                    <summary>What do other people looking at the same map see me as?</summary>
+                    <p>In some cases, you may be listed as a user currently viewing a given map. Only other users on the
+                        same map may be able to see this. This does not show your current location or what you're
+                        looking at on the map.</p>
+                    <ul>
+                        <li><b>You're not visible, if</b> the map you're currently on is private, and you're not logged
+                            in or you're not the
+                            map owner. You also won't see others or get live updates in this case.</li>
+                        <li><b>"Anonymous X12X", if</b> you're not logged in. A random new number is generated each time
+                            you open a map.</li>
+                        <li><b>"Cartes.io user X12X", if</b> you are currently logged in but don't have your profile
+                            set to "public". This lets others see that the marker was created by a "valid" person
+                            (someone who verified
+                            their email address with us), but not who that person is. A random new number is also
+                            generated each time you open a map.
+                        </li>
+                        <li><b>"Your username", if</b> you are currently logged in and your profile is set to
+                            "public".</li>
+                    </ul>
+                    <p>You can edit your profile visibility after logging in. Hover over your username at the top,
+                        choose "Settings",
+                        then uncheck "Public profile".</p>
+                </details>
+
+                <details>
+                    <summary>Can everyone see what I'm looking at on a map?</summary>
+                    <ul>
+                        <li><b>No by default, if</b> you have not explicitly enabled "Share your view with others".</li>
+                        <li><b>No, if</b> the map you are currently on is private, and you're not logged in or you're
+                            not the map owner.
+                        </li>
+                        <li><b>Yes, if</b> you have explicitly enabled "Share your view with others" under "Map display
+                            options".</li>
+                    </ul>
+                </details>
+
+                <details>
+                    <summary>Can anyone see my current location on a map?</summary>
+                    <ul>
+                        <li><b>No by default, if</b> you have not explicitly enabled "Share your location with others".
+                        </li>
+                        <li><b>No, if</b> the map you are currently on is private, and you're not logged in or you're
+                            not the map owner.
+                        </li>
+                        <li><b>Yes, if</b> you have explicitly enabled "Share your location with others" under "Map
+                            display options", after enabling "Location services".</li>
+                    </ul>
                 </details>
 
             </section>

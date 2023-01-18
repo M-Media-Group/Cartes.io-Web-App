@@ -75,6 +75,28 @@ window.Echo = new Echo({
     encrypted: true,
     disableStats: true,
     enabledTransports: ['ws', 'wss'],
+    // authEndpoint: import.meta.env.VITE_API_URL + '/api/broadcasting/auth',
+    auth: {
+        headers: {
+            'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '',
+            'Accept': 'application/json',
+        },
+    },
+    // Axios is used to make the request to the auth endpoint
+    authorizer: (channel: any, options: any) => {
+        return {
+            authorize: (socketId: string, callback: (res: any, data: any) => void) => {
+                axios.post(options.authEndpoint, {
+                    socket_id: socketId,
+                    channel_name: channel.name,
+                }).then((res) => {
+                    callback(false, res.data);
+                }).catch(error => {
+                    callback(true, error);
+                });
+            },
+        };
+    }
 });
 
 const isConnectedToPusher = ref(false);

@@ -1,31 +1,17 @@
-import { Channel } from "laravel-echo";
+import { Channel, PresenceChannel } from "laravel-echo";
 import { ref } from "vue";
 import $bus, { eventTypes } from "@/eventBus/events";
 import userDevice from "@/classes/userDevice";
 import { useUser } from "./user";
+import { PusherPresenceChannel } from "laravel-echo/dist/channel";
 
-const channel = ref(null as Channel | null);
-
-const { user } = useUser();
+const channel = ref(null as PusherPresenceChannel | null);
 
 const usernameToUse = ref("Unknown user");
 
 const trackedUsers = ref<Record<string, any>>({});
 
 const trackSocketIdView = ref('');
-
-const computeUsernameToUse = () => {
-    if (user.value?.is_public && user.value?.username) {
-        return user.value.username;
-    }
-
-    const randomName = Math.floor(Math.random() * 10000);
-
-    if (!user.value?.is_public && user.value?.username) {
-        return "Cartes.io user " + randomName;
-    }
-    return "Anonymous " + randomName;
-}
 
 export function usePusher() {
 
@@ -34,18 +20,34 @@ export function usePusher() {
             return alert("You need to be online to see live data");
         }
 
-        channel.value = await window.Echo.channel("maps." + mapId).subscribed(() => {
-            usernameToUse.value = computeUsernameToUse();
+        channel.value = await window.Echo.join(`maps.${mapId}`)
+            .here((users: any[]) => {
+                console.log("Got users", users)
 
-            $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
+                $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
 
-            listenForLiveUserLocations(mapId);
+                users.forEach((data: { socket_id: string | number; user: { username: any; }; }) => {
+                    if (data.socket_id == window.Echo.socketId()) {
+                        return;
+                    }
+                    trackedUsers.value[data.socket_id] = { username: data.user.username };
+                });
 
-            window.Echo.connector.pusher.channel("maps." + mapId).trigger("client-joined-channel", {
-                socketId: window.Echo.socketId(),
-                username: usernameToUse.value,
+                usernameToUse.value = users.find((u: any) => u.socket_id == window.Echo.socketId())?.user.username ?? "Unknown user";
+
+                listenForLiveUserLocations(mapId);
+            })
+            .joining((user: { username: any; socket_id: string | number; user: { username: any; }; }) => {
+                console.log(user.username);
+                trackedUsers.value[user.socket_id] = { username: user.user.username };
+            })
+            .leaving((user: { username: any; socket_id: string | number; }) => {
+                console.log(user.username);
+                delete trackedUsers.value[user.socket_id];
+            })
+            .error((error: any) => {
+                console.error(error);
             });
-        });
 
         if (channel.value) {
             return channel.value;
@@ -54,10 +56,6 @@ export function usePusher() {
 
     const leaveChannel = async (mapId: string) => {
         if (channel.value) {
-            await window.Echo.connector.pusher.channel("maps." + mapId).trigger("client-left-channel", {
-                socketId: window.Echo.socketId(),
-            });
-
             channel.value = await window.Echo.leave("maps." + mapId) ?? null;
             $bus.$emit(eventTypes.left_websocket_channel, "maps." + mapId);
         }
@@ -68,44 +66,25 @@ export function usePusher() {
             return;
         }
 
-        // We need to send it using Pusher's client event system. For that, we need to get and use the pusher instance from the Echo channel
-        // @ts-ignore
-        const pusher = channel.value.pusher as Pusher;
-
-        pusher.channel("maps." + mapId)
-            .bind("client-joined-channel", (data: any) => {
-                trackedUsers.value[data.socketId] = { username: data.username };
-
-                // Emit self to other users
-                pusher.channel("maps." + mapId).trigger("client-in-channel", {
-                    socketId: window.Echo.socketId(),
-                    username: usernameToUse.value,
-                });
-            })
+        channel.value
             // trackSocketIdView
-            .bind("client-user-view-updated", (data: any) => {
+            .listenForWhisper("user-view-updated", (data: any) => {
                 trackedUsers.value[data.socketId] = { ...trackedUsers.value[data.socketId], view: data.view };
                 if (data.socketId == trackSocketIdView.value) {
                     $bus.$emit(eventTypes.updated_tracked_view, data.view);
                 }
             })
-            .bind("client-user-view-removed", (data: any) => {
+            .listenForWhisper("user-view-removed", (data: any) => {
                 delete trackedUsers.value[data.socketId].view;
                 if (data.socketId == trackSocketIdView.value) {
                     trackSocketIdView.value = '';
                 }
             })
-            .bind("client-in-channel", (data: any) => {
-                trackedUsers.value[data.socketId] = { ...trackedUsers.value[data.socketId], username: data.username };
-            })
-            .bind("client-user-location-updated", (data: any) => {
+            .listenForWhisper("user-location-updated", (data: any) => {
                 trackedUsers.value[data.socketId] = { ...trackedUsers.value[data.socketId], location: data.location };
             })
-            .bind("client-user-location-removed", (data: any) => {
+            .listenForWhisper("user-location-removed", (data: any) => {
                 delete trackedUsers.value[data.socketId].location;
-            })
-            .bind("client-left-channel", (data: any) => {
-                delete trackedUsers.value[data.socketId];
             });
     }
 
