@@ -19,11 +19,6 @@ export function usePusher() {
         }
 
         channel.value = (window.Echo.join(`maps.${mapId}`) as PusherPresenceChannel)
-            .here((users: any[]) => {
-                $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
-                listenForLiveUserLocations(mapId);
-                listenForLiveUserViews(mapId);
-            })
             .joining((user: { username: any; socket_id: string | number; user: { username: any; }; }) => {
                 trackedUsers.value[user.socket_id] = { ...trackedUsers.value[user.socket_id], username: user.user.username };
             })
@@ -34,9 +29,18 @@ export function usePusher() {
                     trackSocketIdView.value = '';
                 }
             })
+            // We use .on instead of .here because it also returns the current user
             .on("pusher:subscription_succeeded", (subscription: any) => {
+                $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
+                listenForLiveUserLocations(mapId);
+                listenForLiveUserViews(mapId);
+
                 usernameToUse.value = subscription.me.info.user.username;
                 let subscriptionMembers = subscription.members;
+
+                if (!subscriptionMembers) {
+                    return;
+                }
 
                 // Remove self from list
                 delete subscriptionMembers[subscription.myID];
