@@ -71,7 +71,7 @@ export function useMap() {
         }
 
         if (selectedMapUuid.value) {
-            await leaveChannel(selectedMapUuid.value);
+            leaveChannel(selectedMapUuid.value);
         }
 
         selectedMapUuid.value = mapId;
