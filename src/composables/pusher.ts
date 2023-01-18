@@ -53,6 +53,9 @@ export function usePusher() {
                     $bus.$emit(eventTypes.left_websocket_channel, "maps." + mapId);
                 }
             })
+            .on("pusher:subscription_succeeded", (subscription: any) => {
+                usernameToUse.value = subscription.me.user.username;
+            })
             .error((error: any) => {
                 console.error(error);
             }) as PusherPresenceChannel;
