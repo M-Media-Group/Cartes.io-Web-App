@@ -20,28 +20,7 @@ export function usePusher() {
 
         channel.value = (window.Echo.join(`maps.${mapId}`) as PusherPresenceChannel)
             .here((users: any[]) => {
-                const currentSocketId = window.Echo.socketId();
-
-                console.log("Yess", users, currentSocketId)
                 $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
-
-                // Remove all trackedUsers not in the list
-                users.forEach((data: { socket_id: string | number; user: { username: any; }; }) => {
-                    if (data.socket_id == currentSocketId) {
-                        return;
-                    }
-                    trackedUsers.value[data.socket_id] = data.user;
-                });
-
-                Object.keys(trackedUsers.value).forEach((socketId: string | number) => {
-                    if (
-                        !users.find((user: { socket_id: string | number; }) => user.socket_id == socketId)
-                        || socketId == currentSocketId
-                    ) {
-                        delete trackedUsers.value[socketId];
-                    }
-                });
-
                 listenForLiveUserLocations(mapId);
                 listenForLiveUserViews(mapId);
             })
@@ -57,6 +36,22 @@ export function usePusher() {
             })
             .on("pusher:subscription_succeeded", (subscription: any) => {
                 usernameToUse.value = subscription.me.info.user.username;
+                let subscriptionMembers = subscription.members;
+
+                // Remove self from list
+                delete subscriptionMembers[subscription.myID];
+
+                // Add all members to trackedUsers from subscriptionMembers object
+                Object.keys(subscriptionMembers).forEach((socketId: string | number) => {
+                    trackedUsers.value[subscriptionMembers[socketId].socket_id] = { ...trackedUsers.value[subscriptionMembers[socketId].socket_id], ...subscriptionMembers[socketId].user };
+                });
+
+                // Remove all trackedUsers not in the list
+                Object.keys(trackedUsers.value).forEach((socketId: string | number) => {
+                    if (!subscriptionMembers.find((member: { socket_id: string | number; }) => member.socket_id == socketId)) {
+                        delete trackedUsers.value[socketId];
+                    }
+                });
             })
             .error((error: any) => {
                 console.error(error);
