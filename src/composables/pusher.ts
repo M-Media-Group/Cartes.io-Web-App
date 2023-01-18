@@ -33,7 +33,7 @@ export function usePusher() {
 
                 users.forEach((data: { socket_id: string | number; user: { username: any; }; }) => {
                     if (data.socket_id == window.Echo.socketId()) {
-                        return usernameToUse.value = data.user.username;
+                        return;
                     }
                     trackedUsers.value[data.socket_id] = data.user;
                 });
