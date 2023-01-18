@@ -1,4 +1,3 @@
-import Pusher from "pusher-js/types/src/core/pusher";
 import { ref, toRaw, watch, WatchStopHandle } from "vue";
 import { useMap } from "./map";
 import { useMapPosition } from "./mapPosition";
