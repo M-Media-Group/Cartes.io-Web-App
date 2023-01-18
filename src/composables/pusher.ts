@@ -21,6 +21,7 @@ export function usePusher() {
         channel.value = (window.Echo.join(`maps.${mapId}`) as PusherPresenceChannel)
             .here((users: any[]) => {
                 listenForLiveUserLocations(mapId);
+                listenForLiveUserViews(mapId);
 
                 $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
 
@@ -50,7 +51,7 @@ export function usePusher() {
                 }
             })
             .on("pusher:subscription_succeeded", (subscription: any) => {
-                usernameToUse.value = subscription.me.user.username;
+                usernameToUse.value = subscription.me.info.user.username;
             })
             .error((error: any) => {
                 console.error(error);
@@ -59,6 +60,41 @@ export function usePusher() {
         if (channel.value) {
             return channel.value;
         }
+    }
+
+    const setTrackSocketIdView = (socketId: string | null) => {
+        if (!socketId) {
+            trackSocketIdView.value = '';
+            return;
+        }
+
+        if (trackSocketIdView.value == socketId) {
+            return;
+        }
+
+        trackSocketIdView.value = socketId;
+
+    };
+
+    const listenForLiveUserViews = (mapId: string) => {
+        if (!channel.value) {
+            return;
+        }
+
+        channel.value
+            // trackSocketIdView
+            .listenForWhisper("user-view-updated", (data: any) => {
+                trackedUsers.value[data.socketId] = { ...trackedUsers.value[data.socketId], view: data.view };
+                if (data.socketId == trackSocketIdView.value) {
+                    $bus.$emit(eventTypes.updated_tracked_view, data.view);
+                }
+            })
+            .listenForWhisper("user-view-removed", (data: any) => {
+                delete trackedUsers.value[data.socketId].view;
+                if (data.socketId == trackSocketIdView.value) {
+                    trackSocketIdView.value = '';
+                }
+            });
     }
 
     const leaveChannel = (mapId: string) => {
@@ -77,19 +113,6 @@ export function usePusher() {
         }
 
         channel.value
-            // trackSocketIdView
-            .listenForWhisper("user-view-updated", (data: any) => {
-                trackedUsers.value[data.socketId] = { ...trackedUsers.value[data.socketId], view: data.view };
-                if (data.socketId == trackSocketIdView.value) {
-                    $bus.$emit(eventTypes.updated_tracked_view, data.view);
-                }
-            })
-            .listenForWhisper("user-view-removed", (data: any) => {
-                delete trackedUsers.value[data.socketId].view;
-                if (data.socketId == trackSocketIdView.value) {
-                    trackSocketIdView.value = '';
-                }
-            })
             .listenForWhisper("user-location-updated", (data: any) => {
                 trackedUsers.value[data.socketId] = { ...trackedUsers.value[data.socketId], location: data.location };
             })
@@ -103,6 +126,7 @@ export function usePusher() {
         joinChannel,
         leaveChannel,
         listenForLiveUserLocations,
+        setTrackSocketIdView,
         trackedUsers,
         channel,
         trackSocketIdView

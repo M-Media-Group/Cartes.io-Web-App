@@ -81,7 +81,7 @@ const share = async () => {
     }
 }
 
-const { leaveChannel, usernameToUse, trackedUsers, trackSocketIdView } = usePusher();
+const { leaveChannel, usernameToUse, trackedUsers, trackSocketIdView, setTrackSocketIdView } = usePusher();
 
 const isLive = inject('isConnectedToPusher');
 
@@ -211,9 +211,6 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
     handleClick(data.lat, data.lng, data.zoom);
 })
 
-const setTrackSocketIdView = (id: string) => {
-    trackSocketIdView.value = id;
-}
 </script>
 
 <template>
@@ -316,7 +313,7 @@ const setTrackSocketIdView = (id: string) => {
                                             </td>
                                             <td v-else>No</td>
                                             <td v-if="trackSocketIdView === key"><a href="#"
-                                                    @click.prevent="setTrackSocketIdView('')">Stop following</a></td>
+                                                    @click.prevent="setTrackSocketIdView(null)">Stop following</a></td>
                                             <td v-else-if="user.view">
                                                 <a href="#"
                                                     @click.prevent="setTrackSocketIdView(key)">Start following
