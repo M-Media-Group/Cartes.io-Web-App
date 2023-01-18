@@ -20,25 +20,30 @@ export function usePusher() {
 
         channel.value = (window.Echo.join(`maps.${mapId}`) as PusherPresenceChannel)
             .here((users: any[]) => {
-                listenForLiveUserLocations(mapId);
-                listenForLiveUserViews(mapId);
+                const currentSocketId = window.Echo.socketId();
 
+                console.log("Yess", users, currentSocketId)
                 $bus.$emit(eventTypes.connected_to_websocket_channel, "maps." + mapId);
 
                 // Remove all trackedUsers not in the list
-                Object.keys(trackedUsers.value).forEach((socketId: string | number) => {
-                    if (!users.find((user: { socket_id: string | number; }) => user.socket_id == socketId)) {
-                        delete trackedUsers.value[socketId];
-                    }
-                });
-
                 users.forEach((data: { socket_id: string | number; user: { username: any; }; }) => {
-                    if (data.socket_id == window.Echo.socketId()) {
+                    if (data.socket_id == currentSocketId) {
                         return;
                     }
                     trackedUsers.value[data.socket_id] = data.user;
                 });
 
+                Object.keys(trackedUsers.value).forEach((socketId: string | number) => {
+                    if (
+                        !users.find((user: { socket_id: string | number; }) => user.socket_id == socketId)
+                        || socketId == currentSocketId
+                    ) {
+                        delete trackedUsers.value[socketId];
+                    }
+                });
+
+                listenForLiveUserLocations(mapId);
+                listenForLiveUserViews(mapId);
             })
             .joining((user: { username: any; socket_id: string | number; user: { username: any; }; }) => {
                 trackedUsers.value[user.socket_id] = { ...trackedUsers.value[user.socket_id], username: user.user.username };
