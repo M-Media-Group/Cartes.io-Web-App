@@ -120,7 +120,6 @@ export function useLiveMapTracking() {
                 if (Date.now() - lastTimeViewWasUpdated.value < 500) {
                     return;
                 }
-                console.log("newVal", newVal, "oldVal", oldVal);
                 if (newVal && oldVal && computeDistance(oldVal.lat, oldVal.lng, newVal.lat, newVal.lng) < 3) {
                     return;
                 }
