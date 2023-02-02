@@ -2,7 +2,7 @@
 import { useMap } from '@/composables/map';
 import { useMapPosition } from '@/composables/mapPosition';
 import { Map } from '@/types/map';
-import { defineAsyncComponent, PropType, ref } from 'vue';
+import { defineAsyncComponent, onBeforeUnmount, PropType, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import MapAuthor from './maps/MapAuthor.vue';
 import MapLoader from "@/components/maps/MapLoader.vue";
@@ -31,6 +31,10 @@ const props = defineProps({
         default: true,
     },
     clickable: {
+        type: Boolean,
+        default: false,
+    },
+    hideMapWhenNotVisible: {
         type: Boolean,
         default: false,
     },
@@ -65,17 +69,56 @@ const goToMap = () => {
 
 const showLoader = ref(true)
 
+const isFrozen = ref(props.hideMapWhenNotVisible);
+const article = ref();
+
+// If hideMapWhenNotVisible is set, we need to hide the map if its not in view to increase performance
+// We do this by using an intersection observer
+
+// Note that using an if statement here isnt the best practice because it makes any code within not reactive, but for our current use case its ok. To refactor later.
+if (props.hideMapWhenNotVisible) {
+
+    let observer: IntersectionObserver;
+
+    onMounted(() => {
+        // Setup an intersection observer to hide the map if its not in view
+        const options = {
+            // The root needs to be an element that is the viewport, the heights may change
+            // so we can't use the map element
+            root: null,
+            rootMargin: '-150px',
+            threshold: 0
+        }
+
+        observer = new IntersectionObserver((seen) => {
+            console.log(seen, seen[0].isIntersecting);
+            if (seen[0].isIntersecting) {
+                isFrozen.value = false;
+            } else {
+                isFrozen.value = true;
+            }
+        }, options);
+        observer.observe(article.value);
+    });
+
+    onBeforeUnmount(() => {
+        observer.unobserve(article.value);
+        observer.disconnect();
+    });
+}
+
 </script>
 <template>
     <article :key="map.uuid"
+        ref="article"
         @click="handleClick()">
         <header class="full"
             v-if="showMap">
-            <MapLoader v-if="showLoader"
+            <MapLoader v-if="showLoader || isFrozen"
                 style="height: 400px"></MapLoader>
         </header>
         <header class="full"
-            v-if="showMap && map.markers_count && map.markers_count > 0"
+            v-if="showMap && map.markers_count && map.markers_count > 0 && !isFrozen"
             v-show="!showLoader">
             <NewMapComponent :mapId="map.uuid"
                 :map="map"
@@ -104,7 +147,8 @@ const showLoader = ref(true)
             class="markdown" />
         <BaseButton v-if="showAction"
             @click="goToMap()">Open map</BaseButton>
-        <small v-if="MapInstance.wouldLinkToCurrentUser(map)">{{ "This map is linked to you only through this device."
+        <small v-if="MapInstance.wouldLinkToCurrentUser(map)">{{
+            "This map is linked to you only through this device."
         }}
         </small>
 

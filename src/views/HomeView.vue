@@ -57,7 +57,7 @@ onMounted(() => {
                         :key="map.uuid"
                         :map="map"
                         :showDescription="true"
-                        :showMap="i < 4"
+                        :hideMapWhenNotVisible="true"
                         :showFooter="true" />
 
                     <div>Showing {{ maps.length }} out of thousands of public and private maps
