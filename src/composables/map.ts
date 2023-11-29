@@ -58,6 +58,21 @@ export function useMap() {
         totalMaps.value = data.meta.total;
     }
 
+    const getAllMapsByQuery = async (query: string) => {
+        if (!userDevice.online) {
+            return alert("You must be online to get all maps.");
+        }
+
+        const data = await cartes.maps()
+            .with(['markers', 'user', 'publicContributors'])
+            .addParam('withCount[]', 'activeMarkers')
+            .addParam('orderBy', 'active_markers_count')
+            .addParam('query', query)
+            .get();
+
+        return data?.data;
+    }
+
     const getMap = async (mapId: string) => {
         if (!userDevice.online) {
             return alert("You must be online to get a map.");
@@ -334,6 +349,7 @@ export function useMap() {
         getMap,
         getRelatedMaps,
         getAllMaps,
+        getAllMapsByQuery,
         canCreateMarkers,
         updateMap,
         addMarkersToMapInArray,
