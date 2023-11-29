@@ -11,9 +11,40 @@ class userDevice {
         accuracy: 0
     };
 
+    #ipLocation = {
+        ip: "",
+        network: "",
+        version: "",
+        city: "",
+        region: "",
+        region_code: "",
+        country: "",
+        country_name: "",
+        country_code: "",
+        country_code_iso3: "",
+        country_capital: "",
+        country_tld: "",
+        continent_code: "",
+        in_eu: false,
+        postal: "",
+        latitude: 0,
+        longitude: 0,
+        timezone: "",
+        utc_offset: "",
+        country_calling_code: "",
+        currency: "",
+        currency_name: "",
+        languages: "",
+        country_area: 0,
+        country_population: 0,
+        asn: "",
+        org: ""
+    };
+
     constructor() {
         this.listenForOnlineStatusChange();
         this.getAllMediaDevices();
+        this.fetchIpLocation();
     }
 
     listenForOnlineStatusChange() {
@@ -34,6 +65,58 @@ class userDevice {
         window.removeEventListener("offline", () => {
             this.#isOnline = false;
         });
+    }
+
+    fetchIpLocation() {
+        if (localStorage.getItem("ipLocation")) {
+            this.#ipLocation = JSON.parse(localStorage.getItem("ipLocation") as string);
+            return;
+        }
+
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                // Theoretically can be written as this.#ipLocation = data;, but written in long-form for clarity and to avoid any potential issues if the API changes
+                this.#ipLocation = {
+                    ip: data.ip,
+                    network: data.org,
+                    version: data.version,
+                    city: data.city,
+                    region: data.region,
+                    region_code: data.region_code,
+                    country: data.country,
+                    country_name: data.country_name,
+                    country_code: data.country_code,
+                    country_code_iso3: data.country_code_iso3,
+                    country_capital: data.country_capital,
+                    country_tld: data.country_tld,
+                    continent_code: data.continent_code,
+                    in_eu: data.in_eu,
+                    postal: data.postal,
+                    latitude: data.latitude,
+                    longitude: data.longitude,
+                    timezone: data.timezone,
+                    utc_offset: data.utc_offset,
+                    country_calling_code: data.country_calling_code,
+                    currency: data.currency,
+                    currency_name: data.currency_name,
+                    languages: data.languages,
+                    country_area: data.country_area,
+                    country_population: data.country_population,
+                    asn: data.asn,
+                    org: data.org
+                };
+
+                this.cacheIpLocation();
+            });
+    }
+
+    cacheIpLocation() {
+        localStorage.setItem("ipLocation", JSON.stringify(this.#ipLocation));
+    }
+
+    get ipLocation() {
+        return this.#ipLocation;
     }
 
     get supportsAr() {
