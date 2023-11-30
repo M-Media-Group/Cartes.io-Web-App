@@ -8,6 +8,7 @@ import MapAuthor from './maps/MapAuthor.vue';
 import MapLoader from "@/components/maps/MapLoader.vue";
 
 import Markdown from 'vue3-markdown-it';
+import { useIntersectionObserver } from '@/composables/observer';
 
 const props = defineProps({
     map: {
@@ -86,6 +87,7 @@ const toggleIsFrozen = (value: boolean) => {
     if (setVisibilityTimeout.value !== null) {
         clearTimeout(setVisibilityTimeout.value);
     }
+
     // If the value is the same as isFrozen, do nothing
     if (value === isFrozen.value) {
         return;
@@ -94,46 +96,33 @@ const toggleIsFrozen = (value: boolean) => {
     setVisibilityTimeout.value = setTimeout(() => {
         isFrozen.value = value;
         console.log("Called to set isFrozen to " + value);
-    }, 220);
+    }, 100);
 }
 
 // Note that using an if statement here isnt the best practice because it makes any code within not reactive, but for our current use case its ok. To refactor later.
 if (props.hideMapWhenNotVisible) {
 
-    let observer: IntersectionObserver;
-
     onMounted(() => {
-        // Setup an intersection observer to hide the map if its not in view
-        const options = {
-            // The root needs to be an element that is the viewport, the heights may change
-            // so we can't use the map element
-            root: null,
-            rootMargin: '-150px',
-            threshold: 0
-        } as IntersectionObserverInit;
-
-        observer = new IntersectionObserver((seen) => {
-            if (seen[0].isIntersecting) {
-                toggleIsFrozen(false);
-            } else {
-                toggleIsFrozen(true);
+        observeElement(article.value,
+            (entry) => {
+                if (entry.isIntersecting) {
+                    toggleIsFrozen(false);
+                } else {
+                    toggleIsFrozen(true);
+                }
             }
-        }, options);
-        observer.observe(article.value);
-    });
-
-    onBeforeUnmount(() => {
-        observer.unobserve(article.value);
-        observer.disconnect();
+        );
     });
 }
+
+const { observeElement, unobserveElement } = useIntersectionObserver();
 
 // We need to set a dynamic ref shouldShowAsUnfrozen - which will be the value of isFrozen if this value has remained unchanged for 1 second. This will prevent loading the map when its scrolled into view for a split second.
 const shouldShowAsUnfrozen = ref(isFrozen.value ?? false);
 
 </script>
 <template>
-    <article :key="map.uuid"
+    <article :key="'map-' + map.uuid"
         ref="article"
         @click="handleClick()"
         :class="{ 'card': showAsCard }">
@@ -234,6 +223,7 @@ article.card {
     padding: 0;
     margin: 0;
     position: relative;
+    scroll-snap-align: start;
 }
 
 .card .headings {
