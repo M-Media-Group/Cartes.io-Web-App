@@ -43,6 +43,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    showOnlyStaticImageOfMap: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const NewMapComponent = defineAsyncComponent(() =>
@@ -113,6 +117,10 @@ if (props.hideMapWhenNotVisible) {
             }
         );
     });
+
+    onBeforeUnmount(() => {
+        unobserveElement(article.value);
+    });
 }
 
 const { observeElement, unobserveElement } = useIntersectionObserver();
@@ -126,6 +134,7 @@ const shouldShowAsUnfrozen = ref(isFrozen.value ?? false);
         ref="article"
         @click="handleClick()"
         :class="{ 'card': showAsCard }">
+
         <template v-if="!showAsCard">
             <header class="full"
                 v-if="showMap">
@@ -168,8 +177,12 @@ const shouldShowAsUnfrozen = ref(isFrozen.value ?? false);
             </small>
         </template>
         <template v-else>
-
-            <NewMapComponent v-if="showMap && map.markers_count && map.markers_count > 0 && !isFrozen"
+            <template v-if="showOnlyStaticImageOfMap">
+                <img class="map-image"
+                    :src="MapInstance.getStaticMapImageUrl(map.uuid)"
+                    @click="goToMap()" />
+            </template>
+            <NewMapComponent v-else-if="showMap && map.markers_count && map.markers_count > 0 && !isFrozen"
                 :mapId="map.uuid"
                 :map="map"
                 :markers="map.markers ?? []"
@@ -224,6 +237,7 @@ article.card {
     margin: 0;
     position: relative;
     scroll-snap-align: start;
+    height: 450px;
 }
 
 .card .headings {
@@ -235,7 +249,7 @@ article.card {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
     color: var(--primary-inverse) !important;
     z-index: 1000;
-    padding-top: 3rem;
+    padding-top: 4rem;
     padding-bottom: 1rem;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -243,5 +257,11 @@ article.card {
 
 .card .headings * {
     color: var(--primary-inverse) !important;
+}
+
+.map-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 </style>

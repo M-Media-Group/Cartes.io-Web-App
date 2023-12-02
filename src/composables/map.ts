@@ -340,6 +340,11 @@ export function useMap() {
         }
     }
 
+    // Get the static image URL for the map. Its basically  `${import.meta.env.VITE_API_URL}/api/maps/${to.params.mapId}/images/static`;
+    const getStaticMapImageUrl = (mapId: string) => {
+        return `${import.meta.env.VITE_API_URL}/api/maps/${mapId}/images/static`;
+    }
+
     return {
         canDeleteMap,
         canUpdateMap,
@@ -361,6 +366,7 @@ export function useMap() {
         wouldLinkToCurrentUser,
         searchForMap,
         setAmountOfUsersCurrentlyConnectedToMap,
+        getStaticMapImageUrl,
         isLoading,
         formErrors,
         hasErrors,

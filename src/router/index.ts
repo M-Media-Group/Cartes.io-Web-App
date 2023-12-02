@@ -154,7 +154,7 @@ router.beforeEach(async (to, from, next) => {
     // We are using beforeEach instead of beforeEnter on the individual route because beforeEach is also called when the view/component updates (when going from one mapId to another)
     if (to.params.mapId) {
         // Set the to.meta.image to return `${import.meta.env.VITE_API_URL}/api/maps/${to.params.mapId}/images/static`;
-        to.meta.image = `${import.meta.env.VITE_API_URL}/api/maps/${to.params.mapId}/images/static`;
+        to.meta.image = Maps.getStaticMapImageUrl(to.params.mapId as string);
         setMetaAttributes(to, from);
 
         await Maps.getMap(to.params.mapId as string).then((map) => {
