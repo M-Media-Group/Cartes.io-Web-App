@@ -68,6 +68,13 @@ const copyCode = async (e: MouseEvent) => {
                 <!-- Code block showing API call -->
                 <pre><code @click="copyCode">cartes.maps('{{ map.uuid }}', '{{ getMapToken(map) ?? 'optional_map_token' }}').get()</code></pre>
             </li>
+            <li>Image using the <a target="_BLANK"
+                    href="https://github.com/M-Media-Group/Cartes.io/wiki/API#get-a-maps-static-image">static image
+                    endpoint</a>
+                <!-- Code block showing the URL. It is on the api endpoint, /api/maps/{uuid}/images/static -->
+                <pre><code @click="copyCode">{{ url }}/api/maps/{{ map.uuid }}/images/static</code></pre>
+                <img :src="`${url}/api/maps/${map.uuid}/images/static`" />
+            </li>
         </ul>
         <p>When using the API or embedding the map, you must attribute this website on your front-end.</p>
     </div>
