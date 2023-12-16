@@ -124,7 +124,9 @@ const sendPasswordReset = async () => {
 
     // await getCsrfToken();
 
-    axios.post("/password/email").then(() => {
+    axios.post("/password/email", {
+        email: userForm.email,
+    }).then(() => {
         $bus.$emit(eventTypes.sent_reset_password_email);
     }).catch((error) => {
         console.log("Password reset error", error);
@@ -177,8 +179,8 @@ const logout = () => {
 const getCsrfToken = () => {
 
     return axios.get("/csrf-token").then((response) => {
-        // Set  a global axios default header with the CSRF token
-        axios.defaults.headers.common["X-CSRF-TOKEN"] = getCsrfTokenFromCookie();
+        axios.defaults.headers.common["X-XSRF-TOKEN"] = getCsrfTokenFromCookie();
+
         return;
     }).catch((error) => {
         console.log("CSRF token error", error);
