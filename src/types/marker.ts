@@ -18,6 +18,12 @@ export interface Marker {
     address?: string | null;
     locations_count?: number;
     zoom?: number;
+    heading?: number;
+    pitch?: number;
+    roll?: number;
+    speed?: number;
+    inbound_course?: number;
+    groundspeed?: number;
     meta?: JSON;
 }
 
