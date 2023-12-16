@@ -84,6 +84,12 @@ const toggleLocationTracking = () => {
     return watchUserLocation();
 }
 
+const getCsrfTokenFromCookie = () => {
+    var _a;
+    const xsrfToken = (_a = document.cookie.split("; ").find((row) => row.startsWith("XSRF-TOKEN"))) === null || _a === void 0 ? void 0 : _a.split("=")[1];
+    return decodeURIComponent(xsrfToken !== null && xsrfToken !== void 0 ? xsrfToken : "").trim();
+}
+
 
 const login = async () => {
     resetFormErrors();
@@ -99,7 +105,13 @@ const login = async () => {
     axios.post("/login", {
         email: userForm.email,
         password: userForm.password,
-    }).then(async () => {
+    },
+        {
+            headers: {
+                "X-XSRF-TOKEN": getCsrfTokenFromCookie(),
+            },
+        }
+    ).then(async () => {
         $bus.$emit(eventTypes.logged_in);
         getUser();
     }).catch((error) => {
@@ -146,7 +158,13 @@ const register = async () => {
         password: userForm.password,
         username: userForm.username,
         password_confirmation: userForm.password,
-    }).then(async () => {
+    },
+        {
+            headers: {
+                "X-XSRF-TOKEN": getCsrfTokenFromCookie(),
+            },
+        }
+    ).then(async () => {
         $bus.$emit(eventTypes.registered);
         getUser();
     }
