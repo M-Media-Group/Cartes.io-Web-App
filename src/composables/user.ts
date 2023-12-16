@@ -105,13 +105,7 @@ const login = async () => {
     axios.post("/login", {
         email: userForm.email,
         password: userForm.password,
-    },
-        {
-            headers: {
-                "X-XSRF-TOKEN": getCsrfTokenFromCookie(),
-            },
-        }
-    ).then(async () => {
+    }).then(async () => {
         $bus.$emit(eventTypes.logged_in);
         getUser();
     }).catch((error) => {
@@ -130,9 +124,7 @@ const sendPasswordReset = async () => {
 
     // await getCsrfToken();
 
-    axios.post("/password/email", {
-        email: userForm.email,
-    }).then(() => {
+    axios.post("/password/email").then(() => {
         $bus.$emit(eventTypes.sent_reset_password_email);
     }).catch((error) => {
         console.log("Password reset error", error);
@@ -158,13 +150,7 @@ const register = async () => {
         password: userForm.password,
         username: userForm.username,
         password_confirmation: userForm.password,
-    },
-        {
-            headers: {
-                "X-XSRF-TOKEN": getCsrfTokenFromCookie(),
-            },
-        }
-    ).then(async () => {
+    }).then(async () => {
         $bus.$emit(eventTypes.registered);
         getUser();
     }
@@ -180,14 +166,7 @@ const register = async () => {
 
 const logout = () => {
     // Delete all cookies
-    axios.post("/logout",
-        {},
-        {
-            headers: {
-                "X-XSRF-TOKEN": getCsrfTokenFromCookie(),
-            },
-        }
-    ).then(async () => {
+    axios.post("/logout").then(async () => {
         $bus.$emit(eventTypes.logged_out, user.value);
         user.value = null;
     }).catch((error) => {
@@ -198,6 +177,8 @@ const logout = () => {
 const getCsrfToken = () => {
 
     return axios.get("/csrf-token").then((response) => {
+        // Set  a global axios default header with the CSRF token
+        axios.defaults.headers.common["X-CSRF-TOKEN"] = getCsrfTokenFromCookie();
         return;
     }).catch((error) => {
         console.log("CSRF token error", error);
