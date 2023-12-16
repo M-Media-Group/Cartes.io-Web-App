@@ -180,7 +180,14 @@ const register = async () => {
 
 const logout = () => {
     // Delete all cookies
-    axios.post("/logout").then(async () => {
+    axios.post("/logout",
+        {},
+        {
+            headers: {
+                "X-XSRF-TOKEN": getCsrfTokenFromCookie(),
+            },
+        }
+    ).then(async () => {
         $bus.$emit(eventTypes.logged_out, user.value);
         user.value = null;
     }).catch((error) => {
