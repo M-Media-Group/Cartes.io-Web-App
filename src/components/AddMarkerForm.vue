@@ -56,6 +56,8 @@ const submitData = reactive<MarkerForm>({
 
 const canSubmit = computed(() => {
   return !isLoading.value &&
+    submitData.lat &&
+    submitData.lng &&
     (submitData.category_name &&
       validateMarkerForm(submitData)) &&
     canCreateMarkerForMapByMapId(props.mapId) &&
@@ -234,10 +236,9 @@ defineExpose({
     <input v-if="showLinkInput === 'required' || showLinkInput === 'optional'"
       type="url"
       pattern="https://.*"
-      :placeholder="
-        'Link using https://' +
+      :placeholder="'Link using https://' +
         (showLinkInput === 'optional' ? ' (optional)' : '')
-      "
+        "
       :required="showLinkInput === 'required'"
       v-model="submitData.link" />
 
@@ -289,9 +290,7 @@ defineExpose({
   </form>
 </template>
 
-<style src="@vueform/multiselect/themes/default.css">
-
-</style>
+<style src="@vueform/multiselect/themes/default.css"></style>
 <style scoped>
 form {
   min-width: 300px;
