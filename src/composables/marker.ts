@@ -63,6 +63,7 @@ export function useMarker() {
         category_name: "",
         description: "",
         link: "",
+        zoom: "",
     });
 
     const addMarkerToMarkerArray = (marker: Marker, mapId = null as string | null) => {
@@ -153,6 +154,11 @@ export function useMarker() {
         // if (form.link === "") {
         //     formErrors.link = "Enter a valid link";
         // }
+
+        if (!form.zoom) {
+            formErrors.zoom = "Enter a valid zoom level";
+        }
+
         return !hasErrors.value;
     };
 

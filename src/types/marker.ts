@@ -39,5 +39,5 @@ export interface MarkerForm {
     category_name: string;
     description: string;
     link: string | null;
-    zoom?: number;
+    zoom?: string | number;
 }

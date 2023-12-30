@@ -20,11 +20,17 @@ const props = defineProps({
     type: Number as PropType<number | string>,
     default: "",
     required: false,
+    validator: (value: number) => {
+      return value >= -90 && value <= 90;
+    },
   },
   markerLng: {
     type: Number as PropType<number | string>,
     default: "",
     required: false,
+    validator: (value: number) => {
+      return value >= -180 && value <= 180;
+    },
   },
   markerElevation: {
     type: Number as PropType<number | string | null>,
@@ -36,22 +42,29 @@ const props = defineProps({
     default: false,
     required: false,
   },
+  zoom: {
+    type: Number as PropType<number>,
+    default: 0,
+    required: false,
+    // Validate that its a number between 0 and 20
+    validator: (value: number) => {
+      return value >= 0 && value <= 20;
+    },
+  },
 })
 
 const { addMarker, isLoading, formErrors, hasErrors, validateMarkerForm, minCategoryNameLength, canCreateMarkerForMapByMapId } = useMarker();
 
-// @todo - refactor, quick dirty way to get it to work but should probably be passed via attributes like the rest
-const { zoom } = useMapPosition();
-
 const multiselect = ref<HTMLInputElement | null>(null);
 
 const submitData = reactive<MarkerForm>({
-  lat: "",
-  lng: "",
+  lat: props.markerLat.toString(),
+  lng: props.markerLng.toString(),
   category_name: "",
   description: "",
   link: "",
-  elevation: null,
+  elevation: props.markerElevation,
+  zoom: props.zoom
 });
 
 const canSubmit = computed(() => {
@@ -98,6 +111,10 @@ watch(props, (newValue) => {
   if (newValue.markerElevation !== submitData.elevation) {
     submitData.elevation = newValue.markerElevation;
     formErrors.elevation = "";
+  }
+  if (newValue.zoom !== submitData.zoom) {
+    submitData.zoom = newValue.zoom;
+    formErrors.zoom = "";
   }
 }, { deep: true, immediate: true });
 
@@ -162,7 +179,7 @@ defineExpose({
 <template>
   <form method="POST"
     action="/markers"
-    @submit.prevent="addMarker(mapId, { ...submitData, zoom: zoom })"
+    @submit.prevent="addMarker(mapId, { ...submitData })"
     :disabled="!canSubmit">
 
     <slot name="form-top"></slot>
