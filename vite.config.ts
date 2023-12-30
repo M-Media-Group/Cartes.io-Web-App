@@ -50,6 +50,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+
+      vue: path.resolve('./node_modules/vue'),
     },
+    dedupe: ['vue'],
   }
 })

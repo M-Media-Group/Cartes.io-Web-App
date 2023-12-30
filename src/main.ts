@@ -14,6 +14,7 @@ import BaseSection from '@/components/BaseSection.vue'
 import BaseInput from '@/components/BaseInput.vue'
 import { registerSW } from 'virtual:pwa-register'
 import { metaTagPlugin } from '@m-media/vue3-meta-tags';
+import OpenLayersMap from 'vue3-openlayers';
 
 const updateSW = registerSW({
     onNeedRefresh() {
@@ -46,6 +47,8 @@ axios.interceptors.response.use(resp => {
 import "./eventBus/listeners/index";
 
 const app = createApp(App)
+
+app.use(OpenLayersMap as any);
 
 app.config.globalProperties.window = window
 
