@@ -4,7 +4,7 @@ import { Category } from "./category";
 
 export interface Marker {
     id: number;
-    location: Location;
+    location?: Location;
     category_id: number;
     created_at: Date;
     updated_at: Date | string;

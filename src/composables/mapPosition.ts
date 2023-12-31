@@ -26,6 +26,10 @@ const averageCenter = computed(() => {
 
     const markerCoordinates = markers.value
         .map((m) => {
+            if (!m.location || !m.location.coordinates || !m.location.coordinates[0] || !m.location.coordinates[1]) {
+                return [0, 0];
+            }
+
             return [m.location.coordinates[1] - 0.1, m.location.coordinates[0] - 0.1];
         })
 

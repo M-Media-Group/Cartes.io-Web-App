@@ -15,14 +15,18 @@ const props = defineProps({
 const { center, zoom } = useMapPosition();
 
 const handleClick = (marker: Marker) => {
+    if (!marker.location) {
+        return;
+    }
+
     // Scroll to top of page when marker is clicked
     window.scrollTo(0, 0);
 
     //    Set the center
 
     center.value = {
-        lat: marker.location.coordinates[1],
-        lng: marker.location.coordinates[0],
+        lat: marker.location?.coordinates[1],
+        lng: marker.location?.coordinates[0],
     }
 
     zoom.value = marker.zoom ?? 16;
@@ -42,7 +46,7 @@ const formattedBearing = ref("");
 // Compute the distance from user using d=√((x2 – x1)² + (y2 – y1)²)
 const computeDistance = (currentLocation: GeolocationCoordinates) => {
     const marker = props.marker;
-    if (currentLocation) {
+    if (currentLocation && marker.location) {
         return markerComposable.computeDistance(currentLocation.latitude, currentLocation.longitude, marker.location.coordinates[1], marker.location.coordinates[0]);
     }
     return null;
@@ -50,7 +54,7 @@ const computeDistance = (currentLocation: GeolocationCoordinates) => {
 
 const computeBearing = (currentLocation: GeolocationCoordinates) => {
     const marker = props.marker;
-    if (currentLocation) {
+    if (currentLocation && marker.location) {
         return markerComposable.computeBearing(currentLocation.latitude, currentLocation.longitude, marker.location.coordinates[1], marker.location.coordinates[0]);
     }
     return null;
@@ -86,11 +90,13 @@ watch(user.currentLocation, (currentLocation) => {
         </header>
         <template v-if="marker.description">{{ marker.description }}</template>
         <footer>
+            <div v-if="!marker.location">No marker location</div>
             <div><a :href="marker.link"
                     target="_blank"
                     rel="noopener noreferrer"
                     v-if="marker.link">{{ marker.link.split("/")[2] }}</a></div>
-            <time :datetime="marker.updated_at.toString()">{{ new Date(marker.updated_at).toLocaleString() }}</time>
+            <time v-if="marker.updated_at"
+                :datetime="marker.updated_at.toString()">{{ new Date(marker.updated_at).toLocaleString() }}</time>
             <div v-if="distance">{{ formattedDistance }} {{ formattedBearing }} of you</div>
         </footer>
     </div>
