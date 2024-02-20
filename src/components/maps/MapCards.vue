@@ -32,8 +32,8 @@ const filteredMarkers = computed(() => {
 // @todo - potentially refactor, this could be inefficient to compute each marker distance - need to performance test
 const sortedMarkers = computed(() => {
     return filteredMarkers.value.sort((a, b) => {
-        if (orderBy.value === 'distance' && user.currentLocation.value) {
-            return marker.computeDistance(user.currentLocation.value?.latitude, user.currentLocation.value?.longitude, a.location.coordinates[1], a.location.coordinates[0]) - marker.computeDistance(user.currentLocation.value?.latitude, user.currentLocation.value?.longitude, b.location.coordinates[1], b.location.coordinates[0]);
+        if (orderBy.value === 'distance' && user.currentLocation.value && a.location?.coordinates[1] && b.location?.coordinates[1]) {
+            return marker.computeDistance(user.currentLocation.value?.latitude, user.currentLocation.value?.longitude, a.location.coordinates[1], a.location?.coordinates[0]) - marker.computeDistance(user.currentLocation.value?.latitude, user.currentLocation.value?.longitude, b.location.coordinates[1], b.location?.coordinates[0]);
         } else if (orderBy.value !== 'distance') {
             return a[orderBy.value] < b[orderBy.value] ? 1 : -1;
         }

@@ -373,11 +373,11 @@ onMounted(() => {
                 :markerLat="contextMenuPosition.lat"
                 :markerLng="contextMenuPosition.lng"
                 :allowLatLngElevationOverride="false"
-                :showLinkInput="map?.options?.links ?? 'disabled'"
+                :showLinkInput="$props.map?.options?.links ?? 'disabled'"
                 :zoom="zoomLevel"
                 @addedMarker="handleNewMarkerEvent($event)" />
             <div class="overlay-content"
-                v-else-if="map?.users_can_create_markers === 'no'">Only the map owner can create markers on this map.
+                v-else-if="$props.map?.users_can_create_markers === 'no'">Only the map owner can create markers on this map.
             </div>
             <div class="overlay-content"
                 v-else>

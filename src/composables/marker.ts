@@ -238,8 +238,8 @@ export function useMarker() {
         }
         if (canDeleteMarker(marker)) {
             const data = await cartes.maps(mapId).markers(marker.id, (marker.token || localStorage.getItem("post_" + marker.id))).update({
-                lat: marker.location.coordinates[1],
-                lng: marker.location.coordinates[0],
+                lat: marker.location?.coordinates[1],
+                lng: marker.location?.coordinates[0],
                 description: marker.description,
             });
             updateMarkerInMarkerArray(data, mapId);

@@ -61,9 +61,6 @@ export function usePusher() {
                 console.error(error);
             }) as PusherPresenceChannel;
 
-        if (channel.value) {
-            return channel.value;
-        }
     }
 
     const setTrackSocketIdView = (socketId: string | null) => {

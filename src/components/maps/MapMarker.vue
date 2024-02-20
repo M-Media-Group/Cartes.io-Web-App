@@ -31,6 +31,12 @@ const handleMarkerClick = (marker: Marker) => {
 
 const handleMarkerDragEnd = (event: any, marker: Marker) => {
     const newPosition = event.target.getLatLng();
+    if (!marker.location) {
+        marker.location = {
+            type: 'Point',
+            coordinates: [newPosition.lng, newPosition.lat],
+        };
+    }
     marker.location.coordinates = [newPosition.lng, newPosition.lat];
     updateMarker(props.mapId, marker);
     $bus.$emit(eventTypes.dragged_marker, marker);
@@ -45,7 +51,7 @@ const componentToUse = preferCanvas ? LCircleMarker : LMarker;
 <template>
     <component :is="componentToUse"
         :radius="7"
-        :lat-lng="[marker.location.coordinates[1], marker.location.coordinates[0]]"
+        :lat-lng="[marker.location?.coordinates[1], marker.location?.coordinates[0]]"
         :key="'map-' + mapId + '|' + marker.id + '-marker'"
         :draggable="!!canDeleteMarker(marker)"
         @dragend="handleMarkerDragEnd($event, marker)"
@@ -54,6 +60,4 @@ const componentToUse = preferCanvas ? LCircleMarker : LMarker;
             :icon-size="[30, 30]"
             :icon-anchor="[15, 25]" />
     </component>
-
-
 </template>

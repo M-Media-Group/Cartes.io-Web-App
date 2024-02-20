@@ -64,8 +64,8 @@ const { usernameToUse, trackedUsers } = usePusher();
 const handleMarkerClick = (marker: Marker) => {
     selectedMarker.value = marker;
     markerPopup.value.leafletObject.openPopup({
-        lat: marker.location.coordinates[1],
-        lng: marker.location.coordinates[0],
+        lat: marker.location?.coordinates[1],
+        lng: marker.location?.coordinates[0],
     });
 
     if (marker.meta) {
@@ -150,8 +150,8 @@ const parseMetadata = (meta: JSON) => {
                 <small v-if="selectedMarker?.elevation">Elevation:
                     {{ selectedMarker.elevation }} meters
                 </small>
-                <small>Coordinates: {{ selectedMarker?.location.coordinates[1] }} {{
-                    selectedMarker?.location.coordinates[0]
+                <small>Coordinates: {{ selectedMarker?.location?.coordinates[1] }} {{
+                    selectedMarker?.location?.coordinates[0]
                 }}</small>
                 <small v-if="selectedMarker?.address">Address: {{ selectedMarker?.address }}</small>
             </details>
