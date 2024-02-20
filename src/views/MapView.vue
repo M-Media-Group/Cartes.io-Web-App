@@ -24,6 +24,7 @@ import { useUser } from "@/composables/user";
 
 import userDevice from "@/classes/userDevice";
 import { useLiveMapTracking } from "@/composables/liveMapTracking";
+import OLMapVue from "@/components/maps/OLMapVue.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -34,7 +35,7 @@ const { markers, displayableMarkers, listenForMarkerChangesOnMap, showExpired } 
 
 const Maps = useMap();
 
-const cluster = ref(true);
+const cluster = ref(false);
 
 // Get the map ID from the url ?mapId parameter
 const mapId = ref(route.params.mapId) as Ref<string>;
@@ -217,7 +218,7 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
     <AppLayout>
 
         <template #header>
-            <NewMapComponent :mapId="mapId"
+            <OLMapVue :mapId="mapId"
                 :show-ar="true"
                 :markers="displayableMarkers"
                 style="height: 70vh"
@@ -262,7 +263,7 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
                                 role="button"
                                 class="secondary">
                                 <div v-if="isLive"
-                                    class="blink"></div> {{ isLive? 'Live feed': 'Feed' }}
+                                    class="blink"></div> {{ isLive ? 'Live feed' : 'Feed' }}
                                 <span
                                     v-if="isLive && Maps.map.value?.users_currently_connected && Maps.map.value?.users_currently_connected > 1">
                                     - {{ Maps.map.value.users_currently_connected }} people connected
@@ -395,7 +396,7 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
                                 :map="Maps.map.value" />
                         </details>
 
-                        <p v-if="canCreateMarkers">Right click (or long-tap on mobile) on the map to create a
+                        <p v-if="canCreateMarkers">Click (or tap on mobile) on the map to create a
                             marker. You can
                             choose
                             one of the existing

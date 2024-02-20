@@ -5,6 +5,7 @@ import { useMarker } from "@/composables/marker";
 import { useMap } from "@/composables/map";
 import { useRoute } from "vue-router";
 import MapLoader from "@/components/maps/MapLoader.vue";
+import OLMapVue from "@/components/maps/OLMapVue.vue";
 
 const route = useRoute();
 
@@ -41,7 +42,7 @@ const NewMapComponent = defineAsyncComponent(() =>
         style="height: 100vh"></MapLoader>
     <div v-if="mapId"
         v-show="!showLoader">
-        <NewMapComponent :mapId="mapId"
+        <OLMapVue :mapId="mapId"
             :show-ar="false"
             :markers="displayableMarkers"
             style="height: 100vh"
@@ -50,5 +51,4 @@ const NewMapComponent = defineAsyncComponent(() =>
     <div v-else>
         Map not found
     </div>
-
 </template>
