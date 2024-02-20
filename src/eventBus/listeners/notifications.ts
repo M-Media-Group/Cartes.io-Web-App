@@ -191,7 +191,7 @@ export default {
   created_map: (event: Map) => {
     new CustomNotification(
       "success",
-      "Map created! Right click or long-tap on mobile to create a marker.",
+      "Map created! Click or tap on mobile to create a marker.",
       ["browser"],
       5000
     ).show();

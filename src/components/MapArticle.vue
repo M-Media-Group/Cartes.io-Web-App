@@ -49,8 +49,8 @@ const props = defineProps({
     },
 });
 
-const NewMapComponent = defineAsyncComponent(() =>
-    import('@/components/maps/NewMapComponent.vue')
+const OLMapVue = defineAsyncComponent(() =>
+    import('@/components/maps/OLMapVue.vue')
 )
 
 const MapInstance = useMap();
@@ -144,7 +144,7 @@ const shouldShowAsUnfrozen = ref(isFrozen.value ?? false);
             <header class="full"
                 v-if="showMap && map.markers_count && map.markers_count > 0 && !isFrozen"
                 v-show="!showLoader">
-                <NewMapComponent :mapId="map.uuid"
+                <OLMapVue :mapId="map.uuid"
                     :map="map"
                     :markers="map.markers ?? []"
                     style="height: 400px"
@@ -182,7 +182,7 @@ const shouldShowAsUnfrozen = ref(isFrozen.value ?? false);
                     :src="MapInstance.getStaticMapImageUrl(map.uuid)"
                     @click="goToMap()" />
             </template>
-            <NewMapComponent v-else-if="showMap && map.markers_count && map.markers_count > 0 && !isFrozen"
+            <OLMapVue v-else-if="showMap && map.markers_count && map.markers_count > 0 && !isFrozen"
                 :mapId="map.uuid"
                 :map="map"
                 :markers="map.markers ?? []"

@@ -31,7 +31,8 @@
     "types": [
       "vite/client",
       "@types/jest",
-      "vite-plugin-pwa/client"
+      "vite-plugin-pwa/client",
+      "jest"
     ]
   },
   "include": [
