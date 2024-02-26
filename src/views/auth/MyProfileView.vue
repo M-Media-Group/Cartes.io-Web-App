@@ -98,7 +98,8 @@ $bus.$on(eventTypes.logged_out, async () => {
                             </li>
                         </ul>
                         <hgroup v-if="recentlyCreatedToken">
-                            <h3>New Token Secret: <code>{{ recentlyCreatedToken }}</code>
+                            <h3>New Token Secret:
+                                <pre><code>{{ recentlyCreatedToken }}</code></pre>
                             </h3>
                             <p>Your new token value is only visible now. Make sure to keep it secret!</p>
                         </hgroup>
@@ -160,5 +161,4 @@ $bus.$on(eventTypes.logged_out, async () => {
                 </article>
             </BaseSection>
         </div>
-    </AppLayout>
-</template>
+    </AppLayout></template>
