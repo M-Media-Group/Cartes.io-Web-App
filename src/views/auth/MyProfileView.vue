@@ -101,7 +101,7 @@ $bus.$on(eventTypes.logged_out, async () => {
                             <h3>New Token Secret:
                                 <pre><code>{{ recentlyCreatedToken }}</code></pre>
                             </h3>
-                            <p>Your new token value is only visible now. Make sure to keep it secret!</p>
+                            <p>Your new token secret value is only visible now. Make sure to keep it secret!</p>
                         </hgroup>
                     </template>
                     <template v-else-if="!user?.email_verified_at && !isLoading">
@@ -161,4 +161,5 @@ $bus.$on(eventTypes.logged_out, async () => {
                 </article>
             </BaseSection>
         </div>
-    </AppLayout></template>
+    </AppLayout>
+</template>
