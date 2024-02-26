@@ -29,6 +29,17 @@ $bus.$on(eventTypes.logged_out, async () => {
     router.push("/login");
 })
 
+const copyCode = async (e: MouseEvent) => {
+    const code = e.target as HTMLElement;
+    const range = document.createRange();
+    range.selectNode(code);
+    window.getSelection()?.removeAllRanges();
+    window.getSelection()?.addRange(range);
+    if (navigator.clipboard) {
+        await navigator.clipboard.writeText(code.innerText);
+    }
+}
+
 </script>
 <template>
     <AppLayout>
@@ -99,7 +110,7 @@ $bus.$on(eventTypes.logged_out, async () => {
                         </ul>
                         <hgroup v-if="recentlyCreatedToken">
                             <h3>New Token Secret:
-                                <pre><code>{{ recentlyCreatedToken }}</code></pre>
+                                <pre><code @click="copyCode">{{ recentlyCreatedToken }}</code></pre>
                             </h3>
                             <p>Your new token secret value is only visible now. Make sure to keep it secret!</p>
                         </hgroup>
