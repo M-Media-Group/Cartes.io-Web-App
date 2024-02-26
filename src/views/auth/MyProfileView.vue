@@ -17,9 +17,11 @@ const tokenName = ref("");
 
 const isLoadingToken = ref(false);
 
+const recentlyCreatedToken = ref("");
+
 $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, token: PersonalAccessToken }) => {
     accessTokens.value.push(e.token);
-    alert(e.accessToken)
+    recentlyCreatedToken.value = e.accessToken;
     isLoadingToken.value = false;
 });
 
@@ -95,6 +97,11 @@ $bus.$on(eventTypes.logged_out, async () => {
                                 <span>created {{ token.created_at }}</span>
                             </li>
                         </ul>
+                        <hgroup v-if="recentlyCreatedToken">
+                            <h3>New Token Secret: <code>{{ recentlyCreatedToken }}</code>
+                            </h3>
+                            <p>Your new token value is only visible now. Make sure to keep it secret!</p>
+                        </hgroup>
                     </template>
                     <template v-else-if="!user?.email_verified_at && !isLoading">
                         You need to verify your email address before you can create API access tokens.
