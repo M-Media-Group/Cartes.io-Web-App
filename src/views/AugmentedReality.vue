@@ -264,7 +264,7 @@ a-scene {
   z-index: 1;
   background-color: var(--pico-background-color);
   padding: 8px;
-  border-radius: 8px;
+  border-radius: var(--pico-border-radius);
 }
 
 .partiallyHidden {
