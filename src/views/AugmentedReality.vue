@@ -186,12 +186,11 @@ const AppLayout = defineAsyncComponent(() =>
           :scale="scale"
           :data-marker-elevation="marker.elevation"
           :position="'0 0 0'"
-          :gps-projected-entity-place="
-            'latitude: ' +
+          :gps-projected-entity-place="'latitude: ' +
             marker.location.coordinates[1] +
             '; longitude: ' +
             marker.location.coordinates[0]
-          ">
+            ">
           <a-text :value="marker.category.name"
             :position="'0 0.7 0'">
           </a-text>
@@ -263,7 +262,7 @@ a-scene {
   left: 16px;
   bottom: 16px;
   z-index: 1;
-  background-color: var(--background-color);
+  background-color: var(--pico-background-color);
   padding: 8px;
   border-radius: 8px;
 }

@@ -38,9 +38,9 @@ summary {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: var(--primary-hover);
-  color: var(--primary-inverse);
-  padding: var(--nav-element-spacing-vertical) var(--nav-element-spacing-horizontal);
+  background-color: var(--pico-primary-hover);
+  color: var(--pico-primary-inverse);
+  padding: var(--pico-nav-element-spacing-vertical) var(--pico-nav-element-spacing-horizontal);
 }
 
 .markdown h2,

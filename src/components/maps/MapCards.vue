@@ -101,7 +101,7 @@ const emitSearchTermChange = (searchTerm: string) => {
 <style scoped>
 .inputs {
     display: inline-flex;
-    gap: var(--spacing);
+    gap: var(--pico-spacing);
     overflow: hidden;
 }
 

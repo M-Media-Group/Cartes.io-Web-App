@@ -148,7 +148,7 @@ const triggerBlur = () => {
 <style scoped>
 /* If the input is not focused, make it small */
 input[type="search"] {
-    width: var(--form-element-spacing-horizontal) !important;
+    width: var(--pico-form-element-spacing-horizontal) !important;
     padding: 0;
     border: none;
     background: none;
@@ -171,12 +171,12 @@ li.search {
     flex-direction: column;
     position: absolute;
     z-index: 10000;
-    background: var(--card-background-color);
-    left: var(--form-element-spacing-horizontal);
-    padding: var(--form-element-spacing-vertical) var(--form-element-spacing-horizontal);
+    background: var(--pico-card-background-color);
+    left: var(--pico-form-element-spacing-horizontal);
+    padding: var(--pico-form-element-spacing-vertical) var(--pico-form-element-spacing-horizontal);
     min-width: 200px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--card-box-shadow);
+    border-radius: var(--pico-border-radius);
+    box-shadow: var(--pico-card-box-shadow);
 }
 
 .search-results li {

@@ -193,7 +193,7 @@ const AddMarkerForm = defineAsyncComponent(() =>
         <a href="#"
           aria-label="Go to your current location"
           @click.prevent="user.toggleLocationTracking()"
-          :style="'background-color:' + (user.locationWatcherId.value ? 'var(--primary)' : '')">
+          :style="'background-color:' + (user.locationWatcherId.value ? 'var(--pico-primary)' : '')">
           <BaseSvg icon="gps"
             style="padding:4px;" />
         </a>
@@ -317,12 +317,12 @@ const AddMarkerForm = defineAsyncComponent(() =>
 .leaflet-control-geosearch .results.active,
 .leaflet-control-geosearch a.reset,
 .leaflet-control-layers {
-  background-color: var(--card-background-color);
+  background-color: var(--pico-card-background-color);
   color: inherit;
 }
 
 .leaflet-control-layers-list {
-  padding: calc(var(--block-spacing-vertical) * .1) var(--block-spacing-horizontal);
+  padding: calc(var(--pico-block-spacing-vertical) * .1) var(--pico-block-spacing-horizontal);
 }
 
 .leaflet-popup-content-wrapper,
@@ -336,7 +336,7 @@ const AddMarkerForm = defineAsyncComponent(() =>
 }
 
 .leaflet-popup a {
-  color: var(--color);
+  color: var(--pico-color);
 }
 
 .leaflet-control-geosearch a.leaflet-bar-part:after,

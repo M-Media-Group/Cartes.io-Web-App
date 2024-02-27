@@ -234,10 +234,9 @@ defineExpose({
     <input v-if="showLinkInput === 'required' || showLinkInput === 'optional'"
       type="url"
       pattern="https://.*"
-      :placeholder="
-        'Link using https://' +
+      :placeholder="'Link using https://' +
         (showLinkInput === 'optional' ? ' (optional)' : '')
-      "
+        "
       :required="showLinkInput === 'required'"
       v-model="submitData.link" />
 
@@ -289,9 +288,7 @@ defineExpose({
   </form>
 </template>
 
-<style src="@vueform/multiselect/themes/default.css">
-
-</style>
+<style src="@vueform/multiselect/themes/default.css"></style>
 <style scoped>
 form {
   min-width: 300px;
@@ -299,7 +296,7 @@ form {
 </style>
 <style>
 .multiselect {
-  margin-bottom: var(--spacing);
+  margin-bottom: var(--pico-spacing);
   background: transparent;
   border: none;
 }
@@ -307,21 +304,21 @@ form {
 .multiselect-search,
 .multiselect-dropdown,
 .multiselect-option.is-pointed {
-  background-color: var(--background-color);
-  border: var(--border-width) solid var(--border-color);
-  border-radius: var(--border-radius);
+  background-color: var(--pico-background-color);
+  border: var(--pico-border-width) solid var(--pico-border-color);
+  border-radius: var(--pico-border-radius);
   color: inherit;
 }
 
 .multiselect-option.is-pointed {
-  background-color: var(--primary-hover);
-  color: var(--primary-inverse);
+  background-color: var(--pico-primary-hover);
+  color: var(--pico-primary-inverse);
 }
 
 .multiselect-option.is-selected.is-pointed,
 .multiselect-option.is-selected {
-  background-color: var(--primary);
-  color: var(--primary-inverse);
+  background-color: var(--pico-primary);
+  color: var(--pico-primary-inverse);
 }
 
 input:not([type=checkbox]):not([type=radio]):not([type=range]).multiselect-fake-input {

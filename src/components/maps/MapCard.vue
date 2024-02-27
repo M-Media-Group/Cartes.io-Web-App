@@ -81,7 +81,7 @@ watch(user.currentLocation, (currentLocation) => {
         @click="handleClick(marker)">
         <header>
             <h3>{{ marker.category.name }}</h3>
-            <address style="color:var(--muted-color);margin-top:calc(var(--block-spacing-vertical) * -0.33)"
+            <address style="color:var(--pico-muted-color);margin-top:calc(var(--pico-block-spacing-vertical) * -0.33)"
                 v-if="marker.address">{{ marker.address }}</address>
         </header>
         <template v-if="marker.description">{{ marker.description }}</template>
@@ -97,24 +97,24 @@ watch(user.currentLocation, (currentLocation) => {
 </template>
 <style scoped>
 .card {
-    /* margin-top: calc(var(--block-spacing-vertical) / 2 * -1); */
-    margin-bottom: calc(var(--block-spacing-vertical) * 0.33);
-    padding: calc(var(--block-spacing-vertical) * .33) var(--block-spacing-horizontal);
-    background-color: var(--card-background-color);
-    border-radius: var(--border-radius);
+    /* margin-top: calc(var(--pico-block-spacing-vertical) / 2 * -1); */
+    margin-bottom: calc(var(--pico-block-spacing-vertical) * 0.33);
+    padding: calc(var(--pico-block-spacing-vertical) * .33) var(--pico-block-spacing-horizontal);
+    background-color: var(--pico-card-background-color);
+    border-radius: var(--pico-border-radius);
 
-    border-radius: var(--border-radius);
-    background: var(--card-background-color);
-    box-shadow: var(--card-box-shadow);
+    border-radius: var(--pico-border-radius);
+    background: var(--pico-card-background-color);
+    box-shadow: var(--pico-card-box-shadow);
 
     cursor: pointer;
 }
 
 .card>header>h3 {
-    margin-bottom: calc(var(--block-spacing-vertical) * 0.33);
+    margin-bottom: calc(var(--pico-block-spacing-vertical) * 0.33);
 }
 
 .card footer {
-    margin-top: calc(var(--block-spacing-vertical) * 0.33);
+    margin-top: calc(var(--pico-block-spacing-vertical) * 0.33);
 }
 </style>

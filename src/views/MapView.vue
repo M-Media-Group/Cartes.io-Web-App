@@ -226,14 +226,14 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
                 :cluster="cluster"
                 @openedContextMenu="hasOpenedContextMenu = true" />
             <kbd v-if="showCreateMarkerTutorial"
-                style="z-index: 1000;position: absolute;text-align: center;bottom: var(--spacing);left: 50%;right: 50%;width: max-content;transform: translate(-50%, -50%);">Right
+                style="z-index: 1000;position: absolute;text-align: center;bottom: var(--pico-spacing);left: 50%;right: 50%;width: max-content;transform: translate(-50%, -50%);">Right
                 click on
                 the map to
                 create a marker</kbd>
         </template>
 
         <template v-if="Maps.map">
-            <div style="margin-top:var(--nav-element-spacing-vertical);">
+            <div style="margin-top:var(--pico-nav-element-spacing-vertical);">
                 <section class="grid">
                     <div>
                         <BaseHeading :title='Maps.map.value?.title ?? "Untitled map"'
@@ -262,7 +262,7 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
                                 role="button"
                                 class="secondary">
                                 <div v-if="isLive"
-                                    class="blink"></div> {{ isLive? 'Live feed': 'Feed' }}
+                                    class="blink"></div> {{ isLive ? 'Live feed' : 'Feed' }}
                                 <span
                                     v-if="isLive && Maps.map.value?.users_currently_connected && Maps.map.value?.users_currently_connected > 1">
                                     - {{ Maps.map.value.users_currently_connected }} people connected

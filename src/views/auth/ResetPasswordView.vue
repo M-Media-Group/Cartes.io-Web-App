@@ -46,11 +46,11 @@ img {
 @media (min-width: 992px) {
     img {
         display: block;
-        margin-top: calc(var(--block-spacing-vertical) * -1);
-        margin-bottom: calc(var(--block-spacing-vertical) * -1);
-        margin-left: calc(var(--block-spacing-vertical) * 1);
-        /* margin: calc(var(--block-spacing-vertical) * -1) calc(var(--block-spacing-horizontal)); */
-        height: calc(var(--block-spacing-vertical) * 2 + 100%);
+        margin-top: calc(var(--pico-block-spacing-vertical) * -1);
+        margin-bottom: calc(var(--pico-block-spacing-vertical) * -1);
+        margin-left: calc(var(--pico-block-spacing-vertical) * 1);
+        /* margin: calc(var(--pico-block-spacing-vertical) * -1) calc(var(--pico-block-spacing-horizontal)); */
+        height: calc(var(--pico-block-spacing-vertical) * 2 + 100%);
         width: 100%;
         object-fit: cover;
     }

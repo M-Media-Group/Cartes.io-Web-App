@@ -214,7 +214,7 @@ const shouldShowAsUnfrozen = ref(isFrozen.value ?? false);
 <style scoped>
 article>header.full {
     padding: 0;
-    /* margin-bottom: calc(var(--block-spacing-vertical) *0.5); */
+    /* margin-bottom: calc(var(--pico-block-spacing-vertical) *0.5); */
 }
 
 /* The first article child of a section */
@@ -224,7 +224,7 @@ article {
 
 h3 {
 
-    margin-bottom: var(--spacing);
+    margin-bottom: var(--pico-spacing);
 }
 
 /* If its the last element of the article except the footer, set margin 0 */
@@ -247,7 +247,7 @@ article.card {
     right: 0;
     padding: 0.5rem;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
-    color: var(--primary-inverse) !important;
+    color: var(--pico-primary-inverse) !important;
     z-index: 1000;
     padding-top: 4rem;
     padding-bottom: 1rem;
@@ -256,7 +256,7 @@ article.card {
 }
 
 .card .headings * {
-    color: var(--primary-inverse) !important;
+    color: var(--pico-primary-inverse) !important;
 }
 
 .map-image {

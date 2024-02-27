@@ -103,9 +103,9 @@ onMounted(() => {
 <style scoped>
 .header {
     min-height: 23rem;
-    background-color: var(--background-color);
-    /* background: linear-gradient(var(--card-border-color), var(--background-color)), url(/images/earth.jpg) no-repeat; */
-    background-image: linear-gradient(0deg, var(--background-color) 0%, var(--card-border-color) 100%);
+    background-color: var(--pico-background-color);
+    /* background: linear-gradient(var(--pico-card-border-color), var(--pico-background-color)), url(/images/earth.jpg) no-repeat; */
+    background-image: linear-gradient(0deg, var(--pico-background-color) 0%, var(--pico-card-border-color) 100%);
     background-size: cover;
 
     display: flex;
@@ -151,17 +151,17 @@ onMounted(() => {
     grid-auto-columns: minmax(60vw, 280px);
     grid-auto-flow: column;
     grid-auto-flow: column;
-    gap: calc(var(--grid-spacing-horizontal) / 2);
+    gap: calc(var(--pico-grid-spacing-horizontal) / 2);
     margin: 0;
-    padding-inline-end: var(--grid-spacing-horizontal);
-    padding-block-start: calc(var(--grid-spacing-horizontal) / 2);
-    padding-block-end: calc(var(--grid-spacing-horizontal) / 2);
+    padding-inline-end: var(--pico-grid-spacing-horizontal);
+    padding-block-start: calc(var(--pico-grid-spacing-horizontal) / 2);
+    padding-block-end: calc(var(--pico-grid-spacing-horizontal) / 2);
     overflow-x: auto;
     overscroll-behavior-inline: contain;
     scroll-snap-type: inline mandatory;
-    scroll-padding-left: var(--grid-spacing-horizontal);
-    scroll-padding-right: var(--grid-spacing-horizontal);
-    scroll-padding-inline: var(--grid-spacing-horizontal);
+    scroll-padding-left: var(--pico-grid-spacing-horizontal);
+    scroll-padding-right: var(--pico-grid-spacing-horizontal);
+    scroll-padding-inline: var(--pico-grid-spacing-horizontal);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -182,10 +182,10 @@ onMounted(() => {
 .horizontal-media-scroller>li:last-of-type figure::after {
     content: "";
     position: absolute;
-    inline-size: var(--grid-spacing-horizontal);
+    inline-size: var(--pico-grid-spacing-horizontal);
     block-size: 100%;
     inset-block-start: 0;
-    inset-inline-end: calc(var(--grid-spacing-horizontal) * -1);
+    inset-inline-end: calc(var(--pico-grid-spacing-horizontal) * -1);
 }
 
 .horizontal-media-scroller figure {

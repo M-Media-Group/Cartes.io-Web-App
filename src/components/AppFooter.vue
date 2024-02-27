@@ -16,7 +16,7 @@
 </template>
 <style scoped>
 div {
-    margin-bottom: var(--block-spacing-vertical);
-    margin-top: var(--block-spacing-vertical);
+    margin-bottom: var(--pico-block-spacing-vertical);
+    margin-top: var(--pico-block-spacing-vertical);
 }
 </style>

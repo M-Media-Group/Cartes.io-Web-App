@@ -225,7 +225,7 @@ small {
 }
 
 form>label {
-    margin-bottom: var(--spacing);
+    margin-bottom: var(--pico-spacing);
 }
 
 form>label>input[type="text"] {

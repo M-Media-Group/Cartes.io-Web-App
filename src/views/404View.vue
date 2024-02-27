@@ -23,9 +23,9 @@ import { ref } from "vue";
 <style scoped>
 .header {
     height: 60vh;
-    background-color: var(--background-color);
-    /* background: linear-gradient(var(--card-border-color), var(--background-color)), url(/images/earth.jpg) no-repeat; */
-    background-image: linear-gradient(0deg, var(--background-color) 0%, var(--card-border-color) 100%);
+    background-color: var(--pico-background-color);
+    /* background: linear-gradient(var(--pico-card-border-color), var(--pico-background-color)), url(/images/earth.jpg) no-repeat; */
+    background-image: linear-gradient(0deg, var(--pico-background-color) 0%, var(--pico-card-border-color) 100%);
     background-size: cover;
 
     display: flex;
