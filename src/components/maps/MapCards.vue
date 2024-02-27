@@ -74,7 +74,7 @@ const emitSearchTermChange = (searchTerm: string) => {
     <div style="max-height: 57vh;overflow-y: scroll;"
         v-if="markers.length > 0">
 
-        <div class="inputs"
+        <div role="group"
             v-if="markers.length > 9">
             <input type="search"
                 v-model="searchTerm"
@@ -98,18 +98,3 @@ const emitSearchTermChange = (searchTerm: string) => {
     </div>
     <div v-else>No markers yet</div>
 </template>
-<style scoped>
-.inputs {
-    display: inline-flex;
-    gap: var(--pico-spacing);
-    overflow: hidden;
-}
-
-.inputs input {
-    flex: 2.5;
-}
-
-.inputs select {
-    flex: 1;
-}
-</style>

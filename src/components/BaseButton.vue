@@ -32,3 +32,9 @@ defineProps({
         <slot />
     </button>
 </template>
+<style>
+button,
+a[role="button"] {
+    width: 100%;
+}
+</style>
