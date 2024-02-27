@@ -62,7 +62,7 @@ export function usePusher() {
             }) as PusherPresenceChannel;
 
         if (channel.value) {
-            return channel.value;
+            channel.value;
         }
     }
 
