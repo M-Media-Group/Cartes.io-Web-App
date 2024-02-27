@@ -15,14 +15,13 @@ defineProps({
 })
 </script>
 <template>
-    <div class="headings"
-        v-if="subtitle || $slots.subtitle">
+    <hgroup v-if="subtitle || $slots.subtitle">
         <component :is="as">{{ title }}</component>
         <slot name="subtitle">
             <p>{{ subtitle }}</p>
         </slot>
 
-    </div>
+    </hgroup>
     <component v-else
         :is="as">{{ title }}</component>
 </template>

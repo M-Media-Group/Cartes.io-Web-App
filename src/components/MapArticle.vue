@@ -240,25 +240,6 @@ article.card {
     height: 450px;
 }
 
-.card .headings {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0.5rem;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
-    color: var(--pico-primary-inverse) !important;
-    z-index: 1000;
-    padding-top: 4rem;
-    padding-bottom: 1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-}
-
-.card .headings * {
-    color: var(--pico-primary-inverse) !important;
-}
-
 .map-image {
     width: 100%;
     height: 100%;

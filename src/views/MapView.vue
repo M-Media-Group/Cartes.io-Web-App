@@ -236,8 +236,7 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
             <div style="margin-top:var(--pico-nav-element-spacing-vertical);">
                 <section class="grid">
                     <div>
-                        <BaseHeading :title='Maps.map.value?.title ?? "Untitled map"'
-                            class="headings">
+                        <BaseHeading :title='Maps.map.value?.title ?? "Untitled map"'>
                             <template #subtitle>
                                 <p>
                                     <MapAuthor v-if="Maps.map.value"
@@ -459,10 +458,10 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
                                             width="24"
                                             :src="user.avatar ?? 'https://via.placeholder.com/96'"
                                             :alt="user.avatar + ' avatar on Cartes.io'" /> -->
-                                        <div class="headings">
+                                        <hgroup>
                                             <p>{{ user.username }}</p>
                                             <p>{{ user.description }}</p>
-                                        </div>
+                                        </hgroup>
                                         <!-- </div> -->
                                     </router-link>
                                 </div>

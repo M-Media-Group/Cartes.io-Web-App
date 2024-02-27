@@ -106,14 +106,14 @@ if (ids.length > 0 || userInstance.user.value?.id) {
                             width="96"
                             :src="user.avatar ?? 'https://via.placeholder.com/96'"
                             :alt="user.username + ' avatar on Cartes.io'" />
-                        <div class="headings">
+                        <hgroup>
                             <h1>{{ user.username }}</h1>
                             <p>Joined {{ accountAgeInText }}
                                 <template v-if="userInstance.user.value?.username === user.username">
                                     · <router-link to="/me">Edit</router-link>
                                 </template>
                             </p>
-                        </div>
+                        </hgroup>
                     </div>
                     <p v-if="user.description">{{ user.description }}</p>
 

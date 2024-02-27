@@ -148,7 +148,7 @@ const triggerBlur = () => {
 <style scoped>
 /* If the input is not focused, make it small */
 input[type="search"] {
-    width: var(--pico-form-element-spacing-horizontal) !important;
+    width: 6rem;
     padding: 0;
     border: none;
     background: none;
