@@ -21,7 +21,7 @@ import CreateMapButton from '@/components/CreateMapButton.vue';
 
 <style scoped>
 .header {
-    min-height: 70vh;
+    min-height: 72vh;
     background-color: var(--pico-background-color);
     /* background: linear-gradient(var(--pico-card-border-color), var(--pico-background-color)), url(/images/earth.jpg) no-repeat; */
     background-image: linear-gradient(0deg, var(--pico-background-color) 0%, var(--pico-card-border-color) 100%);

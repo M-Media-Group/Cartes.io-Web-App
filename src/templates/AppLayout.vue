@@ -43,4 +43,11 @@ import AppFooter from "@/components/AppFooter.vue";
 .v-leave-to {
     opacity: 0;
 }
+
+#app>footer,
+article>footer {
+    padding-block: var(--pico-block-spacing-vertical);
+    padding-top: calc(var(--pico-block-spacing-vertical) * 2);
+    padding-bottom: calc(var(--pico-block-spacing-vertical) * 2);
+}
 </style>
