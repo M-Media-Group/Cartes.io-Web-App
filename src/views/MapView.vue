@@ -252,7 +252,8 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
                     <div>
 
                         <BaseButton v-if="Maps.map.value?.privacy !== 'private'"
-                            @click="share()">Share this map</BaseButton>
+                            @click="share()"
+                            style="margin-bottom: var(--pico-spacing);">Share this map</BaseButton>
 
                         <!-- Markers -->
                         <details open

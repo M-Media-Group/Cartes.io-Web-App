@@ -98,8 +98,8 @@ watch(user.currentLocation, (currentLocation) => {
 <style scoped>
 .card {
     /* margin-top: calc(var(--pico-block-spacing-vertical) / 2 * -1); */
-    margin-bottom: calc(var(--pico-block-spacing-vertical) * 0.33);
-    padding: calc(var(--pico-block-spacing-vertical) * .33) var(--pico-block-spacing-horizontal);
+    margin-bottom: calc(var(--pico-block-spacing-vertical));
+    padding: calc(var(--pico-block-spacing-vertical)) var(--pico-block-spacing-horizontal);
     background-color: var(--pico-card-background-color);
     border-radius: var(--pico-border-radius);
 
