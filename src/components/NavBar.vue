@@ -164,6 +164,8 @@ input[type="search"]:focus {
 li.search {
     position: relative;
     width: max-content;
+    padding: calc(var(--pico-nav-link-spacing-vertical) - var(--pico-border-width) * 2) var(--pico-nav-link-spacing-horizontal);
+    border: 1px solid var(--pico-background-color);
 }
 
 .search-results {
