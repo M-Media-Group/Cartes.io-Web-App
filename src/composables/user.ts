@@ -247,6 +247,27 @@ const updateUser = async () => {
     });
 }
 
+const currentUserHasPermission = (permission: string) => {
+    if (!user.value) {
+        return false;
+    }
+
+    if (user.value.permissions?.find((p) => p.name == permission)) {
+        return true;
+    }
+
+    // The permission may also be in roles.permissions
+    if (user.value.roles) {
+        for (let i = 0; i < user.value.roles.length; i++) {
+            if (user.value.roles[i].permissions?.find((p) => p.name == permission)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 const getPersonalAccessTokens = () => {
     return axios.get('/oauth/personal-access-tokens').then((response) => {
         if (!user.value) {
@@ -295,5 +316,6 @@ export function useUser() {
         updateUser,
         getUsers,
         currentLocation,
+        currentUserHasPermission,
     };
 }

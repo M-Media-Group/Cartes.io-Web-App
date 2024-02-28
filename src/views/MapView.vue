@@ -30,7 +30,7 @@ const route = useRoute();
 const user = useUser();
 const liveMapTracking = useLiveMapTracking();
 
-const { markers, displayableMarkers, listenForMarkerChangesOnMap, showExpired } = useMarker();
+const { markers, displayableMarkers, listenForMarkerChangesOnMap, showExpired, insertMarkersFromFile } = useMarker();
 
 const Maps = useMap();
 
@@ -262,7 +262,7 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
                                 role="button"
                                 class="secondary">
                                 <div v-if="isLive"
-                                    class="blink"></div> {{ isLive? 'Live feed': 'Feed' }}
+                                    class="blink"></div> {{ isLive ? 'Live feed' : 'Feed' }}
                                 <span
                                     v-if="isLive && Maps.map.value?.users_currently_connected && Maps.map.value?.users_currently_connected > 1">
                                     - {{ Maps.map.value.users_currently_connected }} people connected
@@ -473,6 +473,18 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
                         <details v-if="Maps.map.value">
                             <summary>Developer info</summary>
                             <DeveloperInfo :map="Maps.map.value" />
+                        </details>
+
+                        <!-- Data Import, if the user currentUserHasPermission('create markers in bulk')-->
+                        <details v-if="Maps.map.value && user.currentUserHasPermission('create markers in bulk')">
+                            <summary>Data import</summary>
+                            <p>Import data from a CSV file to create markers on this map.</p>
+                            <input type="file"
+                                accept=".gpx"
+                                @change=" !($event.target as any)?.files ?? insertMarkersFromFile(Maps.map.value.uuid,
+                                    // Pass the file to the function
+                                    ($event.target as any)?.files
+                                )" />
                         </details>
 
                     </div>
