@@ -23,6 +23,7 @@ $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, to
     accessTokens.value.push(e.token);
     recentlyCreatedToken.value = e.accessToken;
     isLoadingToken.value = false;
+    tokenName.value = "";
 });
 
 $bus.$on(eventTypes.logged_out, async () => {
@@ -132,7 +133,7 @@ const copyCode = async (e: MouseEvent) => {
                                 required
                                 v-model="tokenName">
                             <BaseButton type="submit"
-                                :disabled="isLoadingToken">Create token</BaseButton>
+                                :disabled="isLoadingToken || !tokenName">Create token</BaseButton>
                         </form>
                     </footer>
                 </article>
