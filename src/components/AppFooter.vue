@@ -8,7 +8,7 @@
         <a href="https://cartes.io/privacy-policy"
             target="_blank">Privacy policy</a>
         <hr />
-        <a href="https://github.com/M-Media-Group/Cartes.io/wiki/API"
+        <a href="https://docs.cartes.io/"
             target="_blank">API docs</a>
         <a href="https://github.com/M-Media-Group/Cartes.io"
             target="_blank">Github</a>
