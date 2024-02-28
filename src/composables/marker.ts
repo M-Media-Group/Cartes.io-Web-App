@@ -7,6 +7,7 @@ import { useMap } from "./map";
 import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { usePusher } from "./pusher";
+import axios from "axios";
 
 const Map = useMap();
 
@@ -216,13 +217,22 @@ export function useMarker() {
             return alert("You need to be online to add a marker");
         }
 
+        console.log("Got file", file);
+
         const formData = new FormData();
         formData.append("file", file);
 
         isLoading.value = true;
 
         try {
-            const data = await cartes.maps(mapId).markers('file').create(formData);
+            const data = await axios.post(import.meta.env.VITE_API_URL + "/api/maps/" + mapId + "/markers/file", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+            })?.then((response) => {
+                return response.data;
+            });
+
             if (data) {
                 data.forEach((marker: Marker) => {
                     if (marker.category.icon && !marker.category.icon.startsWith("https")) {
