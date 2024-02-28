@@ -7,6 +7,7 @@ import { useMap } from "./map";
 import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { usePusher } from "./pusher";
+import axios from "axios";
 
 const Map = useMap();
 
@@ -211,6 +212,40 @@ export function useMarker() {
             isLoading.value = false;
         }
     };
+
+    const insertMarkersFromFile = async (mapId: string, file: File) => {
+        // If no file, return
+        if (!file || !file.name) {
+            return alert("You need to select a file to add markers");
+        }
+
+        if (!userDevice.online) {
+            return alert("You need to be online to add a marker");
+        }
+
+        console.log("Got file", file);
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        isLoading.value = true;
+
+        try {
+            await axios.post(import.meta.env.VITE_API_URL + "/api/maps/" + mapId + "/markers/file", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+            });
+
+            // Re-fetch markers
+            await getAllMarkersForMap(mapId);
+
+        } catch (error) {
+            alert("We could not add your marker at this time. Make sure it does not conflict with an existing marker and has no profanities in its description and category.");
+        } finally {
+            isLoading.value = false;
+        }
+    }
 
     const canDeleteMarker = (marker: Marker) => {
         return marker.token || localStorage.getItem("post_" + marker.id);
@@ -421,6 +456,7 @@ export function useMarker() {
         markers,
         hasErrors,
         minCategoryNameLength,
-        showExpired
+        showExpired,
+        insertMarkersFromFile
     };
 }

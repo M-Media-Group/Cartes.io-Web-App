@@ -32,19 +32,19 @@ const copyCode = async (e: MouseEvent) => {
         <p>
             Use standard API requests to interact with this map. No
             authentication required for public and unlisted maps.
-            <a href="https://github.com/M-Media-Group/Cartes.io/wiki/API"
+            <a href="https://docs.cartes.io/developers/api"
                 rel="noopener"
                 target="_BLANK">Read the docs</a>.
         </p>
         <ul>
-            <li>Use <a href="https://github.com/M-Media-Group/Cartes.io/wiki/API"
+            <li>Use <a href="https://docs.cartes.io/developers/api"
                     rel="noopener"
                     target="_BLANK">the API</a> to get this map and its markers
                 <!-- Code block showing API call -->
                 <pre><code @click="copyCode">GET {{ url }}/api/maps/{{ map.uuid }}</code></pre>
                 <pre><code @click="copyCode">GET {{ url }}/api/maps/{{ map.uuid }}/markers</code></pre>
             </li>
-            <li>Embed as <a href="https://github.com/M-Media-Group/Cartes.io/wiki/iFrame"
+            <li>Embed as <a href="https://docs.cartes.io/developers/iFrame"
                     rel="noopener"
                     target="_BLANK">iFrame</a>
                 <!-- Code block showing API call -->
@@ -69,7 +69,7 @@ const copyCode = async (e: MouseEvent) => {
                 <pre><code @click="copyCode">cartes.maps('{{ map.uuid }}', '{{ getMapToken(map) ?? 'optional_map_token' }}').get()</code></pre>
             </li>
             <li>Image using the <a target="_BLANK"
-                    href="https://github.com/M-Media-Group/Cartes.io/wiki/API#get-a-maps-static-image">static image
+                    href="https://docs.cartes.io/developers/api/#get-a-maps-static-image">static image
                     endpoint</a>
                 <!-- Code block showing the URL. It is on the api endpoint, /api/maps/{uuid}/images/static -->
                 <pre><code @click="copyCode">{{ url }}/api/maps/{{ map.uuid }}/images/static</code></pre>

@@ -31,7 +31,7 @@ const route = useRoute();
 const user = useUser();
 const liveMapTracking = useLiveMapTracking();
 
-const { markers, displayableMarkers, listenForMarkerChangesOnMap, showExpired } = useMarker();
+const { markers, displayableMarkers, listenForMarkerChangesOnMap, showExpired, insertMarkersFromFile } = useMarker();
 
 const Maps = useMap();
 
@@ -474,6 +474,18 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
                         <details v-if="Maps.map.value">
                             <summary>Developer info</summary>
                             <DeveloperInfo :map="Maps.map.value" />
+                        </details>
+
+                        <!-- Data Import, if the user currentUserHasPermission('create markers in bulk')-->
+                        <details v-if="Maps.map.value">
+                            <summary>Data import</summary>
+                            <p>Import data from a GPX file to create markers on this map.</p>
+                            <input type="file"
+                                accept=".gpx"
+                                @change="insertMarkersFromFile(Maps.map.value.uuid,
+                                    // Pass the file to the function
+                                    $event.target?.files[0]
+                                )" />
                         </details>
 
                     </div>

@@ -17,15 +17,29 @@ const tokenName = ref("");
 
 const isLoadingToken = ref(false);
 
+const recentlyCreatedToken = ref("");
+
 $bus.$on(eventTypes.created_personal_access_token, (e: { accessToken: string, token: PersonalAccessToken }) => {
     accessTokens.value.push(e.token);
-    alert(e.accessToken)
+    recentlyCreatedToken.value = e.accessToken;
     isLoadingToken.value = false;
+    tokenName.value = "";
 });
 
 $bus.$on(eventTypes.logged_out, async () => {
     router.push("/login");
 })
+
+const copyCode = async (e: MouseEvent) => {
+    const code = e.target as HTMLElement;
+    const range = document.createRange();
+    range.selectNode(code);
+    window.getSelection()?.removeAllRanges();
+    window.getSelection()?.addRange(range);
+    if (navigator.clipboard) {
+        await navigator.clipboard.writeText(code.innerText);
+    }
+}
 
 </script>
 <template>
@@ -95,6 +109,12 @@ $bus.$on(eventTypes.logged_out, async () => {
                                 <span>created {{ token.created_at }}</span>
                             </li>
                         </ul>
+                        <hgroup v-if="recentlyCreatedToken">
+                            <h3>New Token Secret:
+                                <pre><code @click="copyCode">{{ recentlyCreatedToken }}</code></pre>
+                            </h3>
+                            <p>Your new token secret value is only visible now. Make sure to keep it secret!</p>
+                        </hgroup>
                     </template>
                     <template v-else-if="!user?.email_verified_at && !isLoading">
                         You need to verify your email address before you can create API access tokens.
@@ -113,7 +133,7 @@ $bus.$on(eventTypes.logged_out, async () => {
                                 required
                                 v-model="tokenName">
                             <BaseButton type="submit"
-                                :disabled="isLoadingToken">Create token</BaseButton>
+                                :disabled="isLoadingToken || !tokenName">Create token</BaseButton>
                         </form>
                     </footer>
                 </article>
@@ -124,9 +144,15 @@ $bus.$on(eventTypes.logged_out, async () => {
                     <template v-if="!user?.email_verified_at && !isLoading">
                         You need to verify your email address to be granted permissions.
                     </template>
-                    <template v-else-if="!isLoading && user?.roles && user?.roles.length > 0">
+                    <template v-else-if="!isLoading && ((user?.roles && user?.roles.length > 0) ||
+                        (user?.permissions && user?.permissions.length > 0)
+                    )">
                         <p>You've been granted the following permissions:</p>
                         <ul>
+                            <template v-for="permission in user?.permissions"
+                                :key="permission.id">
+                                <li>{{ permission.name }}</li>
+                            </template>
                             <template v-for="role in user?.roles"
                                 :key="role.id">
                                 <li v-for="permission in role.permissions"
