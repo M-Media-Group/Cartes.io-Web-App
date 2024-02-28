@@ -225,26 +225,15 @@ export function useMarker() {
         isLoading.value = true;
 
         try {
-            const data = await axios.post(import.meta.env.VITE_API_URL + "/api/maps/" + mapId + "/markers/file", formData, {
+            await axios.post(import.meta.env.VITE_API_URL + "/api/maps/" + mapId + "/markers/file", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 },
-            })?.then((response) => {
-                return response.data;
             });
 
-            if (data) {
-                data.forEach((marker: Marker) => {
-                    if (marker.category.icon && !marker.category.icon.startsWith("https")) {
-                        marker.category.icon = "/marker.svg";
-                    }
-                });
-                Map.addMarkersToMapInArray(mapId, data);
-                $bus.$emit(eventTypes.created_marker, data);
-                if (emit) {
-                    emit("addedMarker", data);
-                }
-            }
+            // Re-fetch markers
+            await getAllMarkersForMap(mapId);
+
         } catch (error) {
             alert("We could not add your marker at this time. Make sure it does not conflict with an existing marker and has no profanities in its description and category.");
         } finally {
