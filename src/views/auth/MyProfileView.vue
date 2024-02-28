@@ -143,9 +143,15 @@ const copyCode = async (e: MouseEvent) => {
                     <template v-if="!user?.email_verified_at && !isLoading">
                         You need to verify your email address to be granted permissions.
                     </template>
-                    <template v-else-if="!isLoading && user?.roles && user?.roles.length > 0">
+                    <template v-else-if="!isLoading && ((user?.roles && user?.roles.length > 0) ||
+                        (user?.permissions && user?.permissions.length > 0)
+                    )">
                         <p>You've been granted the following permissions:</p>
                         <ul>
+                            <template v-for="permission in user?.permissions"
+                                :key="permission.id">
+                                <li>{{ permission.name }}</li>
+                            </template>
                             <template v-for="role in user?.roles"
                                 :key="role.id">
                                 <li v-for="permission in role.permissions"
