@@ -481,7 +481,7 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
                             <p>Import data from a CSV file to create markers on this map.</p>
                             <input type="file"
                                 accept=".gpx"
-                                @change=" !($event.target as any)?.files ?? insertMarkersFromFile(Maps.map.value.uuid,
+                                @change="insertMarkersFromFile(Maps.map.value.uuid,
                                     // Pass the file to the function
                                     ($event.target as any)?.files
                                 )" />
