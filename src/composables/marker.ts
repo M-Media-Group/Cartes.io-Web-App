@@ -7,7 +7,6 @@ import { useMap } from "./map";
 import cartes from "@m-media/npm-cartes-io";
 import $bus, { eventTypes } from "@/eventBus/events";
 import { usePusher } from "./pusher";
-import axios from "axios";
 
 const Map = useMap();
 
@@ -217,23 +216,16 @@ export function useMarker() {
             return alert("You need to be online to add a marker");
         }
 
-        console.log("Got file", file);
-
         const formData = new FormData();
         formData.append("file", file);
 
         isLoading.value = true;
 
         try {
-            await axios.post(import.meta.env.VITE_API_URL + "/api/maps/" + mapId + "/markers/file", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                },
-            });
+            await cartes.maps(mapId, localStorage.getItem("map_" + mapId)).markers().createFromFile(file);
 
             // Re-fetch markers
             await getAllMarkersForMap(mapId);
-
         } catch (error) {
             alert("We could not add your marker at this time. Make sure it does not conflict with an existing marker and has no profanities in its description and category.");
         } finally {
