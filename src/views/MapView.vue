@@ -478,13 +478,22 @@ $bus.$on(eventTypes.updated_tracked_view, (data: any) => {
                         <!-- Data Import, if the user currentUserHasPermission('create markers in bulk')-->
                         <details v-if="Maps.map.value">
                             <summary>Data import</summary>
-                            <p>Import data from a GPX file to create markers on this map.</p>
-                            <input type="file"
-                                accept=".gpx"
-                                @change="insertMarkersFromFile(Maps.map.value.uuid,
-                                    // Pass the file to the function
-                                    $event.target?.files[0]
-                                )" />
+                            <template v-if="user.currentUserHasPermission('create markers in bulk')">
+                                <p>Import data from a GPX file to create markers on this map.</p>
+                                <input type="file"
+                                    accept=".gpx"
+                                    @change="insertMarkersFromFile(Maps.map.value.uuid,
+                                        // Pass the file to the function
+                                        $event.target?.files[0]
+                                    )" />
+                            </template>
+                            <templaet v-else-if="user.user?.value?.id">
+                                <p>You need to have the permission to <code>upload markers from file</code> to import data.
+                                    Email us to request it.</p>
+                            </templaet>
+                            <template v-else>
+                                <p>You need to be logged in to import data to this map.</p>
+                            </template>
                         </details>
 
                     </div>
