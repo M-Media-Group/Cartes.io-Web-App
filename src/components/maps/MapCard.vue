@@ -90,11 +90,10 @@ watch(user.currentLocation, (currentLocation) => {
         </header>
         <template v-if="marker.description">{{ marker.description }}</template>
         <footer>
-            <div v-if="!marker.location">No marker location</div>
-            <div><a :href="marker.link"
+            <div v-if="marker.link"><a :href="marker.link"
                     target="_blank"
-                    rel="noopener noreferrer"
-                    v-if="marker.link">{{ marker.link.split("/")[2] }}</a></div>
+                    rel="noopener noreferrer">{{ marker.link.split("/")[2] }}</a>
+            </div>
             <time v-if="marker.updated_at"
                 :datetime="marker.updated_at.toString()">{{ new Date(marker.updated_at).toLocaleString() }}</time>
             <div v-if="distance">{{ formattedDistance }} {{ formattedBearing }} of you</div>
