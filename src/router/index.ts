@@ -4,6 +4,7 @@ import $bus, { eventTypes } from "@/eventBus/events";
 import { setMetaAttributes, setFollow, setTitle, setDescription } from "@m-media/vue3-meta-tags";
 import { useProgress } from "@marcoschulte/vue3-progress";
 import cartes from "@m-media/npm-cartes-io";
+import { updateOrCreateMetaTag } from "@m-media/vue3-meta-tags/src/metaTagger";
 
 const Maps = useMap();
 
@@ -205,6 +206,16 @@ router.afterEach((to, from, failure) => {
             ...to,
             name: document.title,
         });
+
+        updateOrCreateMetaTag(
+            "canonical",
+            // Current URL
+            window.location.href,
+            "link",
+            "rel",
+            "canonical",
+            [{ name: "href", value: window.location.href }]
+        );
     }
 })
 
